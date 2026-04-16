@@ -1,0 +1,19 @@
+Sender : { 1 of thess noreply@apple-gift-center.net / support@apple-verification.com / apple-support@secure-prizes.com}
+Subject : Vous avez gagné un iPhone
+Header : Félicitations {emp_name} 🎉
+Content : Vous avez été sélectionné(e) pour gagner un iPhone 15 gratuit.
+Pour recevoir votre cadeau, cliquez sur le lien ci-dessous et confirmez vos informations :
+{lien}
+Répondez dans les 2 heures, sinon votre lot sera perdu.
+Footer : Cordilement,
+contacter nous {sender_email}
+
+Sender : lotterie@gagnant-now.net
+Subject : Vous avez gagné un tirage au sort
+Header : Félicitations {emp_name} 🎉
+Content : Vous avez été tiré au sort et vous avez gagné 5 000 €.
+Pour recevoir votre gain, vous devez payer des frais de validation de 2 €. 
+cliquez ici {lien}
+Footer : Cordialement
+contecter nous {sender_email}
+

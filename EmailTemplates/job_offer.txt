@@ -1,0 +1,12 @@
+Sender : recruitment@careers.com
+Subject : Offre d'emploi urgente – Réponse requise sous 48h 
+Header : Bonjour {emp_name}
+Content : Bonjour,
+Nous avons consulté votre profil en ligne et avons été très impressionnés par votre parcours.
+Dans le cadre de l’expansion de notre entreprise, nous souhaitons vous proposer un poste de Chargé(e) de mission en télétravail, avec une rémunération attractive allant jusqu’à 3 500€ par mois, sans expérience requise.
+Veuillez également confirmer votre intérêt en cliquant sur le lien ci-dessous :
+{lien}
+Attention : cette offre est limitée et valable uniquement pendant 48 heures
+Footer : Dans l’attente de votre réponse,
+Cordialement,
+Service Recrutement

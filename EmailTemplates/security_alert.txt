@@ -1,0 +1,14 @@
+Sender : google-security@account.com
+Subject : Alerte de sécurité : Connexion suspecte détectée 
+Header : Bonjour {emp_name}, 
+Content : Nous avons détecté une tentative de connexion inhabituelle à votre compte depuis un appareil ou une localisation inconnue.
+Détails de la tentative :
+Appareil : Linux, Navigateur inconnue
+Localisation : {Different_location_from_emp_live}
+Date : {today}
+Si vous êtes à l’origine de cette connexion, aucune action n’est requise.
+Dans le cas contraire, nous vous recommandons fortement de sécuriser votre compte immédiatement en confirmant votre identité via le lien ci-dessous :
+{lien}
+Footer : Merci pour votre vigilance.
+Cordialement,
+Équipe Sécurité 

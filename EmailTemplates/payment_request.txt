@@ -1,0 +1,10 @@
+Sender : bank-payment@portal.com
+Subject : Facture impayée – Action immédiate requise 
+Header : Bonjour {emp_name}
+Content : Suite à une vérification de nos comptes, nous constatons qu’une facture récente reste impayée à ce jour.
+Montant dû : 1 245,00 €
+Date d’échéance : 15/04/2026
+Afin d’éviter des frais de retard ou une suspension de service, nous vous invitons à régulariser votre situation dès maintenant en cliquant sur le lien sécurisé ci-dessous :
+{lien}
+Footer : Cordialement,
+Service Facturation

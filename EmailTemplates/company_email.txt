@@ -1,0 +1,11 @@
+Sender : {nom_chef_dep}@{companyName}.com
+Subject : Tâche urgente à traiter immédiatement {// dep where the employe work at}
+Header : Bonjour {Employe Name},
+Content : Je vous contacte concernant une tâche urgente qui nécessite votre attention immédiate.
+Merci de bien vouloir accéder au lien ci-dessous afin de consulter les détails et commencer le traitement sans délai :
+{Lien}          
+Footer : Le respect des délais est essentiel pour le bon déroulement de nos opérations. N’hésitez pas à me contacter directement en cas de blocage.
+Je compte sur votre réactivité.
+Cordialement,
+{nom_chef_dep}
+
