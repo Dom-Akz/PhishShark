@@ -1,0 +1,706 @@
+{
+  "matiere": "Sensibilisation au Phishing par Email",
+  "type": "QCM",
+  "questions": [
+    {
+      "id": 1,
+      "question": "Vous recevez un email de votre banque vous demandant de 'mettre à jour vos informations personnelles' en cliquant sur un lien. Que devez-vous faire en premier ?",
+      "options": ["Cliquer sur le lien pour vérifier", "Appeler votre banque avec le numéro officiel figurant sur votre carte bancaire", "Répondre à l'email pour demander des explications", "Ignorer l'email sans rien faire"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 2,
+      "question": "Qu'est-ce qui caractérise un email de phishing professionnel bien conçu ?",
+      "options": ["Il contient toujours des fautes d'orthographe", "Il imite parfaitement l'apparence d'un email légitime pour vous tromper", "Il arrive toujours d'une adresse en .ru ou .cn", "Il ne contient jamais de logo"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 3,
+      "question": "Dans un email, comment vérifier rapidement si un lien est suspect sans cliquer dessus ?",
+      "options": ["Regarder la couleur du lien", "Survoler le lien avec le curseur de la souris pour voir l'adresse réelle", "Cliquer avec le bouton droit puis 'Ouvrir'", "Copier le texte du lien uniquement"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 4,
+      "question": "Un email provenant du service RH vous demande de consulter 'votre nouvelle fiche de paie' via un lien. L'adresse de l'expéditeur se termine par '@rh-entreprise.net' au lieu de '@entreprise.com'. Quelle est la bonne réaction ?",
+      "options": ["Cliquer, c'est probablement une erreur technique", "Signaler l'email au service informatique sans cliquer", "Répondre en demandant si c'est légitime", "Ouvrir le lien sur votre smartphone plutôt que sur l'ordinateur"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 5,
+      "question": "Qu'est-ce que le spear phishing exactement ?",
+      "options": ["Un email de phishing envoyé en masse à des millions de personnes", "Un email de phishing personnalisé qui utilise des informations vous concernant spécifiquement", "Un phishing qui cible uniquement les mots de passe", "Un phishing qui utilise des pièces jointes infectées"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 6,
+      "question": "Un email vous annonce que vous avez gagné un bon d'achat de 500€ et vous demande de remplir un formulaire. Quel est le signe le plus évident qu'il s'agit d'une arnaque ?",
+      "options": ["L'email est arrivé un lundi matin", "Vous n'avez participé à aucun concours et l'offre est 'trop belle pour être vraie'", "L'email est écrit en français", "L'email contient des images"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 7,
+      "question": "Votre directeur général vous envoie un email vous demandant d'effectuer un virement bancaire urgent. Que devez-vous impérativement faire ?",
+      "options": ["Exécuter le virement immédiatement pour ne pas le contrarier", "Contacter le directeur par un autre moyen (téléphone, Teams) pour confirmer verbalement la demande", "Répondre à l'email pour demander le RIB", "Transférer l'email au service comptabilité sans vérifier"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 8,
+      "question": "Vous recevez un email avec une pièce jointe nommée 'Facture_Client.pdf'. Une fois téléchargée, l'icône est différente de celle d'un PDF normal. Quelle est l'explication la plus probable ?",
+      "options": ["Votre ordinateur a un problème d'affichage", "Le fichier est peut-être un programme malveillant (.exe) déguisé avec une double extension", "C'est un nouveau format de PDF", "Le fichier est compressé"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 9,
+      "question": "Pourquoi les cybercriminels créent-ils un sentiment d'urgence dans leurs emails de phishing ('Votre compte sera bloqué dans 24h') ?",
+      "options": ["Pour vous empêcher de réfléchir et de vérifier l'authenticité de la demande", "Parce que les systèmes informatiques sont vraiment lents", "Parce qu'ils n'ont pas beaucoup de temps", "C'est une obligation légale"],
+      "reponse": 0,
+      "points": 1
+    },
+    {
+      "id": 10,
+      "question": "Vous recevez un email de 'Microsoft' vous indiquant que votre boîte mail est pleine et qu'il faut cliquer pour augmenter la capacité. L'adresse de l'expéditeur est 'security-noreply@microsfot-support.com'. Que remarquez-vous ?",
+      "options": ["Rien d'anormal, c'est Microsoft", "L'adresse contient une faute d'orthographe ('microsfot') et un domaine suspect", "L'email est trop poli", "Il n'y a pas de pièce jointe"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 11,
+      "question": "Quelle information personnelle un service légitime (banque, administration, support IT) ne vous demandera-t-il JAMAIS par email ?",
+      "options": ["Votre prénom", "Votre adresse email professionnelle", "Votre mot de passe", "Le nom de votre entreprise"],
+      "reponse": 2,
+      "points": 1
+    },
+    {
+      "id": 12,
+      "question": "Vous avez cliqué sur un lien dans un email suspect puis réalisé votre erreur. Quelle est la première action à effectuer ?",
+      "options": ["Fermer simplement la page", "Débrancher le câble réseau/désactiver le WiFi et prévenir immédiatement le support informatique", "Continuer à travailler normalement", "Redémarrer l'ordinateur uniquement"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 13,
+      "question": "Comment les cybercriminels personnalisent-ils les attaques de spear phishing pour les rendre plus crédibles ?",
+      "options": ["En envoyant l'email à minuit", "En utilisant des informations trouvées sur LinkedIn, le site de l'entreprise ou les réseaux sociaux", "En écrivant en majuscules", "En mettant un simple 'Bonjour' sans nom"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 14,
+      "question": "Qu'est-ce que l'ingénierie sociale dans le contexte du phishing par email ?",
+      "options": ["Le travail des community managers", "La manipulation psychologique visant à vous faire baisser votre garde pour obtenir des informations confidentielles", "La conception de logiciels sociaux", "L'organisation d'événements d'entreprise"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 15,
+      "question": "Vous recevez un email de 'DHL' ou 'Chronopost' concernant un colis en attente avec des frais de douane à payer. Vous n'attendez aucun colis. Que faire ?",
+      "options": ["Payer les frais rapidement pour recevoir le colis", "Supprimer l'email ou le signaler comme spam/phishing", "Répondre pour dire que vous n'avez rien commandé", "Cliquer sur le lien pour voir de quel colis il s'agit"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 16,
+      "question": "Quel est le risque si vous répondez 'Je ne suis pas intéressé' à un email de phishing manifeste ?",
+      "options": ["Vous serez retiré de la liste de diffusion", "Vous confirmez aux pirates que votre adresse email est active, ce qui peut générer plus d'attaques", "Votre email sera bloqué", "Rien, c'est une bonne pratique"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 17,
+      "question": "En quoi l'authentification à deux facteurs (2FA) peut-elle vous sauver si votre mot de passe est volé via un email de phishing ?",
+      "options": ["Elle change votre mot de passe automatiquement", "L'attaquant ne pourra pas se connecter sans le second facteur (code SMS ou application)", "Elle prévient la banque", "Elle bloque l'email de phishing"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 18,
+      "question": "Votre collègue vous envoie un email avec pour seul contenu : 'Regarde ce document intéressant' et un lien étrange. Son style d'écriture ne lui ressemble pas. Quelle est la cause la plus probable ?",
+      "options": ["Il est pressé", "Sa messagerie a probablement été compromise et envoie du phishing en son nom", "Il a changé de clavier", "Il teste votre vigilance"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 19,
+      "question": "Qu'est-ce qu'un pixel espion (ou tracking pixel) caché dans un email ?",
+      "options": ["Une décoration d'email", "Une image invisible qui permet à l'expéditeur de savoir si vous avez ouvert l'email", "Un virus indétectable", "Une faute d'orthographe"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 20,
+      "question": "Quel est le principal objectif d'une campagne de sensibilisation par simulation de phishing dans une entreprise ?",
+      "options": ["Piéger les employés pour les punir", "Éduquer et entraîner les employés à reconnaître les menaces réelles sans risque", "Tester la puissance des serveurs mail", "Ralentir le réseau"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 21,
+      "question": "Un email de 'support technique' vous propose de télécharger un logiciel pour 'nettoyer votre ordinateur infecté'. Comment réagir ?",
+      "options": ["Télécharger le logiciel, c'est le support technique", "Ne jamais installer de logiciel demandé par un email non sollicité et prévenir le vrai support IT", "Répondre pour avoir plus de détails", "Redémarrer l'ordinateur"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 22,
+      "question": "Lorsque vous survolez un lien dans un email, que devez-vous principalement vérifier dans la barre d'état en bas du navigateur ?",
+      "options": ["La longueur du lien", "Si le nom de domaine correspond exactement au site officiel attendu (ex: 'amazon.fr' et non 'amazon-securite.com')", "La couleur du lien", "La présence de 'www'"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 23,
+      "question": "Quelle est la différence entre un spam publicitaire gênant et un email de phishing ?",
+      "options": ["Aucune, c'est la même chose", "Le phishing cherche activement à voler vos identifiants ou vos données bancaires", "Le phishing est toujours en anglais", "Le spam contient des images"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 24,
+      "question": "Pourquoi ne faut-il pas cliquer sur 'Se désabonner' dans un email suspect qui semble être du spam malveillant ?",
+      "options": ["Cela peut confirmer aux pirates que votre adresse est valide et active", "Cela ne fonctionne jamais", "Cela coûte de l'argent", "Cela supprime tous vos emails"],
+      "reponse": 0,
+      "points": 1
+    },
+    {
+      "id": 25,
+      "question": "Un email légitime de votre service informatique interne demandant un changement de mot de passe doit normalement :",
+      "options": ["Contenir un lien direct vers la page de changement", "Vous rediriger vers le portail interne officiel que vous connaissez déjà, sans lien cliquable suspect", "Vous demander votre mot de passe actuel en réponse", "Venir d'une adresse Gmail"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 26,
+      "question": "Le cadenas vert dans la barre d'adresse d'un site web signifie :",
+      "options": ["Que le site est totalement sûr et légitime", "Que la connexion entre votre navigateur et le site est chiffrée (personne ne peut espionner)", "Que le site appartient à une grande entreprise", "Qu'il n'y a pas de virus sur le site"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 27,
+      "question": "Vous avez saisi votre mot de passe professionnel sur une fausse page de connexion (phishing). Quelle est l'action immédiate à entreprendre ?",
+      "options": ["Attendre de voir ce qui se passe", "Changer immédiatement votre mot de passe depuis le vrai site et prévenir le support informatique", "Éteindre l'ordinateur", "Envoyer un email à vos collègues pour les prévenir"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 28,
+      "question": "Quel type de pièce jointe est le plus souvent utilisé pour propager des virus dans les emails professionnels ?",
+      "options": ["Les fichiers .txt", "Les documents Word ou Excel contenant des macros malveillantes (.docm, .xlsm)", "Les images .jpg", "Les fichiers .zip vides"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 29,
+      "question": "Lorsque vous recevez un email avec une offre d'emploi mirobolante pour un poste pour lequel vous n'avez jamais postulé, c'est probablement :",
+      "options": ["Une erreur de recrutement", "Une technique d'hameçonnage pour voler vos informations personnelles ou bancaires", "Un chasseur de têtes très motivé", "Un test de votre entreprise"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 30,
+      "question": "Qu'est-ce qu'une attaque de 'Whaling' (chasse à la baleine) ?",
+      "options": ["Une attaque massive contre tous les employés", "Une attaque de spear phishing qui cible spécifiquement les cadres dirigeants ou les personnes à hauts privilèges", "Une attaque qui utilise des images de baleines", "Une attaque via les réseaux sociaux"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 31,
+      "question": "Un email de phishing essaie souvent de vous faire peur (ex: 'Votre compte est suspendu'). Pourquoi cette technique fonctionne-t-elle ?",
+      "options": ["Parce que les gens aiment avoir peur", "Parce que l'émotion (peur, stress) court-circuite la réflexion logique et pousse à l'action rapide", "Parce que c'est illégal", "Parce que les systèmes sont instables"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 32,
+      "question": "Comment devez-vous traiter un email qui vous demande de 'Valider votre compte' en urgence ?",
+      "options": ["Valider rapidement pour éviter la suspension", "Fermer l'email, ouvrir un nouveau navigateur et vous connecter manuellement au service concerné pour vérifier s'il y a un problème", "Répondre en demandant pourquoi", "Transférer l'email à tous vos contacts"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 33,
+      "question": "Quel est le meilleur moyen de stocker et de gérer des mots de passe complexes et uniques pour chaque service ?",
+      "options": ["Les noter sur un post-it sous le clavier", "Utiliser un gestionnaire de mots de passe sécurisé", "Utiliser le même mot de passe partout", "Les enregistrer dans un fichier Word sur le bureau"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 34,
+      "question": "Un QR code est présent dans un email non sollicité. Quel est le risque associé ?",
+      "options": ["Il peut abîmer l'écran", "Il peut cacher une URL malveillante invisible à l'œil nu, contournant ainsi votre vigilance", "Il consomme beaucoup d'encre", "Il est illégal"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 35,
+      "question": "Pourquoi est-il dangereux d'utiliser le même mot de passe pour votre messagerie professionnelle et votre compte Netflix personnel ?",
+      "options": ["Ce n'est pas dangereux", "Si Netflix est piraté, les criminels auront aussi le mot de passe de votre messagerie professionnelle", "Netflix va bloquer votre compte pro", "Cela ralentit l'ordinateur"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 36,
+      "question": "Quel est le meilleur réflexe à adopter face à TOUT email qui vous demande une action urgente et inhabituelle ?",
+      "options": ["Faire ce qui est demandé", "Faire une pause, respirer, et vérifier par un autre canal de communication", "Supprimer l'email sans le lire", "Répondre 'Non merci'"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 37,
+      "question": "Un email prétend venir des 'Ressources Humaines' et vous demande de télécharger un nouveau 'règlement intérieur'. L'extension du fichier est '.scr'. Qu'est-ce que cela signifie ?",
+      "options": ["C'est un fichier crypté", "C'est un économiseur d'écran, souvent utilisé pour cacher un virus exécutable", "C'est une capture d'écran", "C'est un document protégé"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 38,
+      "question": "Si vous avez un doute sur l'authenticité d'un email, vers qui devez-vous vous tourner ?",
+      "options": ["Un collègue au hasard", "Le service informatique ou la sécurité des systèmes d'information", "L'expéditeur de l'email en répondant directement", "Personne, vous gérez seul"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 39,
+      "question": "Qu'est-ce que le 'Smishing' ?",
+      "options": ["Une nouvelle danse", "Un phishing qui utilise les SMS pour vous inciter à cliquer sur un lien malveillant", "Un logiciel de messagerie", "Un type de cryptage"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 40,
+      "question": "Pourquoi les emails de phishing contiennent-ils parfois des logos officiels et une mise en page parfaite ?",
+      "options": ["Pour respecter les normes", "Pour paraître plus légitimes et tromper votre confiance visuelle", "Parce que c'est la loi", "Parce que les pirates sont des graphistes"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 41,
+      "question": "Vous recevez un email de 'La Poste' concernant un remboursement de trop-perçu. Le lien mène vers 'laposte-remboursement.xyz'. Qu'est-ce qui cloche ?",
+      "options": ["Rien, c'est le site de La Poste", "Le nom de domaine est '.xyz' au lieu du site officiel 'laposte.fr'", "L'email est trop court", "Il n'y a pas de faute d'orthographe"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 42,
+      "question": "Quelle est la meilleure politique à suivre concernant les macros dans les documents Word ou Excel reçus par email ?",
+      "options": ["Toujours les activer", "Ne jamais les activer sauf si vous êtes absolument certain de l'origine du fichier et que vous l'avez demandé", "Les activer uniquement le matin", "Les activer si l'email est en français"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 43,
+      "question": "Qu'est-ce que le 'typosquatting' ?",
+      "options": ["Une faute de frappe dans un email", "Créer un faux site avec une URL très proche d'un site connu (ex: 'goggle.com' au lieu de 'google.com')", "Un sport de bureau", "Un virus de clavier"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 44,
+      "question": "Votre navigateur vous avertit que le site que vous visitez n'est pas sécurisé (certificat invalide). Vous y êtes arrivé via un email. Que faire ?",
+      "options": ["Ignorer l'avertissement et continuer", "Fermer la page immédiatement, cela peut être un site de phishing", "Ajouter une exception de sécurité", "Essayer avec un autre navigateur"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 45,
+      "question": "Pourquoi est-il important de maintenir votre logiciel de messagerie (Outlook, Thunderbird) et votre navigateur à jour ?",
+      "options": ["Pour avoir les nouvelles couleurs", "Les mises à jour corrigent souvent des failles de sécurité que les pirates pourraient exploiter", "Pour recevoir plus d'emails", "C'est obligatoire pour l'assurance"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 46,
+      "question": "Comment signaler efficacement un email de phishing dans une entreprise organisée ?",
+      "options": ["Le supprimer", "Utiliser le bouton 'Phishing Alert' ou 'Signalement' de votre client de messagerie, ou le transférer au support IT", "Le mettre dans le dossier Spam", "Répondre 'Ceci est un phishing'"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 47,
+      "question": "Qu'est-ce que le 'Pretexting' ?",
+      "options": ["Écrire un email avant de l'envoyer", "Inventer un scénario crédible (un 'prétexte') pour vous soutirer des informations", "Tester la connexion", "Utiliser un nouveau modèle d'email"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 48,
+      "question": "Vous gérez les factures fournisseurs. Un email d'un fournisseur connu vous demande de payer la prochaine facture sur un nouveau compte bancaire. La demande est urgente. Que faire ?",
+      "options": ["Payer pour éviter les pénalités", "Vérifier le changement de RIB en appelant votre contact habituel chez le fournisseur avec un numéro de téléphone connu et fiable", "Répondre à l'email pour confirmer le RIB", "Ignorer la demande"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 49,
+      "question": "Quelle information partagée sur LinkedIn peut aider un pirate à personnaliser une attaque de spear phishing contre vous ?",
+      "options": ["Votre prénom", "Votre poste actuel, le nom de votre entreprise et vos relations professionnelles", "Votre photo de profil", "Le nombre de vos contacts"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 50,
+      "question": "Un email contient une pièce jointe avec un nom très long incluant '...pdf______________________________________.exe'. Pourquoi est-ce dangereux ?",
+      "options": ["Le nom est trop long pour être lu", "Les nombreux espaces cachent la véritable extension '.exe' à la fin", "C'est un fichier corrompu", "Cela prend trop de place"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 51,
+      "question": "Quel est le canal de communication le plus sûr pour confirmer une demande sensible reçue par email ?",
+      "options": ["Répondre à l'email", "Envoyer un SMS", "Utiliser un canal distinct et vérifié : appel téléphonique au numéro officiel ou discussion en face à face", "Envoyer un autre email"],
+      "reponse": 2,
+      "points": 1
+    },
+    {
+      "id": 52,
+      "question": "Le service informatique annonce une campagne de simulation de phishing. Quel est l'objectif principal pour vous ?",
+      "options": ["Essayer de deviner quels emails sont faux", "Vous entraîner à détecter les signaux d'alerte pour vous protéger des vraies attaques", "Gagner un prix", "Prouver que vous êtes le meilleur"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 53,
+      "question": "Vous recevez un email d'alerte de sécurité de Google vous indiquant une tentative de connexion suspecte. Le lien mène vers 'google-account-verification.com'. Est-ce légitime ?",
+      "options": ["Oui, Google utilise plusieurs domaines", "Non, le domaine officiel de Google est 'google.com' ou 'accounts.google.com'", "Oui, si le cadenas est vert", "Peut-être"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 54,
+      "question": "Pourquoi les filtres anti-spam ne bloquent-ils pas 100% des emails de phishing ?",
+      "options": ["Ils ne sont pas activés", "Les cybercriminels changent constamment leurs techniques pour contourner les filtres", "Les filtres sont en vacances", "Les employés les désactivent"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 55,
+      "question": "Un email vous demande de vous connecter à votre espace client pour 'lire un message important'. Quelle est l'habitude la plus sûre ?",
+      "options": ["Cliquer sur le bouton 'Se connecter' dans l'email", "Aller dans vos favoris ou taper l'adresse officielle du site dans un nouvel onglet", "Utiliser le lien en bas de l'email", "Répondre à l'email pour demander le message"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 56,
+      "question": "Qu'est-ce que le 'clone phishing' ?",
+      "options": ["Envoyer un email en copie cachée", "Reproduire un email légitime précédemment reçu mais en remplaçant les liens ou pièces jointes par des versions malveillantes", "Créer un double de votre boîte mail", "Une technique de sauvegarde"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 57,
+      "question": "En cas de doute sur une pièce jointe inattendue, quel est le moyen le plus sûr de vérifier son contenu ?",
+      "options": ["L'ouvrir directement", "Contacter l'expéditeur par téléphone pour confirmer l'envoi avant de l'ouvrir", "La transférer à un collègue pour qu'il l'ouvre", "Changer son extension en .txt"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 58,
+      "question": "Quel est le risque si vous téléchargez et ouvrez une pièce jointe malveillante ?",
+      "options": ["Rien, les antivirus bloquent tout", "Cela peut installer un logiciel malveillant (virus, ransomware) qui peut chiffrer vos fichiers ou voler vos données", "L'ordinateur s'éteint", "Vous perdez l'email"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 59,
+      "question": "Pourquoi les adresses email des expéditeurs sont-elles parfois difficiles à lire sur mobile ?",
+      "options": ["À cause de la luminosité", "L'écran est plus petit et l'adresse complète est souvent masquée, il faut cliquer sur le nom pour l'afficher entièrement", "Le réseau est lent", "C'est un bug"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 60,
+      "question": "Vous recevez un email de 'Votre Carte Vitale' vous demandant de la renouveler en ligne. Quel est le bon réflexe ?",
+      "options": ["Cliquer sur le lien pour renouveler", "Savoir que l'Assurance Maladie ne demande jamais ce type d'action urgente par email et utiliser le site officiel Ameli.fr", "Répondre avec votre numéro de sécurité sociale", "Imprimer l'email"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 61,
+      "question": "Comment un attaquant peut-il savoir que vous avez ouvert son email de phishing ?",
+      "options": ["Il appelle votre standard", "Grâce à une image invisible (pixel espion) chargée depuis son serveur quand vous ouvrez l'email", "Il reçoit une notification de lecture", "Par télépathie"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 62,
+      "question": "Qu'est-ce qui est le plus efficace pour se protéger contre le phishing : la technologie ou la vigilance humaine ?",
+      "options": ["La technologie uniquement", "La vigilance humaine est la dernière et la plus importante barrière", "Les deux sont inutiles", "Le hasard"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 63,
+      "question": "Vous recevez un email avec une faute dans votre nom/prénom. Est-ce forcément un signe de phishing ?",
+      "options": ["Non, ça peut arriver", "C'est un indice fort, surtout si l'email est censé provenir d'un service avec lequel vous avez un compte régulier", "Oui, absolument", "Non, les entreprises font toujours des fautes"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 64,
+      "question": "Un email vous demande de payer une amende pour 'infraction au code de la route'. Le logo de l'ANTAI est présent. Vous n'avez pas de voiture. Que faire ?",
+      "options": ["Payer pour éviter les poursuites", "Signaler le phishing et supprimer, sachant que les vraies amendes arrivent par courrier postal", "Cliquer pour voir la photo radar", "Contester par email"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 65,
+      "question": "Pourquoi est-il dangereux d'utiliser le WiFi public d'un café ou d'un aéroport pour consulter ses emails professionnels ?",
+      "options": ["C'est plus lent", "Un pirate sur le même réseau peut potentiellement intercepter vos communications (attaque Man-in-the-Middle)", "Cela coûte plus cher en batterie", "C'est interdit par le Code du Travail"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 66,
+      "question": "Quelle est la principale différence entre un email de phishing classique et une attaque de spear phishing ?",
+      "options": ["La vitesse d'envoi", "Le spear phishing utilise des informations personnelles vous concernant pour être plus convaincant", "L'email classique contient des fautes", "Le spear phishing n'utilise pas de lien"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 67,
+      "question": "Que faire si vous recevez un email menaçant de divulguer des informations personnelles si vous ne payez pas une rançon ?",
+      "options": ["Payer immédiatement", "Ne pas payer, ne pas répondre, et prévenir le support informatique ou les autorités compétentes", "Répondre pour négocier", "Supprimer l'email et ne rien dire"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 68,
+      "question": "Qu'est-ce que le 'Vishing' ?",
+      "options": ["Un virus visuel", "Une attaque de phishing utilisant des appels téléphoniques (voix)", "Un nouveau réseau social", "Un type de VPN"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 69,
+      "question": "Un email vous propose de recevoir un cadeau en échange de votre participation à un sondage. Le lien mène vers un site inconnu. Que faites-vous ?",
+      "options": ["Vous participez pour le cadeau", "Vous ignorez l'email, il s'agit probablement d'une collecte de données personnelles ou d'une arnaque", "Vous utilisez un faux nom", "Vous transférez à vos amis"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 70,
+      "question": "Quelle est la meilleure façon de stocker un document contenant des mots de passe sensibles ?",
+      "options": ["Sur le bureau de l'ordinateur", "Dans un coffre-fort de mots de passe chiffré (KeePass, Bitwarden, etc.)", "Dans un tiroir fermé à clé", "Dans un fichier nommé 'mots_de_passe.txt'"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 71,
+      "question": "Un email de votre fournisseur d'accès internet vous informe que votre connexion va être coupée pour 'maintenance urgente' si vous ne cliquez pas sur un lien. Comment réagir ?",
+      "options": ["Cliquer pour éviter la coupure", "Ignorer l'email : un FAI ne coupe pas la ligne pour maintenance si vous ne cliquez pas sur un lien", "Répondre pour se plaindre", "Débrancher la box"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 72,
+      "question": "Comment vérifier rapidement la réputation d'un site web sans y accéder ?",
+      "options": ["Demander sur Facebook", "Utiliser un service en ligne comme VirusTotal pour scanner l'URL", "Deviner", "Crier le nom du site"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 73,
+      "question": "Pourquoi les criminels utilisent-ils des services de raccourcissement d'URL (bit.ly, tinyurl) dans leurs emails ?",
+      "options": ["Pour faire joli", "Pour masquer la véritable destination malveillante du lien", "Pour gagner de la place", "Parce que c'est gratuit"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 74,
+      "question": "Votre boîte mail affiche 'Ce message semble dangereux' en haut d'un email. Que devez-vous faire ?",
+      "options": ["Passer outre, c'est une erreur", "Être extrêmement prudent et ne pas interagir avec le contenu sans vérification approfondie", "Le classer dans un dossier", "Le transférer pour vérification"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 75,
+      "question": "Quel est le principal vecteur d'infection par ransomware en entreprise ?",
+      "options": ["Les clés USB", "Les emails de phishing avec pièces jointes ou liens malveillants", "Les CD-ROM", "Les mises à jour Windows"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 76,
+      "question": "Un email vous demande de confirmer votre adresse email et mot de passe pour 'éviter la fermeture de votre compte'. Que ne faut-il SURTOUT PAS faire ?",
+      "options": ["Supprimer l'email", "Fournir vos identifiants, surtout le mot de passe", "Le signaler comme phishing", "Prévenir le support"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 77,
+      "question": "Comment les informations de votre vie privée (naissance, animaux, enfants) peuvent-elles être utilisées contre vous dans un email de phishing ?",
+      "options": ["Elles ne servent à rien", "Pour personnaliser l'email ('Joyeux anniversaire Sophie ! Cliquez pour votre cadeau') et gagner votre confiance", "Pour vous envoyer de la publicité", "Pour pirater votre compte bancaire directement"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 78,
+      "question": "Vous recevez un email de 'Netflix' vous indiquant un problème de paiement. Le design est parfait. Que devez-vous absolument éviter ?",
+      "options": ["Aller sur le site de Netflix via votre navigateur", "Vérifier votre compte bancaire", "Cliquer sur le lien dans l'email pour 'mettre à jour' votre moyen de paiement", "Supprimer l'email"],
+      "reponse": 2,
+      "points": 1
+    },
+    {
+      "id": 79,
+      "question": "Quel est le risque de la fonction 'Aperçu des messages' dans Outlook si vous recevez un email de phishing ?",
+      "options": ["Aucun risque", "L'aperçu peut charger le pixel espion ou, dans de rares cas, exécuter du code malveillant sans même ouvrir l'email", "Cela supprime l'email", "Cela bloque l'expéditeur"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 80,
+      "question": "Un email vous demande de 'mettre à jour votre navigateur' en cliquant sur un lien pour des raisons de sécurité. Où devez-vous faire les mises à jour ?",
+      "options": ["Via le lien fourni dans l'email", "Uniquement via les paramètres internes du navigateur (Aide > À propos de...) ou le site officiel", "En redémarrant l'ordinateur", "En désinstallant le navigateur"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 81,
+      "question": "Qu'est-ce qui est le plus suspect dans l'adresse email 'service-client@amazone-securite.fr' ?",
+      "options": ["Le tiret", "La faute d'orthographe 'amazone' et l'ajout inutile '-securite'", "Le .fr", "service-client"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 82,
+      "question": "Comment réagir si un lien dans un email vous redirige vers une page qui ressemble à Google ou Microsoft mais l'URL dans la barre d'adresse est bizarre ?",
+      "options": ["Entrer vos identifiants", "Fermer l'onglet immédiatement, ne rien saisir", "Vérifier l'URL plus tard", "Continuer pour voir"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 83,
+      "question": "Qu'est-ce que le 'Credential Harvesting' ?",
+      "options": ["La récolte de légumes", "La collecte massive d'identifiants de connexion via de fausses pages de login", "Le stockage de mots de passe", "La création de nouveaux comptes"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 84,
+      "question": "Un email vous promet un remboursement des impôts. La période des impôts est passée. Est-ce crédible ?",
+      "options": ["Oui, l'administration fait des cadeaux", "Non, les remboursements se font par virement automatique après déclaration officielle, jamais via un simple email avec lien", "Oui, si on clique vite", "Peut-être"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 85,
+      "question": "Pourquoi est-il important de ne pas laisser son adresse email professionnelle sur des sites publics ou forums ?",
+      "options": ["Pour éviter de recevoir des newsletters", "Les robots des spammeurs et des pirates la collectent pour en faire des cibles de phishing", "C'est interdit", "Cela coûte cher"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 86,
+      "question": "Quelle est la principale caractéristique d'un mot de passe robuste ?",
+      "options": ["Il est court et facile à retenir", "Il est long (12+ caractères), unique et mélange lettres, chiffres et symboles", "Il contient votre date de naissance", "Il est écrit dans une autre langue"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 87,
+      "question": "Votre patron est en déplacement. Vous recevez un email de sa part vous demandant d'acheter des cartes cadeaux pour un client. Il dit être injoignable par téléphone. Que faire ?",
+      "options": ["Acheter les cartes immédiatement", "Ne rien faire et attendre de pouvoir le joindre par un moyen vérifié", "Envoyer les codes par email", "Demander à un collègue de le faire"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 88,
+      "question": "Quel est le principal objectif du 'Business Email Compromise' (BEC) ?",
+      "options": ["Changer le mot de passe", "Tromper l'employé pour effectuer un virement frauduleux ou transmettre des données sensibles", "Envoyer du spam", "Tester le réseau"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 89,
+      "question": "Un email vous demande de télécharger un nouveau logiciel de visioconférence que vous n'avez jamais utilisé. Comment procéder ?",
+      "options": ["Télécharger via le lien dans l'email", "Vérifier auprès du service informatique si ce logiciel est autorisé et le télécharger depuis le site officiel ou la logithèque de l'entreprise", "Refuser toutes les réunions", "Utiliser votre logiciel personnel"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 90,
+      "question": "Qu'est-ce qu'un 'Cheval de Troie Bancaire' ?",
+      "options": ["Un virus inoffensif", "Un logiciel malveillant qui surveille vos connexions aux sites bancaires pour voler vos identifiants", "Un nouveau moyen de paiement", "Une pièce de monnaie"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 91,
+      "question": "Vous recevez un email de phishing au bureau. Vous l'avez identifié et ne l'avez pas ouvert. Que devez-vous en faire ?",
+      "options": ["Le garder pour vous", "Le signaler via l'outil de signalement de l'entreprise ou le transférer au support IT avant de le supprimer", "Le déplacer dans la corbeille", "Répondre 'Stop'"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 92,
+      "question": "Quelle est la faille humaine la plus exploitée par le phishing ?",
+      "options": ["La gourmandise", "La confiance, la peur et l'urgence", "L'ennui", "La curiosité uniquement"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 93,
+      "question": "Un email vous informe que votre abonnement antivirus a expiré et qu'il faut 'cliquer ici pour le renouveler'. Vous n'avez pas cet antivirus. C'est :",
+      "options": ["Une erreur de destinataire", "Une tentative de phishing ou une arnaque au faux support technique", "Une promotion légitime", "Un test de votre banque"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 94,
+      "question": "Pourquoi est-il conseillé de taper manuellement les adresses des sites sensibles (banque, impôts) plutôt que de cliquer sur des liens ?",
+      "options": ["Pour faire travailler sa mémoire", "Pour être sûr à 100% d'arriver sur le site officiel et non sur une copie frauduleuse", "Pour économiser des clics", "Parce que les liens ne fonctionnent pas"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 95,
+      "question": "Qu'est-ce que le 'Quishing' ?",
+      "options": ["Une marque de vêtements", "Une attaque de phishing qui utilise des QR codes malveillants", "Un nouveau sport", "Un type de fichier"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 96,
+      "question": "Vous recevez une notification comme quoi un colis ne peut pas être livré. Le lien mène vers un site avec un formulaire demandant vos informations personnelles et bancaires pour 'replanifier'. C'est suspect car :",
+      "options": ["Le site est en français", "Les frais de relivraison sont souvent une excuse pour voler vos données bancaires", "Il n'y a pas de logo", "L'email est poli"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 97,
+      "question": "Pourquoi ne faut-il jamais communiquer un code de validation reçu par SMS à une personne au téléphone ou par email ?",
+      "options": ["Le code est personnel et sert de deuxième facteur d'authentification", "Cela coûte de l'argent", "Le code est trop long", "Ce n'est pas grave"],
+      "reponse": 0,
+      "points": 1
+    },
+    {
+      "id": 98,
+      "question": "Quel est le conseil de sécurité le plus important concernant les emails ?",
+      "options": ["Lire tous les emails", "Réfléchir avant de cliquer (Stop, Look, Think)", "Classer ses emails par couleur", "Répondre rapidement"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 99,
+      "question": "Comment un gestionnaire de mots de passe vous protège-t-il contre le phishing ?",
+      "options": ["Il bloque les emails", "Il ne remplira pas automatiquement vos identifiants sur un faux site (car l'URL ne correspond pas)", "Il change vos mots de passe", "Il scanne les virus"],
+      "reponse": 1,
+      "points": 1
+    },
+    {
+      "id": 100,
+      "question": "Quel est le mot d'ordre face à un email non sollicité ou suspect ?",
+      "options": ["Curiosité", "Méfiance et Vérification", "Vitesse", "Confiance aveugle"],
+      "reponse": 1,
+      "points": 1
+    }
+  ]
+}

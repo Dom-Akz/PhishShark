@@ -44,6 +44,7 @@ class Entreprise(models.Model):
 
 
 class Employes(models.Model):
+    # this is just a internal identifer (use only inside the project apps to identife the Employes)
     # entreprise-Fisrt/last-Letterfrom(first_name/last_name)-year(2026)-id
     matricule = models.CharField(max_length=100, unique=True)
 
