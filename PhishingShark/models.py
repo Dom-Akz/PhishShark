@@ -1,6 +1,24 @@
 from django.db import models
 
 
+EMAIL_STATUS_CHOICES = [
+    ("PENDING", "Pending"),
+    ("SENT", "Sent"),
+    ("RECEIVED", "Received"),
+    ("FAILED", "Failed"),
+]
+
+EMAIL_TYPE_CHOICES = [
+    ("COMPANY_EMAIL", "company_email"),
+    ("PAYMENT_REQUEST", "payment_request"),
+    ("JOB_OFFER", "job_offer"),
+    ("ID_DEP", "it_dep"),
+    ("SCAM_IPHONE", "scam_iphone"),
+    ("SCAM_LOTTERY", "scam_lottery"),
+    ("SECURITY_ALERT", "security_alert"),
+]
+
+
 class Departement(models.Model):
     name = models.CharField(max_length=100, unique=True)
     chef_departement = models.CharField(max_length=100)
@@ -12,7 +30,6 @@ class Departement(models.Model):
         return self.name
 
 
-# Model Administrateur :
 class Administrateur(models.Model):
     name = models.CharField(max_length=100)
     username = models.CharField(max_length=100, unique=True)
@@ -64,10 +81,24 @@ class Employes(models.Model):
         Departement, on_delete=models.SET_NULL, null=True, related_name="employees"
     )
 
-    # add related info here :
+    # related info here :
 
     updated_at = models.DateTimeField(auto_now_add=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.first_name
+
+
+class EmailTracking(models.Model):
+    employe = models.ForeignKey(
+        Employes, on_delete=models.CASCADE, related_name="email_tracking"
+    )
+    type = models.CharField(max_length=20, choices=EMAIL_TYPE_CHOICES)
+    status = models.CharField(
+        max_length=20, choices=EMAIL_STATUS_CHOICES, default="PENDING"
+    )
+    send_date = models.DateTimeField(auto_now_add=True)
+    recive_date = models.DateTimeField(null=True, blank=True)
+    # use to track the email by the eemploye
+    uuid = models.CharField(max_length=100, unique=True)
