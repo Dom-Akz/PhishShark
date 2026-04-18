@@ -5,6 +5,7 @@ EMAIL_STATUS_CHOICES = [
     ("PENDING", "Pending"),
     ("SENT", "Sent"),
     ("RECEIVED", "Received"),
+    ("CLICK", "click"),
     ("FAILED", "Failed"),
 ]
 
