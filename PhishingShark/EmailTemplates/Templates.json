@@ -9,10 +9,14 @@
             "content": "Je vous contacte concernant une tâche urgente qui nécessite votre attention immédiate.\nMerci de bien vouloir accéder au lien ci-dessous afin de consulter les détails et commencer le traitement sans délai :\n{lien}",
             "footer": "Le respect des délais est essentiel pour le bon déroulement de nos opérations. N'hésitez pas à me contacter directement en cas de blocage.\nJe compte sur votre réactivité.\nCordialement,\n{nom_chef_dep}",
             "variables": [
-                "nom_chef_dep",
-                "companyName",
-                "Employe_Name",
-                "lien"
+                {
+                    "sender": [
+                        "nom_chef_dep",
+                        "company_name"
+                    ],
+                    "header": "Employe_Name",
+                    "content": "lien"
+                }
             ]
         },
         {
@@ -24,8 +28,10 @@
             "content": "Suite à une vérification de nos comptes, nous constatons qu'une facture récente reste impayée à ce jour.\nMontant dû : 1 245,00 €\nDate d'échéance : 15/04/2026\nAfin d'éviter des frais de retard ou une suspension de service, nous vous invitons à régulariser votre situation dès maintenant en cliquant sur le lien sécurisé ci-dessous :\n{lien}",
             "footer": "Cordialement,\nService Facturation",
             "variables": [
-                "emp_name",
-                "lien"
+                {
+                    "header": "emp_name",
+                    "content": "lien"
+                }
             ]
         },
         {
@@ -37,8 +43,10 @@
             "content": "Bonjour,\nNous avons consulté votre profil en ligne et avons été très impressionnés par votre parcours.\nDans le cadre de l'expansion de notre entreprise, nous souhaitons vous proposer un poste de Chargé(e) de mission en télétravail, avec une rémunération attractive allant jusqu'à 3 500€ par mois, sans expérience requise.\nVeuillez également confirmer votre intérêt en cliquant sur le lien ci-dessous :\n{lien}\nAttention : cette offre est limitée et valable uniquement pendant 48 heures",
             "footer": "Dans l'attente de votre réponse,\nCordialement,\nService Recrutement",
             "variables": [
-                "emp_name",
-                "lien"
+                {
+                    "header": "emp_name",
+                    "content": "lien"
+                }
             ]
         },
         {
@@ -50,28 +58,25 @@
             "content": "Dans le cadre de la mise à jour de sécurité de notre système informatique, le service IT a détecté une activité inhabituelle sur votre compte professionnel.\nAfin d'éviter toute suspension de votre accès, nous vous demandons de vérifier vos informations immédiatement en cliquant sur le lien ci-dessous :\n{lien}",
             "footer": "Cordialement,\nService Informatique\nSupport Technique",
             "variables": [
-                "emp_name",
-                "lien"
+                {
+                    "header": "emp_name",
+                    "content": "lien"
+                }
             ]
         },
         {
             "id": "scam_iphone",
             "name": "iPhone Gift Scam",
-            "sender_options": [
-                "noreply@apple-gift-center.net",
-                "support@apple-verification.com",
-                "apple-support@secure-prizes.com"
-            ],
-            "sender": "{selected_sender}",
+            "sender": "noreply@apple-gift-center.net",
             "subject": "Vous avez gagné un iPhone",
             "header": "Félicitations {emp_name} 🎉",
             "content": "Vous avez été sélectionné(e) pour gagner un iPhone 15 gratuit.\nPour recevoir votre cadeau, cliquez sur le lien ci-dessous et confirmez vos informations :\n{lien}\nRépondez dans les 2 heures, sinon votre lot sera perdu.",
             "footer": "Cordialement,\nContactez-nous : {sender_email}",
             "variables": [
-                "emp_name",
-                "lien",
-                "selected_sender",
-                "sender_email"
+                {
+                    "header": "emp_name",
+                    "content": "lien"
+                }
             ]
         },
         {
@@ -81,11 +86,12 @@
             "subject": "Vous avez gagné un tirage au sort",
             "header": "Félicitations {emp_name} 🎉",
             "content": "Vous avez été tiré au sort et vous avez gagné 5 000 €.\nPour recevoir votre gain, vous devez payer des frais de validation de 2 €.\nCliquez ici : {lien}",
-            "footer": "Cordialement,\nContactez-nous : {sender_email}",
+            "footer": "Cordialement,\nContactez-nous : lotterie@gagnant-now.net",
             "variables": [
-                "emp_name",
-                "lien",
-                "sender_email"
+                {
+                    "header": "emp_name",
+                    "content": "lien"
+                }
             ]
         },
         {
@@ -94,13 +100,17 @@
             "sender": "google-security@account.com",
             "subject": "Alerte de sécurité : Connexion suspecte détectée",
             "header": "Bonjour {emp_name},",
-            "content": "Nous avons détecté une tentative de connexion inhabituelle à votre compte depuis un appareil ou une localisation inconnue.\nDétails de la tentative :\nAppareil : Linux, Navigateur inconnu\nLocalisation : {Different_location_from_emp_live}\nDate : {today}\nSi vous êtes à l'origine de cette connexion, aucune action n'est requise.\nDans le cas contraire, nous vous recommandons fortement de sécuriser votre compte immédiatement en confirmant votre identité via le lien ci-dessous :\n{lien}",
+            "content": "Nous avons détecté une tentative de connexion inhabituelle à votre compte depuis un appareil ou une localisation inconnue.\nDétails de la tentative :\nAppareil : Linux, Navigateur inconnu\nLocalisation : {diff_location}\nDate : {today_date}\nSi vous êtes à l'origine de cette connexion, aucune action n'est requise.\nDans le cas contraire, nous vous recommandons fortement de sécuriser votre compte immédiatement en confirmant votre identité via le lien ci-dessous :\n{lien}",
             "footer": "Merci pour votre vigilance.\nCordialement,\nÉquipe Sécurité",
             "variables": [
-                "emp_name",
-                "Different_location_from_emp_live",
-                "today",
-                "lien"
+                {
+                    "header": "emp_name",
+                    "content": [
+                        "diff_location",
+                        "today_date",
+                        "lien"
+                    ]
+                }
             ]
         }
     ]

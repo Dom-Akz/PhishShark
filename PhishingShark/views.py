@@ -6,6 +6,8 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django import forms
 import json
+import datetime
+import os
 
 # ROOT_FOLDER="/home/soufiane/cs/PFA/PhishingShark/PhishShark/PhishShark/"
 TEMPLATES = "EmailTemplates/Templates.json"
@@ -19,13 +21,39 @@ def extract_ink(ink):
     ext = ink.split("_")  # [dep, chefdep, ...]
 
     res_json = {
-        "nom": ext[0],
+        "emp_name": ext[0],
         "departement": ext[1],
-        "chef departement": ext[2],
+        "nom_chef_dep": ext[2],
         "localisation": ext[3],
-        "entreprise": ext[4],
+        "company_name": ext[4],
+        "lien": "lien",  # todo
+        "today_date": datetime.date.today(),
     }
     return res_json
+
+
+# replace variable with value using emp_info
+# return the email as json
+def replace_var(emp_info, template):
+    email = template
+    del email["variables"]
+    for var_mapping in template["variables"]:
+        for field_name, placeholder in var_mapping.items():
+            if isinstance(placeholder, list):
+                # Multiple placeholders for one field
+                for p in placeholder:
+                    if p in emp_info:
+                        email[field_name] = email[field_name].replace(
+                            f"{{{p}}}", emp_info[p]
+                        )
+            else:
+                # Single placeholder
+                if placeholder in emp_info:
+                    email[field_name] = email[field_name].replace(
+                        f"{{{placeholder}}}", emp_info[placeholder]
+                    )
+
+    return email
 
 
 # main functions:
@@ -60,13 +88,8 @@ def generate_email(employe):
     if max_type["received_count"] >= 2:
         for item in tmp:
             if max_type["type"] == item["id"]:
-                # get the variable field
-                variables = tmp.get("variables", [])
-                # remove the variable field
-                email = tmp
-                del email["variables"]
-                email["header"] = email["header"].replace("{emp_name}", emp_info["nom"])
-
+                email = replace_var(emp_info, item)
+                break
     # use different email type than the last click one
     else:
         last_email_click = (
@@ -74,6 +97,11 @@ def generate_email(employe):
             .order_by("-received_date")
             .first()
         )
+        for item in tmp:
+            if last_email_click.type != item["id"]:
+                email = replace_var(emp_info, item)
+                break
+    return email
 
 
 # send email
@@ -87,10 +115,12 @@ def track_email():
 
 
 # here is the function that handle all steps
-@login_required
+@login_required(login_url="login")
 @require_POST
 def phishing_email(request):
-    admin = request.user
+    # email = generate_email(ink)
+    # uuid = send_email(email)
+    # track_email()  # thread
     pass
 
 
@@ -112,6 +142,6 @@ def logout_u(request):
 
 
 # main dashboard
-@login_required
+@login_required(login_url="login")
 def dashboard(request):
     pass
