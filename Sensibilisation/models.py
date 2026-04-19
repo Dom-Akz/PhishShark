@@ -22,5 +22,5 @@ class QcmResult(models.Model):
 
 class Sensibilisation(models.Model):
     employee_matricule = models.CharField(max_length=100)
-    # totale time spen reading the sSensibilisation page (hh:mm)
+    # totale time spen reading the Sensibilisation page (hh:mm)
     totale_time = models.TimeField()

@@ -14,7 +14,7 @@ import datetime
 
 
 # ROOT_FOLDER="/home/soufiane/cs/PFA/PhishingShark/PhishShark/PhishShark/"
-TEMPLATES = "EmailTemplates/Templates.json"
+TEMPLATES_FILE = "EmailTemplates/Templates.json"
 
 
 # helper functions:
@@ -65,17 +65,16 @@ def replace_var(emp_info, template):
 
 # generate email from templates using ink
 def generate_email(employe):
-    if not os.path.exists(TEMPLATES):
-        raise FileNotFoundError(f"The file '{TEMPLATES}' does not exist")
+    if not os.path.exists(TEMPLATES_FILE):
+        raise FileNotFoundError(f"The file '{TEMPLATES_FILE}' does not exist")
 
-    ink = Employes.objects.filter(user=employe).only("ink")
-    emp_info = extract_ink(ink)
-    email = {}  # json response
+    emp_info = extract_ink(employe.ink)
+    email = {}
 
     # Email Type Choice:
     # get totale email clicks and there type
     received_counts = (
-        EmailTracking.objects.filter(user=employe, status="CLICK")
+        EmailTracking.objects.filter(employe=employe, status="CLICK")
         .values("type")
         .annotate(received_count=Count("id"))
         .order_by("-received_count")
@@ -85,7 +84,7 @@ def generate_email(employe):
     max_type = received_counts.first()
 
     # open ttemplates file
-    with open(TEMPLATES, "r") as templates:
+    with open(TEMPLATES_FILE, "r") as templates:
         tmp = json.load(templates)
 
     # use the same type again
@@ -108,19 +107,16 @@ def generate_email(employe):
     return email
 
 
-# TODO: send to all employe with in a departement
+# TODO: send to all employe with in a departement (send_mail return the number of mail sent)
 # send email
-def send_email(email, employe):
-    # get the employe email
-    emp_email = Employes.objects.filter(user=employe).only("email")
-
+def send_email(email, emp_email):
     body = email["header"] + email["content"] + email["footer"]
 
     send_mail(
         subject=email["subject"],
         message=body,
         from_email=email["sender"],
-        recipient_list=[emp_email],
+        recipient_list=[emp_email],  # list of emails
         fail_silently=False,
     )
 
@@ -131,13 +127,16 @@ def track_email():
 
 
 # here is the function that handle all steps
-@login_required(login_url="login")
 @require_POST
-def phishing_email(request):
-    # email = generate_email(ink)
-    # uuid = send_email(email)
-    # track_email()  # thread
-    pass
+def phishing_email(request, employe):
+    # get all employe info
+    emp = Employes.objects.get(id=employe)
+
+    email = generate_email(emp)
+
+    send_email(email, emp.email)
+
+    # track_email()
 
 
 # Authentification :
@@ -157,7 +156,13 @@ def logout_u(request):
 # sub-dashboard function
 
 
+@require_POST
+def ajouter_employe(request):
+    pass
+
+
 # main dashboard
-@login_required(login_url="login")
+
+
 def dashboard(request):
     pass

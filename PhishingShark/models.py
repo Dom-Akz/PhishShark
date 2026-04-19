@@ -103,4 +103,3 @@ class EmailTracking(models.Model):
     recive_date = models.DateTimeField(null=True, blank=True)
     # use to track the email by the eemploye
     uuid = models.CharField(max_length=100, unique=True)
-    sender = models.EmailField(max_length=100)
