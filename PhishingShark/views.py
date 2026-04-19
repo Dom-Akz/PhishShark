@@ -5,9 +5,13 @@ from django.db.models import Count
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django import forms
-import json
-import datetime
 import os
+import json
+from django.core.mail import send_mail
+
+# from django.conf import settings
+import datetime
+
 
 # ROOT_FOLDER="/home/soufiane/cs/PFA/PhishingShark/PhishShark/PhishShark/"
 TEMPLATES = "EmailTemplates/Templates.json"
@@ -104,9 +108,21 @@ def generate_email(employe):
     return email
 
 
+# TODO: send to all employe with in a departement
 # send email
-def send_email():
-    pass
+def send_email(email, employe):
+    # get the employe email
+    emp_email = Employes.objects.filter(user=employe).only("email")
+
+    body = email["header"] + email["content"] + email["footer"]
+
+    send_mail(
+        subject=email["subject"],
+        message=body,
+        from_email=email["sender"],
+        recipient_list=[emp_email],
+        fail_silently=False,
+    )
 
 
 # track the email

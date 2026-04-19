@@ -5,8 +5,8 @@
             "name": "Urgent Task from Manager",
             "sender": "{nom_chef_dep}@{companyName}.com",
             "subject": "Tâche urgente à traiter immédiatement",
-            "header": "Bonjour {Employe_Name},",
-            "content": "Je vous contacte concernant une tâche urgente qui nécessite votre attention immédiate.\nMerci de bien vouloir accéder au lien ci-dessous afin de consulter les détails et commencer le traitement sans délai :\n{lien}",
+            "header": "Bonjour {Employe_Name},\n",
+            "content": "Je vous contacte concernant une tâche urgente qui nécessite votre attention immédiate.\nMerci de bien vouloir accéder au lien ci-dessous afin de consulter les détails et commencer le traitement sans délai :\n{lien}\n",
             "footer": "Le respect des délais est essentiel pour le bon déroulement de nos opérations. N'hésitez pas à me contacter directement en cas de blocage.\nJe compte sur votre réactivité.\nCordialement,\n{nom_chef_dep}",
             "variables": [
                 {
@@ -24,8 +24,8 @@
             "name": "Unpaid Invoice Notice",
             "sender": "bank-payment@portal.com",
             "subject": "Facture impayée – Action immédiate requise",
-            "header": "Bonjour {emp_name},",
-            "content": "Suite à une vérification de nos comptes, nous constatons qu'une facture récente reste impayée à ce jour.\nMontant dû : 1 245,00 €\nDate d'échéance : 15/04/2026\nAfin d'éviter des frais de retard ou une suspension de service, nous vous invitons à régulariser votre situation dès maintenant en cliquant sur le lien sécurisé ci-dessous :\n{lien}",
+            "header": "Bonjour {emp_name},\n",
+            "content": "Suite à une vérification de nos comptes, nous constatons qu'une facture récente reste impayée à ce jour.\nMontant dû : 1 245,00 €\nDate d'échéance : 15/04/2026\nAfin d'éviter des frais de retard ou une suspension de service, nous vous invitons à régulariser votre situation dès maintenant en cliquant sur le lien sécurisé ci-dessous :\n{lien}"\n,
             "footer": "Cordialement,\nService Facturation",
             "variables": [
                 {
@@ -39,7 +39,7 @@
             "name": "Urgent Job Offer",
             "sender": "recruitment@careers.com",
             "subject": "Offre d'emploi urgente – Réponse requise sous 48h",
-            "header": "Bonjour {emp_name},",
+            "header": "Bonjour {emp_name},\n",
             "content": "Bonjour,\nNous avons consulté votre profil en ligne et avons été très impressionnés par votre parcours.\nDans le cadre de l'expansion de notre entreprise, nous souhaitons vous proposer un poste de Chargé(e) de mission en télétravail, avec une rémunération attractive allant jusqu'à 3 500€ par mois, sans expérience requise.\nVeuillez également confirmer votre intérêt en cliquant sur le lien ci-dessous :\n{lien}\nAttention : cette offre est limitée et valable uniquement pendant 48 heures",
             "footer": "Dans l'attente de votre réponse,\nCordialement,\nService Recrutement",
             "variables": [
