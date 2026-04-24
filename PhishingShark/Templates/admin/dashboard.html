@@ -1,0 +1,449 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Security Dashboard - PhishShark</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}" />
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                    <span>PhishShark Admin</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="active"><a href="#dashboard">📊 Dashboard</a></li>
+                    <li><a href="#phishing">📧 Phishing Campaigns</a></li>
+                    <li><a href="#training">📚 Training & Awareness</a></li>
+                    <li><a href="#employees">👥 Employees</a></li>
+                    <li><a href="#departments">🏢 Departments</a></li>
+                    <li><a href="#reports">📈 Reports</a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="avatar">{{ user.username|slice:":1"|upper }}</div>
+                    <div class="user-details">
+                        <span class="user-name">{{ user.username|default:"Admin User" }}</span>
+                        <span class="user-role">
+                            {% if is_superuser %}Super Administrator{% else %}Department Admin{% endif %}
+                        </span>
+                        {% if admin_department %}
+                        <span class="user-dept">Dept: {{ admin_department }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-left">
+                    <button class="menu-toggle" id="menuToggle">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="3" y1="12" x2="21" y2="12"/>
+                            <line x1="3" y1="6" x2="21" y2="6"/>
+                            <line x1="3" y1="18" x2="21" y2="18"/>
+                        </svg>
+                    </button>
+                    <h1>Security Dashboard</h1>
+                </div>
+                <div class="header-right">
+                    <!-- Date Range Filter -->
+                    <div class="filter-group">
+                        <label for="dateRange">Date Range:</label>
+                        <select id="dateRange" class="filter-select">
+                            <option value="7" {% if selected_days == 7 %}selected{% endif %}>Last 7 days</option>
+                            <option value="30" {% if selected_days == 30 %}selected{% endif %}>Last 30 days</option>
+                            <option value="90" {% if selected_days == 90 %}selected{% endif %}>Last 90 days</option>
+                            <option value="365" {% if selected_days == 365 %}selected{% endif %}>Last year</option>
+                        </select>
+                    </div>
+                    <!-- Department Filter (only for superuser) -->
+                    {% if is_superuser %}
+                    <div class="filter-group">
+                        <label for="departmentFilter">Department:</label>
+                        <select id="departmentFilter" class="filter-select">
+                            <option value="all">All Departments</option>
+                            {% for dept in departments %}
+                            <option value="{{ dept.id }}" {% if selected_department|stringformat:"s" == dept.id|stringformat:"s" %}selected{% endif %}>
+                                {{ dept.name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    {% endif %}
+                    <!-- Refresh Button -->
+                    <button class="btn btn-primary" id="refreshData">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="23 4 23 10 17 10"/>
+                            <polyline points="1 20 1 14 7 14"/>
+                            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+                        </svg>
+                        Refresh
+                    </button>
+                </div>
+            </header>
+
+            <!-- Dashboard Content -->
+            <div class="dashboard-content">
+                <!-- KPI Cards Section -->
+                <section class="kpi-section">
+                    <h2 class="section-title">Key Performance Indicators</h2>
+                    <div class="kpi-grid">
+                        <!-- Phishing KPIs -->
+                        <div class="kpi-card kpi-primary">
+                            <div class="kpi-icon">📧</div>
+                            <div class="kpi-content">
+                                <span class="kpi-value">{{ total_emails_sent|default:"0" }}</span>
+                                <span class="kpi-label">Emails Sent</span>
+                            </div>
+                        </div>
+
+                        <div class="kpi-card kpi-danger">
+                            <div class="kpi-icon">⚠️</div>
+                            <div class="kpi-content">
+                                <span class="kpi-value">{{ total_clicks|default:"0" }}</span>
+                                <span class="kpi-label">Phishing Clicks</span>
+                            </div>
+                        </div>
+
+                        <div class="kpi-card kpi-warning">
+                            <div class="kpi-icon">📊</div>
+                            <div class="kpi-content">
+                                <span class="kpi-value">{{ click_rate|default:"0" }}%</span>
+                                <span class="kpi-label">Click Rate</span>
+                            </div>
+                        </div>
+
+                        <div class="kpi-card kpi-success">
+                            <div class="kpi-icon">👥</div>
+                            <div class="kpi-content">
+                                <span class="kpi-value">{{ total_employees|default:"0" }}</span>
+                                <span class="kpi-label">Total Employees</span>
+                            </div>
+                        </div>
+
+                        <!-- Training KPIs -->
+                        <div class="kpi-card kpi-info">
+                            <div class="kpi-icon">📝</div>
+                            <div class="kpi-content">
+                                <span class="kpi-value">{{ total_qcm_taken|default:"0" }}</span>
+                                <span class="kpi-label">Quizzes Completed</span>
+                            </div>
+                        </div>
+
+                        <div class="kpi-card kpi-purple">
+                            <div class="kpi-icon">⭐</div>
+                            <div class="kpi-content">
+                                <span class="kpi-value">{{ avg_score|default:"0" }}%</span>
+                                <span class="kpi-label">Average Quiz Score</span>
+                            </div>
+                        </div>
+
+                        <div class="kpi-card kpi-teal">
+                            <div class="kpi-icon">⏱️</div>
+                            <div class="kpi-content">
+                                <span class="kpi-value">{{ avg_training_time|default:"00:00" }}</span>
+                                <span class="kpi-label">Avg. Training Time</span>
+                            </div>
+                        </div>
+
+                        <div class="kpi-card kpi-dark">
+                            <div class="kpi-icon">🏢</div>
+                            <div class="kpi-content">
+                                <span class="kpi-value">{{ total_departments|default:"0" }}</span>
+                                <span class="kpi-label">Departments</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Charts Section - Row 1 -->
+                <section class="charts-section">
+                    <div class="charts-row">
+                        <!-- Email Status Distribution (Doughnut) -->
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <h3>Email Status Distribution</h3>
+                            </div>
+                            <div class="chart-body">
+                                <canvas id="emailStatusChart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Email Type Breakdown (Bar) -->
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <h3>Campaign Types Performance</h3>
+                            </div>
+                            <div class="chart-body">
+                                <canvas id="emailTypeChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Timeline Chart -->
+                <section class="charts-section">
+                    <div class="charts-row">
+                        <div class="chart-card chart-card-wide">
+                            <div class="chart-header">
+                                <h3>Campaign Activity Over Time</h3>
+                            </div>
+                            <div class="chart-body chart-body-lg">
+                                <canvas id="timelineChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Department Risk Chart -->
+                <section class="charts-section">
+                    <div class="charts-row">
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <h3>Department Click Rate</h3>
+                            </div>
+                            <div class="chart-body">
+                                <canvas id="departmentRiskChart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Quiz Score Distribution -->
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <h3>Quiz Score Distribution</h3>
+                            </div>
+                            <div class="chart-body">
+                                <canvas id="quizScoreChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Data Tables Section -->
+                <section class="tables-section">
+                    <div class="tables-row">
+                        <!-- Recent Phishing Activity -->
+                        <div class="table-card">
+                            <div class="table-header">
+                                <h3>Recent Campaign Activity</h3>
+                                <a href="#" class="view-all">View All</a>
+                            </div>
+                            <div class="table-body">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Employee</th>
+                                            <th>Type</th>
+                                            <th>Status</th>
+                                            <th>Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for activity in recent_activity %}
+                                        <tr>
+                                            <td>
+                                                <div class="user-cell">
+                                                    <span class="avatar-sm">{{ activity.employee.first_name|slice:":1"|default:"?" }}</span>
+                                                    {{ activity.employee.first_name }} {{ activity.employee.last_name }}
+                                                </div>
+                                            </td>
+                                            <td><span class="badge">{{ activity.type }}</span></td>
+                                            <td><span class="status status-{{ activity.status|lower }}">{{ activity.status }}</span></td>
+                                            <td>{{ activity.send_date|date:"M d, Y H:i" }}</td>
+                                        </tr>
+                                        {% empty %}
+                                        <tr>
+                                            <td colspan="4" style="text-align: center;">No activity found</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Top Quiz Performers -->
+                        <div class="table-card">
+                            <div class="table-header">
+                                <h3>Top Quiz Performers</h3>
+                                <a href="#" class="view-all">View All</a>
+                            </div>
+                            <div class="table-body">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Employee</th>
+                                            <th>Score</th>
+                                            <th>Attempts</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for performer in top_performers %}
+                                        <tr>
+                                            <td>
+                                                <div class="user-cell">
+                                                    <span class="avatar-sm">{{ performer.employee_matricule|slice:":1" }}</span>
+                                                    {{ performer.employee_name }}
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="score-bar">
+                                                    <div class="score-fill" style="width: {{ performer.score }}%"></div>
+                                                    <span>{{ performer.score }}%</span>
+                                                </div>
+                                            </td>
+                                            <td>{{ performer.totale_qcm_taken }}</td>
+                                        </tr>
+                                        {% empty %}
+                                        <tr>
+                                            <td colspan="3" style="text-align: center;">No quiz data found</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Data injection from Django backend -->
+    <script>
+        const dashboardData = {
+            emailStatus: {
+                labels: ['Pending', 'Sent', 'Received', 'Clicked', 'Failed'],
+                data: [
+                    {{ email_pending|default:0 }},
+                    {{ email_sent|default:0 }},
+                    {{ email_received|default:0 }},
+                    {{ email_clicked|default:0 }},
+                    {{ email_failed|default:0 }}
+                ]
+            },
+            emailTypes: {
+                labels: ['Company Email', 'Payment Request', 'Job Offer', 'IT Dept', 'Scam iPhone', 'Scam Lottery', 'Security Alert'],
+                sent: [{{ type_company|default:0 }}, {{ type_payment|default:0 }}, {{ type_job|default:0 }}, {{ type_it|default:0 }}, {{ type_iphone|default:0 }}, {{ type_lottery|default:0 }}, {{ type_security|default:0 }}],
+                clicked: [{{ type_company_click|default:0 }}, {{ type_payment_click|default:0 }}, {{ type_job_click|default:0 }}, {{ type_it_click|default:0 }}, {{ type_iphone_click|default:0 }}, {{ type_lottery_click|default:0 }}, {{ type_security_click|default:0 }}]
+            },
+            timeline: {
+                labels: {{ timeline_labels|safe }},
+                sent: {{ timeline_sent|safe }},
+                clicked: {{ timeline_clicked|safe }}
+            },
+            quizScores: {
+                labels: ['0-20%', '21-40%', '41-60%', '61-80%', '81-100%'],
+                data: [{{ score_0_20|default:0 }}, {{ score_21_40|default:0 }}, {{ score_41_60|default:0 }}, {{ score_61_80|default:0 }}, {{ score_81_100|default:0 }}]
+            },
+            departmentRisk: {
+                labels: {{ department_names|safe }},
+                clickRate: {{ dept_click_rate|safe }}
+            }
+        };
+    </script>
+    <script src="{% static 'dashboard/js/dashboard.js' %}"></script>
+    <script>
+        // Initialize charts when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Email Status Chart
+            const ctx1 = document.getElementById('emailStatusChart').getContext('2d');
+            new Chart(ctx1, {
+                type: 'doughnut',
+                data: {
+                    labels: dashboardData.emailStatus.labels,
+                    datasets: [{
+                        data: dashboardData.emailStatus.data,
+                        backgroundColor: ['#ffc107', '#17a2b8', '#28a745', '#dc3545', '#6c757d'],
+                        borderWidth: 0
+                    }]
+                },
+                options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+            });
+
+            // Email Type Chart
+            const ctx2 = document.getElementById('emailTypeChart').getContext('2d');
+            new Chart(ctx2, {
+                type: 'bar',
+                data: {
+                    labels: dashboardData.emailTypes.labels,
+                    datasets: [
+                        { label: 'Sent', data: dashboardData.emailTypes.sent, backgroundColor: '#17a2b8' },
+                        { label: 'Clicked', data: dashboardData.emailTypes.clicked, backgroundColor: '#dc3545' }
+                    ]
+                },
+                options: { responsive: true, scales: { y: { beginAtZero: true } } }
+            });
+
+            // Timeline Chart
+            const ctx3 = document.getElementById('timelineChart').getContext('2d');
+            new Chart(ctx3, {
+                type: 'line',
+                data: {
+                    labels: dashboardData.timeline.labels,
+                    datasets: [
+                        { label: 'Sent', data: dashboardData.timeline.sent, borderColor: '#17a2b8', fill: false },
+                        { label: 'Clicked', data: dashboardData.timeline.clicked, borderColor: '#dc3545', fill: false }
+                    ]
+                },
+                options: { responsive: true, scales: { y: { beginAtZero: true } } }
+            });
+
+            // Department Risk Chart
+            if (dashboardData.departmentRisk.labels.length > 0) {
+                const ctx4 = document.getElementById('departmentRiskChart').getContext('2d');
+                new Chart(ctx4, {
+                    type: 'bar',
+                    data: {
+                        labels: dashboardData.departmentRisk.labels,
+                        datasets: [{
+                            label: 'Click Rate (%)',
+                            data: dashboardData.departmentRisk.clickRate,
+                            backgroundColor: '#ffc107'
+                        }]
+                    },
+                    options: { responsive: true, scales: { y: { beginAtZero: true, max: 100 } } }
+                });
+            }
+
+            // Quiz Score Chart
+            const ctx5 = document.getElementById('quizScoreChart').getContext('2d');
+            new Chart(ctx5, {
+                type: 'bar',
+                data: {
+                    labels: dashboardData.quizScores.labels,
+                    datasets: [{
+                        label: 'Number of Employees',
+                        data: dashboardData.quizScores.data,
+                        backgroundColor: '#28a745'
+                    }]
+                },
+                options: { responsive: true, scales: { y: { beginAtZero: true } } }
+            });
+        });
+
+        // Refresh functionality
+        document.getElementById('refreshData')?.addEventListener('click', function() {
+            const days = document.getElementById('dateRange')?.value || 30;
+            const dept = document.getElementById('departmentFilter')?.value || 'all';
+            let url = window.location.pathname + '?days=' + days;
+            if (dept !== 'all') url += '&department=' + dept;
+            window.location.href = url;
+        });
+    </script>
+</body>
+</html>

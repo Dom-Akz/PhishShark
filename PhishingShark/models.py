@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.auth.models import AbstractUser
 
 EMAIL_STATUS_CHOICES = [
     ("PENDING", "Pending"),
@@ -31,14 +31,7 @@ class Departement(models.Model):
         return self.name
 
 
-class Administrateur(models.Model):
-    name = models.CharField(max_length=100)
-    username = models.CharField(max_length=100, unique=True)
-    email = models.EmailField(max_length=100, unique=True)
-    password = models.CharField(
-        max_length=500,
-        unique=True,
-    )
+class Administrateur(AbstractUser):
     departement = models.ForeignKey(
         Departement, on_delete=models.SET_NULL, null=True, related_name="admin"
     )
@@ -48,7 +41,7 @@ class Administrateur(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.name
+        return self.first_name
 
 
 class Entreprise(models.Model):
@@ -108,3 +101,9 @@ class EmailTracking(models.Model):
     )
     # use to track the email by the employe
     uuid = models.CharField(max_length=100, unique=True)
+
+    def get_type_display(self):
+        return self.type
+
+    def get_status_display(self):
+        return self.status

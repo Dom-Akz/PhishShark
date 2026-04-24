@@ -25,10 +25,12 @@ SECRET_KEY = "django-insecure-nsbksqonu3mc@!*(7r_fs0wp48k1o+s)oxiyfqd_4hzz6(h1@z
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
+LOGIN_URL = "/admin/login"
 ALLOWED_HOSTS = []
-
-
+AUTH_USER_MODEL = "PhishingShark.Administrateur"
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+]
 # Application definition
 
 INSTALLED_APPS = [

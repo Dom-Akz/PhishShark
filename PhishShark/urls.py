@@ -21,6 +21,7 @@ from PhishingShark import views
 
 urlpatterns = [
     path("admin/login/", views.login_u, name="login"),
+    path("admin/dashboard/", views.dashboard, name="dashboard"),
     # path("", views.track_email, name="track_email"),
     # path("admin/", admin.site.urls),
 ]
