@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -53,13 +54,20 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "PhishShark.urls"
 
+WSGI_APPLICATION = "PhishShark.wsgi.application"
+
+
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [
+            os.path.join(BASE_DIR, "templates"),
+            os.path.join(BASE_DIR, "PhishingShark/Templates"),  # Add this
+        ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
+                "django.template.context_processors.debug",
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
@@ -67,10 +75,6 @@ TEMPLATES = [
         },
     },
 ]
-
-WSGI_APPLICATION = "PhishShark.wsgi.application"
-
-
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
@@ -122,7 +126,7 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 
-# MailHog configuration
+# MailHog
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "localhost"
 EMAIL_PORT = 1025
@@ -130,3 +134,9 @@ EMAIL_USE_TLS = False
 EMAIL_USE_SSL = False
 EMAIL_HOST_USER = ""
 EMAIL_HOST_PASSWORD = ""
+
+# GoPhish
+GOPHISH_API_URL = "https://localhost:3333/api"
+GOPHISH_API_KEY = "6e5e364159531f48552daf5febc16a6c2e9e834e8a82f3dc7f9b606412511aee"
+GOPHISH_PHISH_SERVER = "http://127.0.0.1:80"
+GOPHISH_VERIFY_SSL = False

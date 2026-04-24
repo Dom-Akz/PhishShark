@@ -20,5 +20,7 @@ from django.urls import path
 from PhishingShark import views
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
+    path("admin/login/", views.login_u, name="login"),
+    # path("", views.track_email, name="track_email"),
+    # path("admin/", admin.site.urls),
 ]

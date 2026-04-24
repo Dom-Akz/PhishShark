@@ -53,6 +53,7 @@ class Administrateur(models.Model):
 
 class Entreprise(models.Model):
     name = models.CharField(max_length=100)
+    alias = models.CharField(max_length=20, null=True)
     administrateur = models.ForeignKey(
         Administrateur, on_delete=models.SET_NULL, null=True, related_name="entreprise"
     )
@@ -63,7 +64,7 @@ class Entreprise(models.Model):
 
 class Employes(models.Model):
     # this is just a internal identifer (use only inside the project apps to identife the Employes)
-    # entreprise-Fisrt/last-Letterfrom(first_name/last_name)-year(2026)-id
+    # alias-last-Letterfrom(first_name/last_name)-year(2026)-id
     matricule = models.CharField(max_length=100, unique=True)
 
     # this is use in email generation.
@@ -100,6 +101,10 @@ class EmailTracking(models.Model):
         max_length=20, choices=EMAIL_STATUS_CHOICES, default="PENDING"
     )
     send_date = models.DateTimeField(auto_now_add=True)
-    recive_date = models.DateTimeField(null=True, blank=True)
-    # use to track the email by the eemploye
+    clicked_at = models.DateTimeField(null=True, blank=True)
+    received_date = models.DateTimeField(null=True, blank=True)
+    ip_address = models.GenericIPAddressField(
+        protocol="both", null=True, unpack_ipv4=False
+    )
+    # use to track the email by the employe
     uuid = models.CharField(max_length=100, unique=True)
