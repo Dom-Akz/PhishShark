@@ -17,8 +17,9 @@ import json
 import hashlib
 import requests
 
-# ROOT_FOLDER="/home/soufiane/cs/PFA/PhishingShark/PhishShark/PhishShark/"
 TEMPLATES_FILE = "EmailTemplates/Templates.json"
+MIRROR_PAGES_FOLDER = "Mirrors/Pages/"
+MIRROR_MAP_FILE = "Mirros/map.json"
 
 
 # helper functions:
@@ -78,6 +79,13 @@ def get_client_ip(request):
     return ip
 
 
+def get_mirror_page(email_type):
+    with open(MIRROR_MAP_FILE, "r") as map_file:
+        map_file = json.load(map_file)
+
+    return map_file.get(email_type)
+
+
 # main functions:
 
 
@@ -130,7 +138,14 @@ def generate_email(employe):
 
 # send email
 def send_email(email, emp, email_type):
+    uuid = generate_uuid(emp.matricule)
+
+    mirro_file_name = get_mirror_page(email_type)
+    pg_slug = mirro_file_name.replace(".html", "")
+    link = f"http://localhost:8000/track/{uuid}/{pg_slug}/"
+
     body = email["header"] + email["content"] + email["footer"]
+    body = body.replace("{lien}", link)
 
     send_mail(
         subject=email["subject"],
@@ -140,7 +155,6 @@ def send_email(email, emp, email_type):
         fail_silently=False,
     )
 
-    uuid = generate_uuid(emp.matricule)
     EmailTracking.objects.create(
         employe=emp,
         uuid=uuid,
@@ -160,6 +174,63 @@ def track_email(request, uuid):
     email_tracking.ip_address = get_client_ip(request)
 
     email_tracking.save()
+
+    return redirect("/admin/dashboard")  # replace with sens page
+
+
+@login_required(login_url="/admin/login/")
+def employees_page(request):
+    if request.user.is_superuser:
+        employees = (
+            Employes.objects.select_related("departement", "entreprise")
+            .all()
+            .order_by("-created_at")
+        )
+    else:
+        try:
+            admin = Administrateur.objects.get(username=request.user.username)
+            if admin.departement:
+                employees = (
+                    Employes.objects.select_related("departement", "entreprise")
+                    .filter(departement=admin.departement)
+                    .order_by("-created_at")
+                )
+            else:
+                employees = Employes.objects.none()
+        except Administrateur.DoesNotExist:
+            employees = Employes.objects.none()
+
+        # Get filter options
+    departments = Departement.objects.all()
+    enterprises = Entreprise.objects.all()
+
+    # Get statistics
+    total_employees = employees.count()
+
+    # Count employees who clicked on phishing
+    clicked_count = (
+        EmailTracking.objects.filter(employe__in=employees, status="CLICK")
+        .values("employe")
+        .distinct()
+        .count()
+    )
+
+    # Count employees who completed training (placeholder logic)
+    trained_count = QcmResult.objects.values("employe_matricule").distinct().count()
+    pending_count = max(0, total_employees - trained_count)
+
+    return render(
+        request,
+        "admin/employees.html",
+        {
+            "employees": employees,
+            "departments": departments,
+            "enterprises": enterprises,
+            "trained_count": trained_count,
+            "pending_count": pending_count,
+            "clicked_count": clicked_count,
+        },
+    )
 
 
 # here is the function that handle all steps
