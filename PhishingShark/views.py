@@ -9,7 +9,7 @@ from .models import (
     CapturedCredential,
 )
 from Sensibilisation.models import QcmResult
-from django.db.models import Count
+from django.db.models import Count, Avg
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.core.mail import send_mail
@@ -577,12 +577,55 @@ def dashboard(request):
     dep_id = admin.departement_id
     departements = Departement.objects.filter(id=dep_id)
 
+    all_results = QcmResult.objects.all()
+
+    # Calculate statistics
+    total_qcm_taken = all_results.count()
+    avg_score = all_results.aggregate(avg=Avg("score"))["avg"] or 0
+
+    # Score distribution
+    score_0_20 = all_results.filter(score__lte=20).count()
+    score_21_40 = all_results.filter(score__gt=20, score__lte=40).count()
+    score_41_60 = all_results.filter(score__gt=40, score__lte=60).count()
+    score_61_80 = all_results.filter(score__gt=60, score__lte=80).count()
+    score_81_100 = all_results.filter(score__gt=80).count()
+
+    # Top performers
+    top_performers = []
+    for result in all_results.order_by("-score")[:10]:
+        try:
+            employee = Employes.objects.get(matricule=result.employee_matricule)
+            name = f"{employee.first_name} {employee.last_name}"
+        except Employes.DoesNotExist:
+            name = result.employee_matricule
+
+        top_performers.append(
+            {
+                "employee_name": name,
+                "employee_matricule": result.employee_matricule,
+                "score": result.score,
+                "totale_qcm_taken": result.totale_qcm_taken,
+            }
+        )
+
+    print(f"Dashboard - QCM Results: {total_qcm_taken} records, Avg score: {avg_score}")
+    print(f"Top performers: {len(top_performers)}")
+
     context = {
         "user": request.user,
         "departments": departements,
         "selected_days": days,
         "selected_department": dep_id,
         "admin_department": admin.departement.name if admin.departement else None,
+        # QCM Results
+        "total_qcm_taken": total_qcm_taken,
+        "avg_score": round(avg_score, 1),
+        "score_0_20": score_0_20,
+        "score_21_40": score_21_40,
+        "score_41_60": score_41_60,
+        "score_61_80": score_61_80,
+        "score_81_100": score_81_100,
+        "top_performers": top_performers,
     }
 
     context.update(get_phishing_data(days, dep_id))

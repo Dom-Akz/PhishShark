@@ -6,6 +6,8 @@ EMAIL_STATUS_CHOICES = [
     ("SENT", "Sent"),
     ("RECEIVED", "Received"),
     ("CLICK", "click"),
+    ("CREDENTIALS_CAPTURED", "Credentials Captured"),
+    ("TRAINING_COMPLETED", "Training Completed"),
     ("FAILED", "Failed"),
 ]
 
