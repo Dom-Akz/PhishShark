@@ -25,7 +25,7 @@
             "sender": "bank-payment@portal.com",
             "subject": "Facture impayée – Action immédiate requise",
             "header": "Bonjour {emp_name},\n",
-            "content": "Suite à une vérification de nos comptes, nous constatons qu'une facture récente reste impayée à ce jour.\nMontant dû : 1 245,00 €\nDate d'échéance : 15/04/2026\nAfin d'éviter des frais de retard ou une suspension de service, nous vous invitons à régulariser votre situation dès maintenant en cliquant sur le lien sécurisé ci-dessous :\n{lien}"\n,
+            "content": "Suite à une vérification de nos comptes, nous constatons qu'une facture récente reste impayée à ce jour.\nMontant dû : 1 245,00 €\nDate d'échéance : 15/04/2026\nAfin d'éviter des frais de retard ou une suspension de service, nous vous invitons à régulariser votre situation dès maintenant en cliquant sur le lien sécurisé ci-dessous :\n{lien}",
             "footer": "Cordialement,\nService Facturation",
             "variables": [
                 {

@@ -16,13 +16,21 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from PhishingShark import views
+
+app_name = "dashboard"
 
 urlpatterns = [
     path("admin/login/", views.login_u, name="login"),
     path("admin/dashboard/", views.dashboard, name="dashboard"),
     path("admin/employees/", views.employees_page, name="employees"),
-    # path("", views.track_email, name="track_email"),
+    path("phishing/send/<int:employe>/", views.phishing_email, name="phishing_email"),
+    path("track/<str:uuid>/<slug:pg_slug>/", views.track_email, name="track_email"),
+    path("fake-page/<slug:page_slug>/", views.serve_fake_page, name="fake_page"),
+    path("capture-credentials/", views.capture_credentials, name="capture_credentials"),
+    path("admin/companies/", views.companies_page, name="companies"),
+    path("admin/departements/", views.departments_page, name="departments"),
+    path("sensibilisation/", include("Sensibilisation.urls")),
     # path("admin/", admin.site.urls),
 ]

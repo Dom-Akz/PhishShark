@@ -1,0 +1,351 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Security Admin{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    {% block extra_css %}{% endblock %}
+  </head>
+  <body>
+    <div class="dashboard-container">
+      <!-- Sidebar Navigation -->
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+          <div class="logo">
+            <svg
+              width="32"
+              height="32"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg>
+            <span>Security Admin</span>
+          </div>
+        </div>
+        <nav class="sidebar-nav">
+          <ul>
+            <li class="{% if active_page == 'dashboard' %}active{% endif %}">
+              <a href="/admin/dashboard">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <rect x="3" y="3" width="7" height="9" />
+                  <rect x="14" y="3" width="7" height="5" />
+                  <rect x="14" y="12" width="7" height="9" />
+                  <rect x="3" y="16" width="7" height="5" />
+                </svg>
+                Dashboard
+              </a>
+            </li>
+            <li class="{% if active_page == 'campaigns' %}active{% endif %}">
+              <a href="/admin/companies">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+                  />
+                  <polyline points="22,6 12,13 2,6" />
+                </svg>
+                Phishing Campaigns
+              </a>
+            </li>
+            <li class="{% if active_page == 'training' %}active{% endif %}">
+              <a href="#">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+                  <path d="M6 12v5c3 3 9 3 12 0v-5" />
+                </svg>
+                Training & Awareness
+              </a>
+            </li>
+            <li class="{% if active_page == 'employees' %}active{% endif %}">
+              <a href="/admin/employees">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                  <circle cx="9" cy="7" r="4" />
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                </svg>
+                Employees
+              </a>
+            </li>
+            <li class="{% if active_page == 'departments' %}active{% endif %}">
+              <a href="/admin/departements">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                  <polyline points="9 22 9 12 15 12 15 22" />
+                </svg>
+                Departments
+              </a>
+            </li>
+            <li class="{% if active_page == 'reports' %}active{% endif %}">
+              <a href="#">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+                  />
+                  <polyline points="14 2 14 8 20 8" />
+                  <line x1="16" y1="13" x2="8" y2="13" />
+                  <line x1="16" y1="17" x2="8" y2="17" />
+                </svg>
+                Reports
+              </a>
+            </li>
+          </ul>
+        </nav>
+        <div class="sidebar-footer">
+          <div class="user-info">
+            <div class="avatar">
+              {{ user.username|slice:":1"|upper|default:"A" }}
+            </div>
+            <div class="user-details">
+              <span class="user-name"
+                >{{ user.username|default:"Admin User" }}</span
+              >
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <!-- Header -->
+        <header class="header">
+          <div class="header-left">
+            <button class="menu-toggle" id="menuToggle">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <line x1="3" y1="12" x2="21" y2="12" />
+                <line x1="3" y1="6" x2="21" y2="6" />
+                <line x1="3" y1="18" x2="21" y2="18" />
+              </svg>
+            </button>
+            {% block header_title %}
+            <h1>Security Dashboard</h1>
+            {% endblock %}
+          </div>
+          <div class="header-right">
+            {% block header_actions %}{% endblock %}
+          </div>
+        </header>
+            {% if messages %}
+            <div class="notifications-container" id="notificationsContainer">
+                {% for message in messages %}
+                <div class="notification notification-{{ message.tags }}" data-auto-dismiss="5000">
+                    <div class="notification-icon">
+                        {% if message.tags == 'success' %}
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                            <polyline points="22 4 12 14.01 9 11.01"/>
+                        </svg>
+                        {% elif message.tags == 'error' or message.tags == 'danger' %}
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="15" y1="9" x2="9" y2="15"/>
+                            <line x1="9" y1="9" x2="15" y2="15"/>
+                        </svg>
+                        {% elif message.tags == 'warning' %}
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                            <line x1="12" y1="9" x2="12" y2="13"/>
+                            <line x1="12" y1="17" x2="12.01" y2="17"/>
+                        </svg>
+                        {% else %}
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="12" y1="16" x2="12" y2="12"/>
+                            <line x1="12" y1="8" x2="12.01" y2="8"/>
+                        </svg>
+                        {% endif %}
+                    </div>
+                    <div class="notification-content">
+                        <p class="notification-message">{{ message }}</p>
+                    </div>
+                    <button class="notification-close" onclick="dismissNotification(this.parentElement)">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"/>
+                            <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                    </button>
+                    <div class="notification-progress"></div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        <!-- Dashboard Content -->
+        <div class="dashboard-content">{% block content %}{% endblock %}</div>
+      </main>
+    </div>
+
+    <!-- Mobile sidebar overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <script>
+      // Mobile sidebar toggle
+      document.addEventListener("DOMContentLoaded", function () {
+        const menuToggle = document.getElementById("menuToggle");
+        const sidebar = document.getElementById("sidebar");
+        const overlay = document.getElementById("sidebarOverlay");
+
+        if (menuToggle) {
+          menuToggle.addEventListener("click", function () {
+            sidebar.classList.toggle("active");
+            overlay.classList.toggle("active");
+          });
+        }
+
+        if (overlay) {
+          overlay.addEventListener("click", function () {
+            sidebar.classList.remove("active");
+            overlay.classList.remove("active");
+          });
+        }
+      });
+function initNotifications() {
+            const notifications = document.querySelectorAll('.notification');
+            
+            notifications.forEach((notification, index) => {
+                // Stagger animation entrance
+                setTimeout(() => {
+                    notification.classList.add('notification-show');
+                }, index * 100);
+
+                // Auto-dismiss after timeout
+                const timeout = parseInt(notification.dataset.autoDismiss) || 5000;
+                const progressBar = notification.querySelector('.notification-progress');
+                
+                if (progressBar) {
+                    progressBar.style.animationDuration = timeout + 'ms';
+                }
+
+                setTimeout(() => {
+                    dismissNotification(notification);
+                }, timeout);
+            });
+        }
+
+        function dismissNotification(notification) {
+            if (!notification || notification.classList.contains('notification-hiding')) return;
+            
+            notification.classList.add('notification-hiding');
+            notification.classList.remove('notification-show');
+            
+            setTimeout(() => {
+                notification.remove();
+                
+                // Remove container if empty
+                const container = document.getElementById('notificationsContainer');
+                if (container && container.children.length === 0) {
+                    container.remove();
+                }
+            }, 300);
+        }
+
+        // Global function to show notifications programmatically
+        function showNotification(message, type = 'info', duration = 5000) {
+            let container = document.getElementById('notificationsContainer');
+            
+            if (!container) {
+                container = document.createElement('div');
+                container.id = 'notificationsContainer';
+                container.className = 'notifications-container';
+                const dashboardContent = document.querySelector('.dashboard-content');
+                if (dashboardContent) {
+                    dashboardContent.parentNode.insertBefore(container, dashboardContent);
+                }
+            }
+
+            const icons = {
+                success: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>',
+                error: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>',
+                danger: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>',
+                warning: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+                info: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>'
+            };
+
+            const notification = document.createElement('div');
+            notification.className = 'notification notification-' + type;
+            notification.dataset.autoDismiss = duration;
+            notification.innerHTML = `
+                <div class="notification-icon">${icons[type] || icons.info}</div>
+                <div class="notification-content">
+                    <p class="notification-message">${message}</p>
+                </div>
+                <button class="notification-close" onclick="dismissNotification(this.parentElement)">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+                <div class="notification-progress" style="animation-duration: ${duration}ms;"></div>
+            `;
+
+            container.appendChild(notification);
+
+            // Trigger animation
+            requestAnimationFrame(() => {
+                notification.classList.add('notification-show');
+            });
+
+            // Auto dismiss
+            setTimeout(() => {
+                dismissNotification(notification);
+            }, duration);
+
+            return notification;
+        }
+    </script>
+    {% block extra_js %}{% endblock %}
+  </body>
+</html>

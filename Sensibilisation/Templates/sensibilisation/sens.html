@@ -1,0 +1,309 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Security Awareness Training - PhishShark</title>
+    <link rel="stylesheet" href="{% static 'css/sens.css' %}" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+  
+        <h1>Security Awareness Training</h1>
+        <p>
+          This was a simulated phishing test — learn to recognize real attacks
+        </p>
+      </div>
+
+      <div class="content">
+        <!-- Alert Banner -->
+        <div class="alert-banner">
+          <p>
+            <strong>Security Notice:</strong> You clicked on a simulated
+            phishing link. This was a controlled security test. No actual data
+            was compromised.
+          </p>
+        </div>
+        <!-- Add this after the alert banner or header -->
+        {% if employee_name %}
+        <div
+          style="
+            background: #f3f4f6;
+            padding: 16px 20px;
+            margin-bottom: 24px;
+            border-radius: 6px;
+          "
+        >
+          <p style="margin: 0; font-size: 14px">
+            <strong>👤 Employee:</strong> {{ employee_name }} 
+            {% if employee_email %}
+            <span style="color: #6b7280; margin-left: 8px">({{ employee_email }})</span>
+            {% endif %}
+          </p>
+        </div>
+        {% endif %}
+        <!-- Stats -->
+        <div class="grid-3">
+          <div class="stat-box">
+            <div class="stat-number">3.4B+</div>
+            <div class="stat-label">Phishing emails sent daily</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-number">1 in 5</div>
+            <div class="stat-label">Employees click phishing links</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-number">$4.45M</div>
+            <div class="stat-label">Average cost per data breach</div>
+          </div>
+        </div>
+
+        <!-- What is Phishing -->
+        <div class="section">
+          <h2 class="section-title">What is Phishing?</h2>
+          <div class="text-content">
+            <p>
+              Phishing is a cyber attack where criminals impersonate trusted
+              organizations to steal passwords, credit card numbers, or other
+              sensitive information. Attacks arrive via email, text message
+              (smishing), or phone calls (vishing).
+            </p>
+            <p>
+              Attackers create urgency — threatening account closure, promising
+              rewards, or impersonating executives — to trick you into acting
+              without thinking.
+            </p>
+          </div>
+        </div>
+
+        <!-- Red Flags -->
+        <div class="section">
+          <h2 class="section-title">How to Spot a Phishing Email</h2>
+          <ul class="red-flag-list">
+            <li>
+              <strong>Suspicious sender address</strong> — Domain misspelled
+              (e.g., "micros0ft.com" instead of "microsoft.com")
+            </li>
+            <li>
+              <strong>Urgent or threatening language</strong> — "Your account
+              will be closed immediately"
+            </li>
+            <li>
+              <strong>Generic greeting</strong> — "Dear Customer" or "Valued
+              Member" instead of your name
+            </li>
+            <li>
+              <strong>Requests for sensitive information</strong> — Legitimate
+              companies never ask for passwords or credit cards by email
+            </li>
+            <li>
+              <strong>Suspicious links or attachments</strong> — Hover to see
+              real URL; unexpected attachments (ZIP, EXE, DOC macros) are
+              dangerous
+            </li>
+            <li>
+              <strong>Poor grammar and spelling</strong> — Professional
+              companies proofread their communications
+            </li>
+          </ul>
+        </div>
+
+        <!-- Examples -->
+        <div class="section">
+          <h2 class="section-title">Real Phishing Examples</h2>
+
+          <div class="example-card">
+            <div class="example-sender">
+              From: security@accounts-support.com
+            </div>
+            <div class="example-subject">
+              Subject: ⚠️ Unusual Sign-in Attempt Detected
+            </div>
+            <div class="example-body">
+              "Dear customer, someone tried to access your account from an
+              unknown device. Click here to secure your account immediately or
+              it will be permanently locked."
+            </div>
+            <div class="example-flags">
+              ❌ Generic greeting | ❌ Urgent threat | ❌ Suspicious sender
+              domain
+            </div>
+          </div>
+
+          <div class="example-card">
+            <div class="example-sender">From: billing@paypai.com</div>
+            <div class="example-subject">
+              Subject: Invoice #38491 - Payment Due
+            </div>
+            <div class="example-body">
+              "We noticed an unpaid invoice of $1,245.00. Download the attached
+              invoice to review the charges."
+            </div>
+            <div class="example-flags">
+              ❌ Wrong domain ("paypai.com" not "paypal.com") | ❌ Unexpected
+              attachment | ❌ Unfamiliar invoice
+            </div>
+          </div>
+
+          <div class="example-card">
+            <div class="example-sender">From: ceo@company-secure.net</div>
+            <div class="example-subject">
+              Subject: Urgent - Wire Transfer Needed
+            </div>
+            <div class="example-body">
+              "I'm in a meeting and can't talk. Please wire $50,000 to this
+              account immediately. I'll explain later."
+            </div>
+            <div class="example-flags">
+              ❌ Bypasses normal approval | ❌ Urgent request | ❌ Prevents
+              verification ("can't talk")
+            </div>
+          </div>
+        </div>
+
+        <!-- What to Do -->
+        <div class="section">
+          <h2 class="section-title">
+            What To Do If You Receive a Phishing Email
+          </h2>
+          <ul class="checklist-list">
+            <li>
+              <strong>STOP</strong> — Don't click links, reply, or open
+              attachments
+            </li>
+            <li>
+              <strong>HOVER</strong> — Hover over links to see the real URL
+              (don't click)
+            </li>
+            <li>
+              <strong>VERIFY</strong> — Contact the company using official
+              channels (not the email)
+            </li>
+            <li><strong>REPORT</strong> — Forward to your IT security team</li>
+            <li>
+              <strong>DELETE</strong> — Mark as spam and delete the message
+            </li>
+          </ul>
+        </div>
+
+        <!-- If Already Clicked -->
+        <div class="section">
+          <h2 class="section-title">
+            If You Already Clicked or Shared Information
+          </h2>
+          <ul class="action-list">
+            <li>
+              <strong>1. Disconnect from the internet</strong> — Stop malware
+              from spreading
+            </li>
+            <li>
+              <strong>2. Run a security scan</strong> — Use your antivirus
+              software immediately
+            </li>
+            <li>
+              <strong>3. Change your passwords</strong> — Especially for any
+              accounts using the same password
+            </li>
+            <li>
+              <strong>4. Enable Multi-Factor Authentication (MFA)</strong> — Add
+              this critical protection to all accounts
+            </li>
+            <li>
+              <strong>5. Contact affected institutions</strong> — Call your bank
+              or credit card company if you shared financial info
+            </li>
+            <li>
+              <strong>6. Report to IT</strong> — Immediately notify your
+              security team
+            </li>
+            <li>
+              <strong>7. Monitor your accounts</strong> — Check for unauthorized
+              activity
+            </li>
+          </ul>
+        </div>
+
+        <!-- Prevention -->
+        <div class="section">
+          <h2 class="section-title">How to Protect Yourself</h2>
+          <ul class="checklist-list">
+            <li>
+              <strong>Enable Multi-Factor Authentication (MFA/2FA)</strong> —
+              The single most effective protection
+            </li>
+            <li>
+              <strong>Use a password manager</strong> — Generate strong, unique
+              passwords for every account. Never reuse passwords
+            </li>
+            <li>
+              <strong>Keep software updated</strong> — Enable automatic updates
+              for your OS, browser, and antivirus
+            </li>
+            <li>
+              <strong>Back up your data</strong> — Use the 3-2-1 rule: 3 copies,
+              2 media types, 1 offsite
+            </li>
+            <li>
+              <strong>Verify before trusting</strong> — Always contact senders
+              through official channels you find independently
+            </li>
+            <li>
+              <strong>Never share passwords or 2FA codes</strong> — Legitimate
+              companies will never ask for them
+            </li>
+            <li>
+              <strong>Be skeptical of unexpected messages</strong> — Even from
+              coworkers (their accounts may be compromised)
+            </li>
+          </ul>
+        </div>
+
+        <!-- Additional Resources -->
+        <div class="section">
+          <h2 class="section-title">Additional Resources</h2>
+          <ul class="checklist-list">
+            <li>
+              <strong>Report Phishing Emails:</strong> Forward to
+              reportphishing@apwg.org
+            </li>
+            <li><strong>Report Text Scams:</strong> Forward to 7726 (SPAM)</li>
+            <li>
+              <strong>FTC Identity Theft Recovery:</strong> IdentityTheft.gov
+            </li>
+            <li>
+              <strong>Check for breached accounts:</strong> haveibeenpwned.com
+            </li>
+            <li><strong>Report to FTC:</strong> ReportFraud.ftc.gov</li>
+          </ul>
+        </div>
+
+        <!-- Quiz CTA -->
+        <div class="quiz-card">
+          <h3>Test Your Knowledge</h3>
+          <p>Complete the quiz to earn your security awareness certificate</p>
+          <button class="btn btn-primary" onclick="startQuiz()">
+            Take the Quiz →
+          </button>
+        </div>
+
+
+      <div class="footer">
+        <p>© 2026 PhishShark — Security Awareness Platform</p>
+      </div>
+    </div>
+
+    <script>
+      const urlParams = new URLSearchParams(window.location.search);
+      const trackingUuid =
+        urlParams.get("rid") || urlParams.get("employee") || "";
+
+      function startQuiz() {
+        window.location.href = `/sensibilisation/quiz/?rid=${trackingUuid}`;
+      }
+
+    </script>
+  </body>
+</html>

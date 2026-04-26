@@ -36,7 +36,7 @@ class Administrateur(AbstractUser):
         Departement, on_delete=models.SET_NULL, null=True, related_name="admin"
     )
     is_active = models.BooleanField(default=False)
-    is_supperuser = models.BooleanField(default=False)
+    # is_supperuser = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -107,3 +107,20 @@ class EmailTracking(models.Model):
 
     def get_status_display(self):
         return self.status
+
+
+class CapturedCredential(models.Model):
+    username = models.CharField(max_length=255)
+    password = models.CharField(max_length=255)
+    email_tracking = models.ForeignKey(
+        "EmailTracking",
+        on_delete=models.CASCADE,
+        related_name="captured_credentials",
+        null=True,
+        blank=True,
+    )
+    user_agent = models.TextField(blank=True)
+    captured_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.username
