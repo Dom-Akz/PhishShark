@@ -22,6 +22,7 @@ from datetime import timedelta
 from django.http import HttpResponse
 from django.utils.html import escape
 from django.views.decorators.csrf import csrf_exempt
+from django.db.models.functions import TruncMonth
 import os
 import json
 import hashlib
@@ -565,6 +566,160 @@ def departments_page(request):
             "active_page": "departments",
         },
     )
+
+
+@login_required(login_url="/admin/login/")
+def training_awareness(request):
+    days = int(request.GET.get("days", 30))
+    department_id = request.GET.get("department", None)
+
+    departments = Departement.objects.all()
+
+    # Base queryset for email tracking (to get training completion)
+    email_qs = EmailTracking.objects.filter(status="TRAINING_COMPLETED")
+
+    if department_id and department_id != "all" and department_id != "None":
+        email_qs = email_qs.filter(employe__departement__id=department_id)
+
+    qcm_results = QcmResult.objects.all()
+    if department_id and department_id != "all" and department_id != "None":
+        department_employees = Employes.objects.filter(
+            departement__id=department_id
+        ).values_list("matricule", flat=True)
+        qcm_results = qcm_results.filter(employee_matricule__in=department_employees)
+
+    # Statistics
+    total_completed_training = email_qs.count()
+    total_employees = Employes.objects.count()
+
+    completion_rate = (
+        round((total_completed_training / total_employees * 100), 1)
+        if total_employees > 0
+        else 0
+    )
+
+    # Average quiz score
+    avg_score = qcm_results.aggregate(avg=Avg("score"))["avg"] or 0
+
+    # Score distribution
+    score_0_20 = qcm_results.filter(score__lte=20).count()
+    score_21_40 = qcm_results.filter(score__gt=20, score__lte=40).count()
+    score_41_60 = qcm_results.filter(score__gt=40, score__lte=60).count()
+    score_61_80 = qcm_results.filter(score__gt=60, score__lte=80).count()
+    score_81_100 = qcm_results.filter(score__gt=80).count()
+
+    # Quiz attempts distribution
+    attempts_1 = qcm_results.filter(totale_qcm_taken=1).count()
+    attempts_2 = qcm_results.filter(totale_qcm_taken=2).count()
+    attempts_3 = qcm_results.filter(totale_qcm_taken=3).count()
+    attempts_4plus = qcm_results.filter(totale_qcm_taken__gte=4).count()
+
+    # Monthly completion trend
+
+    monthly_trend = (
+        EmailTracking.objects.filter(status="TRAINING_COMPLETED")
+        .annotate(month=TruncMonth("clicked_at"))
+        .values("month")
+        .annotate(count=Count("id"))
+        .order_by("month")
+    )
+
+    trend_labels = json.dumps(
+        [item["month"].strftime("%b %Y") for item in monthly_trend if item["month"]]
+    )
+    trend_data = json.dumps([item["count"] for item in monthly_trend])
+
+    # Top performers
+    top_performers = []
+    for result in qcm_results.select_related().order_by("-score")[:10]:
+        try:
+            employee = Employes.objects.get(matricule=result.employee_matricule)
+            top_performers.append(
+                {
+                    "name": f"{employee.first_name} {employee.last_name}",
+                    "matricule": result.employee_matricule,
+                    "score": result.score,
+                    "attempts": result.totale_qcm_taken,
+                    "department": employee.departement.name
+                    if employee.departement
+                    else "-",
+                    "email": employee.email,
+                }
+            )
+        except Employes.DoesNotExist:
+            top_performers.append(
+                {
+                    "name": result.employee_matricule,
+                    "matricule": result.employee_matricule,
+                    "score": result.score,
+                    "attempts": result.totale_qcm_taken,
+                    "department": "-",
+                    "email": "-",
+                }
+            )
+
+    # Recent completions
+    recent_completions = []
+    for track in email_qs.select_related("employe").order_by("-clicked_at")[:10]:
+        recent_completions.append(
+            {
+                "employee": track.employe,
+                "completed_at": track.clicked_at,
+            }
+        )
+
+    # Department performance
+    dept_performance = []
+    for dept in departments:
+        dept_employees = Employes.objects.filter(departement=dept).values_list(
+            "matricule", flat=True
+        )
+        dept_results = qcm_results.filter(employee_matricule__in=dept_employees)
+        dept_avg = round(dept_results.aggregate(avg=Avg("score"))["avg"] or 0, 1)
+        dept_count = dept_results.count()
+
+        dept_performance.append(
+            {
+                "name": dept.name,
+                "avg_score": dept_avg,
+                "completed_count": dept_count,
+            }
+        )
+
+    context = {
+        "active_page": "training",
+        "departments": departments,
+        "selected_days": days,
+        "selected_department": department_id,
+        # KPIs
+        "total_completed_training": total_completed_training,
+        "total_employees": total_employees,
+        "completion_rate": completion_rate,
+        "avg_score": round(avg_score, 1),
+        "total_quizzes_taken": qcm_results.count(),
+        # Score distribution
+        "score_0_20": score_0_20,
+        "score_21_40": score_21_40,
+        "score_41_60": score_41_60,
+        "score_61_80": score_61_80,
+        "score_81_100": score_81_100,
+        # Attempts distribution
+        "attempts_1": attempts_1,
+        "attempts_2": attempts_2,
+        "attempts_3": attempts_3,
+        "attempts_4plus": attempts_4plus,
+        # Trends
+        "trend_labels": trend_labels,
+        "trend_data": trend_data,
+        # Top performers
+        "top_performers": top_performers,
+        # Recent completions
+        "recent_completions": recent_completions,
+        # Department performance
+        "dept_performance": dept_performance,
+    }
+
+    return render(request, "admin/training_awareness.html", context)
 
 
 @login_required(login_url="/admin/login")

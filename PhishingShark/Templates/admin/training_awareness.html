@@ -1,0 +1,508 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}Training & Awareness - Security Admin{% endblock %}
+
+{% block header_title %}
+<div>
+    <h1 class="page-title">Training & Awareness</h1>
+    <p class="page-subtitle">Monitor employee training progress and quiz performance</p>
+</div>
+{% endblock %}
+
+{% block header_actions %}
+<div class="filter-group">
+    <label for="dateRange">Period:</label>
+    <select id="dateRange" class="filter-select">
+        <option value="30" {% if selected_days == 30 %}selected{% endif %}>Last 30 days</option>
+        <option value="90" {% if selected_days == 90 %}selected{% endif %}>Last 90 days</option>
+        <option value="365" {% if selected_days == 365 %}selected{% endif %}>Last year</option>
+    </select>
+</div>
+
+<div class="filter-group">
+    <label for="departmentFilter">Department:</label>
+    <select id="departmentFilter" class="filter-select">
+        <option value="all">All Departments</option>
+        {% for dept in departments %}
+        <option value="{{ dept.id }}" {% if selected_department|stringformat:"s" == dept.id|stringformat:"s" %}selected{% endif %}>
+            {{ dept.name }}
+        </option>
+        {% endfor %}
+    </select>
+</div>
+
+<button class="btn btn-primary" id="refreshData">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="23 4 23 10 17 10"/>
+        <polyline points="1 20 1 14 7 14"/>
+        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+    </svg>
+    Refresh
+</button>
+<button class="btn btn-secondary" id="exportBtn">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+        <polyline points="7 10 12 15 17 10"/>
+        <line x1="12" y1="15" x2="12" y2="3"/>
+    </svg>
+    Export Report
+</button>
+{% endblock %}
+
+{% block content %}
+<style>
+    .stats-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .stat-card {
+        background: var(--card-bg);
+        border-radius: var(--border-radius);
+        padding: 1.25rem;
+        box-shadow: var(--shadow-sm);
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .stat-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .stat-icon.primary { background: rgba(59, 130, 246, 0.1); color: var(--primary); }
+    .stat-icon.success { background: rgba(16, 185, 129, 0.1); color: var(--success); }
+    .stat-icon.warning { background: rgba(245, 158, 11, 0.1); color: var(--warning); }
+    .stat-icon.info { background: rgba(6, 182, 212, 0.1); color: var(--info); }
+    .stat-icon.purple { background: rgba(139, 92, 246, 0.1); color: #8b5cf6; }
+
+    .stat-content h4 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin: 0 0 0.25rem 0;
+    }
+
+    .stat-content p {
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+        margin: 0;
+    }
+
+    .charts-row {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .chart-card {
+        background: var(--card-bg);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-sm);
+        border: 1px solid var(--border-color);
+        overflow: hidden;
+    }
+
+    .chart-card-wide {
+        grid-column: span 2;
+    }
+
+    .chart-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem 1.25rem;
+        border-bottom: 1px solid var(--border-light);
+    }
+
+    .chart-header h3 {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--text-primary);
+    }
+
+    .chart-body {
+        padding: 1.25rem;
+        height: 300px;
+        position: relative;
+    }
+
+    .table-container {
+        background: var(--card-bg);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-sm);
+        border: 1px solid var(--border-color);
+        overflow: hidden;
+        margin-bottom: 1.5rem;
+    }
+
+    .table-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem 1.25rem;
+        border-bottom: 1px solid var(--border-light);
+    }
+
+    .table-header h3 {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--text-primary);
+    }
+
+    .data-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .data-table th,
+    .data-table td {
+        padding: 0.875rem 1.25rem;
+        text-align: left;
+        border-bottom: 1px solid var(--border-light);
+    }
+
+    .data-table th {
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--text-muted);
+        background: var(--bg-primary);
+    }
+
+    .data-table tr:hover td {
+        background: var(--bg-primary);
+    }
+
+    .badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.25rem 0.625rem;
+        border-radius: 9999px;
+        font-size: 0.75rem;
+        font-weight: 500;
+    }
+
+    .badge-success { background: rgba(16, 185, 129, 0.1); color: #059669; }
+    .badge-warning { background: rgba(245, 158, 11, 0.1); color: #d97706; }
+    .badge-danger { background: rgba(239, 68, 68, 0.1); color: #dc2626; }
+
+    .progress-bar {
+        width: 100px;
+        height: 6px;
+        background: var(--border-color);
+        border-radius: 3px;
+        overflow: hidden;
+    }
+
+    .progress-fill {
+        height: 100%;
+        background: var(--success);
+        border-radius: 3px;
+    }
+
+    .user-cell {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .avatar-sm {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--primary-light), var(--purple));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: white;
+    }
+
+    @media (max-width: 768px) {
+        .charts-row {
+            grid-template-columns: 1fr;
+        }
+        .chart-card-wide {
+            grid-column: span 1;
+        }
+    }
+</style>
+
+<!-- Stats Cards -->
+<div class="stats-row">
+    <div class="stat-card">
+        <div class="stat-icon success">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                <polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+        </div>
+        <div class="stat-content">
+            <h4>{{ total_completed_training }}</h4>
+            <p>Completed Training</p>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon primary">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                <circle cx="9" cy="7" r="4"/>
+            </svg>
+        </div>
+        <div class="stat-content">
+            <h4>{{ completion_rate }}%</h4>
+            <p>Completion Rate</p>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon purple">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+            </svg>
+        </div>
+        <div class="stat-content">
+            <h4>{{ avg_score }}%</h4>
+            <p>Average Quiz Score</p>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon info">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+            </svg>
+        </div>
+        <div class="stat-content">
+            <h4>{{ total_quizzes_taken }}</h4>
+            <p>Quizzes Taken</p>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Row -->
+<div class="charts-row">
+    <!-- Score Distribution -->
+    <div class="chart-card">
+        <div class="chart-header">
+            <h3>Quiz Score Distribution</h3>
+        </div>
+        <div class="chart-body">
+            <canvas id="scoreChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Attempts Distribution -->
+    <div class="chart-card">
+        <div class="chart-header">
+            <h3>Quiz Attempts Distribution</h3>
+        </div>
+        <div class="chart-body">
+            <canvas id="attemptsChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- Monthly Trend -->
+<div class="chart-card chart-card-wide" style="margin-bottom: 1.5rem;">
+    <div class="chart-header">
+        <h3>Training Completion Trend</h3>
+    </div>
+    <div class="chart-body" style="height: 350px;">
+        <canvas id="trendChart"></canvas>
+    </div>
+</div>
+
+<!-- Top Performers & Department Performance -->
+<div class="charts-row">
+    <div class="table-container">
+        <div class="table-header">
+            <h3>Top Performers</h3>
+        </div>
+        <div class="table-body">
+            <table class="data-table">
+                <thead>
+                    <tr><th>Employee</th><th>Score</th><th>Attempts</th><th>Department</th></tr>
+                </thead>
+                <tbody>
+                    {% for performer in top_performers %}
+                    <tr>
+                        <td>
+                            <div class="user-cell">
+                                <div class="avatar-sm">{{ performer.name|slice:":1"|upper }}</div>
+                                {{ performer.name }}
+                            </div>
+                        </td>
+                        <td><span class="badge badge-success">{{ performer.score }}%</span></td>
+                        <td>{{ performer.attempts }}</td>
+                        <td>{{ performer.department }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="4">No quiz results yet</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="table-container">
+        <div class="table-header">
+            <h3>Department Performance</h3>
+        </div>
+        <div class="table-body">
+            <table class="data-table">
+                <thead><tr><th>Department</th><th>Avg Score</th><th>Completed</th></tr></thead>
+                <tbody>
+                    {% for dept in dept_performance %}
+                    <tr>
+                        <td>{{ dept.name }}</td>
+                        <td>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: {{ dept.avg_score }}%;"></div>
+                                </div>
+                                <span>{{ dept.avg_score }}%</span>
+                            </div>
+                        </td>
+                        <td>{{ dept.completed_count }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="3">No department data</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Completions -->
+<div class="table-container">
+    <div class="table-header">
+        <h3>Recent Training Completions</h3>
+    </div>
+    <div class="table-body">
+        <table class="data-table">
+            <thead><tr><th>Employee</th><th>Email</th><th>Department</th><th>Completed At</th></tr></thead>
+            <tbody>
+                {% for completion in recent_completions %}
+                <tr>
+                    <td>{{ completion.employee.first_name }} {{ completion.employee.last_name }}</td>
+                    <td>{{ completion.employee.email }}</td>
+                    <td>{{ completion.employee.departement.name|default:"-" }}</td>
+                    <td>{{ completion.completed_at|date:"M d, Y H:i" }}</td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="4">No completions yet</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    // Score Distribution Chart
+    const scoreCtx = document.getElementById('scoreChart')?.getContext('2d');
+    if (scoreCtx) {
+        new Chart(scoreCtx, {
+            type: 'bar',
+            data: {
+                labels: ['0-20%', '21-40%', '41-60%', '61-80%', '81-100%'],
+                datasets: [{
+                    label: 'Number of Employees',
+                    data: [{{ score_0_20 }}, {{ score_21_40 }}, {{ score_41_60 }}, {{ score_61_80 }}, {{ score_81_100 }}],
+                    backgroundColor: '#1a472a',
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: { y: { beginAtZero: true, title: { display: true, text: 'Number of Employees' } } }
+            }
+        });
+    }
+
+    // Attempts Distribution Chart
+    const attemptsCtx = document.getElementById('attemptsChart')?.getContext('2d');
+    if (attemptsCtx) {
+        new Chart(attemptsCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['1 attempt', '2 attempts', '3 attempts', '4+ attempts'],
+                datasets: [{
+                    data: [{{ attempts_1 }}, {{ attempts_2 }}, {{ attempts_3 }}, {{ attempts_4plus }}],
+                    backgroundColor: ['#059669', '#3b82f6', '#f59e0b', '#ef4444'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { position: 'bottom' } }
+            }
+        });
+    }
+
+    // Trend Chart
+    const trendCtx = document.getElementById('trendChart')?.getContext('2d');
+    if (trendCtx) {
+        new Chart(trendCtx, {
+            type: 'line',
+            data: {
+                labels: {{ trend_labels|safe }},
+                datasets: [{
+                    label: 'Training Completions',
+                    data: {{ trend_data|safe }},
+                    borderColor: '#1a472a',
+                    backgroundColor: 'rgba(26, 71, 42, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 4,
+                    pointBackgroundColor: '#1a472a'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: { y: { beginAtZero: true, title: { display: true, text: 'Number of Completions' } } }
+            }
+        });
+    }
+
+    // Refresh functionality
+    document.getElementById('refreshData')?.addEventListener('click', function() {
+        const days = document.getElementById('dateRange')?.value || 30;
+        const dept = document.getElementById('departmentFilter')?.value || 'all';
+        let url = window.location.pathname + '?days=' + days;
+        if (dept !== 'all') url += '&department=' + dept;
+        window.location.href = url;
+    });
+
+    // Export functionality
+    document.getElementById('exportBtn')?.addEventListener('click', function() {
+        let csv = 'Employee,Score,Attempts,Department,Completed At\n';
+        {% for performer in top_performers %}
+        csv += `"{{ performer.name }}",{{ performer.score }},{{ performer.attempts }},"{{ performer.department }}",\n`;
+        {% endfor %}
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'training_report.csv';
+        a.click();
+        URL.revokeObjectURL(url);
+    });
+</script>
+{% endblock %}
