@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+import uuid
 
 EMAIL_STATUS_CHOICES = [
     ("PENDING", "Pending"),
@@ -102,7 +103,7 @@ class EmailTracking(models.Model):
         protocol="both", null=True, unpack_ipv4=False
     )
     # use to track the email by the employe
-    uuid = models.CharField(max_length=100, unique=True)
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
 
     def get_type_display(self):
         return self.type
