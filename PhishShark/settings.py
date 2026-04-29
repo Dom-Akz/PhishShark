@@ -138,4 +138,4 @@ EMAIL_HOST_USER = "soufianemoussaoui.dev@gmail.com"
 EMAIL_HOST_PASSWORD = "spju tqym wpkr kzdg"
 
 # settings.py
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+# EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"

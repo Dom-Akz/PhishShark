@@ -274,12 +274,7 @@ def capture_credentials(request):
                 user_agent=user_agent,
             )
 
-            print(f"Credentials captured for: {email_tracking.employe.email}")
-            print(f"   Username: {username}")
-            print(f"   Password: {password}")
-
         except EmailTracking.DoesNotExist:
-            print(f"No tracking found for UUID: {tracking_uuid}")
             CapturedCredential.objects.create(
                 username=username,
                 password=password,
@@ -762,9 +757,6 @@ def dashboard(request):
                 "totale_qcm_taken": result.totale_qcm_taken,
             }
         )
-
-    print(f"Dashboard - QCM Results: {total_qcm_taken} records, Avg score: {avg_score}")
-    print(f"Top performers: {len(top_performers)}")
 
     context = {
         "user": request.user,
