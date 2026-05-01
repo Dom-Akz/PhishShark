@@ -15,6 +15,7 @@ from django.views.decorators.http import require_POST
 from django.core.mail import send_mail
 from django.utils import timezone
 from django.contrib import messages
+from django.core.mail import EmailMessage
 from django.http import JsonResponse
 from django.db.models import Q
 from django.db.models.functions import TruncDate
@@ -23,6 +24,7 @@ from django.http import HttpResponse
 from django.utils.html import escape
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models.functions import TruncMonth
+from django.conf import settings
 import os
 import json
 import hashlib
@@ -179,13 +181,15 @@ def send_email(email, emp, email_type):
     body = email["header"] + email["content"] + email["footer"]
     body = body.replace("lien", link)
 
-    send_mail(
+    send_msg = EmailMessage(
         subject=email["subject"],
-        message=body,
-        from_email=email["sender"],
-        recipient_list=[emp.email],  # can take a list of emails
-        fail_silently=False,
+        body=body,
+        from_email=settings.EMAIL_HOST_USER,
+        to=[emp.email],
+        reply_to=[email["sender"]],
+        headers={"Replay-To": email["sender"]},
     )
+    send_msg.send(fail_silently=False)
 
     EmailTracking.objects.update_or_create(
         employe=emp,
