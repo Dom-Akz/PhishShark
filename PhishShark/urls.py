@@ -22,7 +22,9 @@ from PhishingShark import views
 app_name = "dashboard"
 
 urlpatterns = [
+    path("", views.logout_u, name="login"),
     path("admin/login/", views.login_u, name="login"),
+    path("admin/logout/", views.logout_u, name="logout"),
     path("admin/dashboard/", views.dashboard, name="dashboard"),
     path("admin/employees/", views.employees_page, name="employees"),
     path("phishing/send/<int:employe>/", views.phishing_email, name="phishing_email"),
