@@ -364,10 +364,12 @@ def login_u(request):
 
         user = authenticate(request, username=username, password=password)
         if user is not None:
-            login(request, user)  # Django handles the session securely
+            login(request, user)
+            messages.success(request, "You have been logged in successfully.")
             return redirect("/admin/dashboard/")
         else:
-            return render(request, "admin/Login.html", {"error": "Invalid credentials"})
+            messages.error(request, "Invalid username or password")
+            return render(request, "admin/Login.html")
 
     return render(request, "admin/Login.html")
 
@@ -375,7 +377,6 @@ def login_u(request):
 def logout_u(request):
     logout(request)
     request.session.flush()
-    messages.success(request, "You have been logged out successfully.")
     return redirect("/admin/login/")
 
 
