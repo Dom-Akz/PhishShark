@@ -139,16 +139,17 @@
             </li>
           </ul>
         </nav>
-        <div class="sidebar-footer">
-            <a href="/admin/logout/" class="logout-btn">
-                <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-                    <polyline points="16 17 21 12 16 7"/>
-                    <line x1="21" y1="12" x2="9" y2="12"/>
-                </svg>
-                Logout
-            </a>
-        </div>
+
+<!--- Profile link -->
+<div class="user-info">
+      <a  href="/admin/profile">
+        <button class="btn btn-link" type="button" id="userMenuButton" width=16 height=16 aria-expanded="false"> 
+            <i class="fas fa-user-circle"></i> {{ request.user.username }}
+        </button>
+        </a>
+    
+</div>
+
       </aside>
 
       <!-- Main Content -->
@@ -184,17 +185,7 @@
                 <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
             </svg>
         </button>
-        <div class="user-info-header">
-            <span class="user-name">{{ user.username|default:"Admin" }}</span>
-            <a href="/admin/logout/" class="logout-btn">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-                    <polyline points="16 17 21 12 16 7"/>
-                    <line x1="21" y1="12" x2="9" y2="12"/>
-                </svg>
-                Logout
-            </a>
-        </div>
+
         {% block header_actions %}{% endblock %}
     </div>
 </header>

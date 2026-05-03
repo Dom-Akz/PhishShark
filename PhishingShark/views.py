@@ -25,9 +25,9 @@ from django.utils.html import escape
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models.functions import TruncMonth
 from django.conf import settings
+from .forms import AdminProfileForm
 import os
 import json
-import hashlib
 import uuid
 
 TEMPLATES_FILE = os.path.join(
@@ -351,7 +351,7 @@ def phishing_email(request, employe):
 def login_view(request):
     if request.user.is_authenticated:
         return redirect("/admin/dashboard")
-    return render(request, "admin/Login.html")
+    render(request, "admin/Login.html")
 
 
 def login_u(request):
@@ -375,6 +375,7 @@ def login_u(request):
 def logout_u(request):
     logout(request)
     request.session.flush()
+    messages.success(request, "You have been logged out successfully.")
     return redirect("/admin/login/")
 
 
@@ -780,3 +781,28 @@ def dashboard(request):
     context.update(get_phishing_data(days))
 
     return render(request, "admin/dashboard.html", context=context)
+
+
+# Admin Profile :
+
+
+@login_required
+def profile_view(request):
+    admin_user = request.user
+
+    if request.method == "POST":
+        form = AdminProfileForm(request.POST, instance=admin_user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Your profile has been updated successfully!")
+            return redirect("profile")
+        else:
+            messages.error(request, "Please correct the errors below.")
+    else:
+        form = AdminProfileForm(instance=admin_user)
+
+    context = {
+        "form": form,
+        "admin_user": admin_user,
+    }
+    return render(request, "admin/profile.html", context)
