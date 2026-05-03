@@ -1,10 +1,23 @@
-{% extends "admin/base.html" %} {% load static %} {% block title %}Departments
-Management - Security Admin{% endblock %} {% block header_title %}
+{% extends "admin/base.html" %} 
+{% load static %} 
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/departements.css' %}" />
+{% endblock %}
+
+{% block title %}
+Departments Management - Security Admin
+{% endblock %} 
+
+{% block header_title %}
+
 <div>
   <h1 class="page-title">Departments</h1>
   <p class="page-subtitle">Manage and monitor department information</p>
 </div>
-{% endblock %} {% block header_actions %}
+{% endblock %} 
+
+{% block header_actions %}
 <button class="btn btn-secondary" id="exportBtn">
   <svg
     width="16"
@@ -20,7 +33,7 @@ Management - Security Admin{% endblock %} {% block header_title %}
   </svg>
   Export
 </button>
-{% if request.user.is_superuser %}
+
 <button class="btn btn-primary" id="addDeptBtn">
   <svg
     width="16"
@@ -35,208 +48,8 @@ Management - Security Admin{% endblock %} {% block header_title %}
   </svg>
   Add Department
 </button>
-{% endif %} {% endblock %} {% block content %}
-<style>
-  .stats-row {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .stat-card {
-    background: var(--card-bg);
-    border-radius: var(--border-radius);
-    padding: 1.25rem;
-    box-shadow: var(--shadow-sm);
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  .stat-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-
-  .stat-icon.primary {
-    background: rgba(59, 130, 246, 0.1);
-    color: var(--primary);
-  }
-  .stat-icon.success {
-    background: rgba(16, 185, 129, 0.1);
-    color: var(--success);
-  }
-  .stat-icon.warning {
-    background: rgba(245, 158, 11, 0.1);
-    color: var(--warning);
-  }
-  .stat-icon.danger {
-    background: rgba(239, 68, 68, 0.1);
-    color: var(--danger);
-  }
-
-  .stat-content h4 {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--text-primary);
-    margin: 0 0 0.25rem 0;
-  }
-
-  .stat-content p {
-    font-size: 0.875rem;
-    color: var(--text-secondary);
-    margin: 0;
-  }
-
-  .toolbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 1rem;
-    padding: 1rem 1.5rem;
-    background: var(--card-bg);
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow-sm);
-    margin-bottom: 1.5rem;
-  }
-
-  .search-box {
-    position: relative;
-    flex: 1;
-    max-width: 400px;
-  }
-
-  .search-box input {
-    width: 100%;
-    padding: 0.625rem 1rem 0.625rem 2.5rem;
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
-    font-size: 0.875rem;
-  }
-
-  .search-box svg {
-    position: absolute;
-    left: 0.75rem;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--text-secondary);
-  }
-
-  .table-container {
-    background: var(--card-bg);
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow-sm);
-    overflow: hidden;
-  }
-
-  .table-wrapper {
-    overflow-x: auto;
-  }
-
-  .data-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.875rem;
-  }
-
-  .data-table th,
-  .data-table td {
-    padding: 0.875rem 1rem;
-    text-align: left;
-    border-bottom: 1px solid var(--border-color);
-  }
-
-  .data-table th {
-    background: var(--bg-secondary);
-    font-weight: 600;
-    color: var(--text-primary);
-  }
-
-  .data-table tbody tr:hover {
-    background: var(--bg-secondary);
-  }
-
-  .dept-info {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-
-  .dept-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
-    background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 600;
-    font-size: 1.125rem;
-  }
-
-  .dept-details {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .dept-name {
-    font-weight: 500;
-    color: var(--text-primary);
-  }
-
-  .dept-chef {
-    font-size: 0.75rem;
-    color: var(--text-secondary);
-  }
-
-  .progress-bar {
-    width: 100px;
-    height: 6px;
-    background: var(--border-color);
-    border-radius: 3px;
-    overflow: hidden;
-  }
-
-  .progress-fill {
-    height: 100%;
-    background: var(--danger);
-    border-radius: 3px;
-  }
-
-  .badge {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.25rem 0.625rem;
-    border-radius: 9999px;
-    font-size: 0.75rem;
-    font-weight: 500;
-  }
-
-  .badge-success {
-    background: rgba(16, 185, 129, 0.1);
-    color: #059669;
-  }
-  .badge-warning {
-    background: rgba(245, 158, 11, 0.1);
-    color: #d97706;
-  }
-  .badge-danger {
-    background: rgba(239, 68, 68, 0.1);
-    color: #dc2626;
-  }
-  .badge-info {
-    background: rgba(59, 130, 246, 0.1);
-    color: #2563eb;
-  }
-</style>
+{% endblock %} 
+{% block content %}
 
 <!-- Stats Cards -->
 <div class="stats-row">
@@ -274,7 +87,7 @@ Management - Security Admin{% endblock %} {% block header_title %}
       </svg>
     </div>
     <div class="stat-content">
-      <h4>0</h4>
+      <h4>{{ active_dep }}</h4>
       <p>Active Departments</p>
     </div>
   </div>

@@ -379,16 +379,13 @@ def logout_u(request):
 
 
 # DASHBOARD :
-def get_phishing_data(days, department_id=None):
+def get_phishing_data(days):
     end_date = timezone.now()
     start_date = end_date - timedelta(days=days)
 
     email_qs = EmailTracking.objects.filter(
         send_date__gte=start_date, send_date__lte=end_date
     )
-
-    if department_id and department_id != "all" and department_id != "None":
-        email_qs = email_qs.filter(employe__departement__id=department_id)
 
     total_sent = email_qs.exclude(status="PENDING").count()
     total_clicks = email_qs.filter(status="CLICK").count()
@@ -535,7 +532,10 @@ def departments_page(request):
     departments = Departement.objects.all().order_by("name")
 
     department_stats = []
+    totale_active_dep = 0
     for dept in departments:
+        if dept.is_active:
+            totale_active_dep += 1
         employees_count = Employes.objects.filter(departement=dept).count()
         emails_sent = EmailTracking.objects.filter(employe__departement=dept).count()
         clicks = EmailTracking.objects.filter(
@@ -562,7 +562,7 @@ def departments_page(request):
             "departments": departments,
             "department_stats": department_stats,
             "total_departments": departments.count(),
-            "active_page": "departments",
+            "active_dep": totale_active_dep,
         },
     )
 
@@ -728,8 +728,7 @@ def dashboard(request):
 
     days = int(request.GET.get("days", 30))
 
-    dep_id = admin.departement_id
-    departements = Departement.objects.filter(id=dep_id)
+    departements = Departement.objects.all()
 
     all_results = QcmResult.objects.all()
 
@@ -766,7 +765,6 @@ def dashboard(request):
         "user": request.user,
         "departments": departements,
         "selected_days": days,
-        "selected_department": dep_id,
         "admin_department": admin.departement.name if admin.departement else None,
         # QCM Results
         "total_qcm_taken": total_qcm_taken,
@@ -779,6 +777,6 @@ def dashboard(request):
         "top_performers": top_performers,
     }
 
-    context.update(get_phishing_data(days, dep_id))
+    context.update(get_phishing_data(days))
 
     return render(request, "admin/dashboard.html", context=context)

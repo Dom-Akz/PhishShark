@@ -27,6 +27,7 @@ class Departement(models.Model):
     name = models.CharField(max_length=100, unique=True)
     chef_departement = models.CharField(max_length=100)
     description = models.CharField(max_length=100)
+    is_active = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
