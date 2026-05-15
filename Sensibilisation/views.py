@@ -18,8 +18,8 @@ QCM_FILE = os.path.join(os.path.dirname(__file__), "Qcm_Database", "qcm.json")
 
 
 def load_questions():
-    with open(QCM_FILE, "r", encoding="utf-8") as f:
-        data = json.load(f)
+    with open(QCM_FILE, "r", encoding="utf-8") as file:
+        data = json.load(file)
     return data.get("questions", [])
 
 

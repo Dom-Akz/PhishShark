@@ -19,7 +19,7 @@ from django.contrib import admin
 from django.urls import path, include
 from PhishingShark import views
 
-app_name = "dashboard"
+# app_name = "dashboard"
 
 urlpatterns = [
     path("", views.logout_u, name="login"),
@@ -30,11 +30,10 @@ urlpatterns = [
     path("admin/employees/", views.employees_page, name="employees"),
     path("phishing/send/<int:employe>/", views.phishing_email, name="phishing_email"),
     path("track/<str:uuid>/<slug:pg_slug>/", views.track_email, name="track_email"),
-    path("fake-page/<slug:page_slug>/", views.serve_fake_page, name="fake_page"),
+    path("/<slug:page_slug>/", views.serve_fake_page, name="fake_page"),
     path("capture-credentials/", views.capture_credentials, name="capture_credentials"),
     path("admin/companies/", views.companies_page, name="companies"),
     path("admin/departements/", views.departments_page, name="departments"),
     path("admin/training/", views.training_awareness, name="training_awareness"),
     path("sensibilisation/", include("Sensibilisation.urls")),
-    # path("admin/", admin.site.urls),
 ]

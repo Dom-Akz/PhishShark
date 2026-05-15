@@ -8,7 +8,7 @@ from .models import (
     EmailTracking,
     CapturedCredential,
 )
-from Sensibilisation.models import QcmResult
+from Sensibilisation.models import QcmResult, AlertsEmails
 from django.db.models import Count, Avg
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
@@ -34,7 +34,7 @@ TEMPLATES_FILE = os.path.join(
     os.path.dirname(__file__), "EmailTemplates", "Templates.json"
 )
 MIRROR_MAP_FILE = os.path.join(os.path.dirname(__file__), "Mirrors", "map.json")
-
+ALERT_EMAIL = os.path.join(os.path.dirname(__file__), "EmailTemplates", "alerts.json")
 
 # helper functions:
 
@@ -45,12 +45,10 @@ def extract_ink(ink):
 
     # Format: first_name_departement_chefdep_location_company
     res_json = {
-        "Employe_Name": ext[0],  # For company_email template
         "emp_name": ext[0],  # For all other templates
-        "departement": ext[1],
+        "dep_name": ext[1],
         "nom_chef_dep": ext[2],
         "localisation": ext[3],
-        "companyName": ext[4],  # For company_email sender
         "company_name": ext[4],  # For company_email variables
         "lien": "lien",
         "today_date": timezone.now().strftime("%d/%m/%Y"),
@@ -83,6 +81,17 @@ def replace_var(emp_info, template):
 def generate_uuid(matricule):
     unique_string = f"{matricule}_{timezone.now().timestamp()}"
     return str(uuid.uuid5(uuid.NAMESPACE_DNS, unique_string))
+
+
+# return the alert json data
+def create_alert_email(emp):
+    with open(ALERT_EMAIL, "r") as f:
+        data = json.load(f)
+        email_alert = data.get("Alerts", data)
+
+    emp_info = extract_ink(emp.ink)
+    email_alert = replace_var(emp_info, email_alert)
+    return email_alert
 
 
 def get_client_ip(request):
@@ -169,7 +178,7 @@ def generate_email(employe):
     return email, email_type
 
 
-# send email
+# send phishing email
 def send_email(email, emp, email_type):
 
     uuid = generate_uuid(emp.matricule)
@@ -186,8 +195,8 @@ def send_email(email, emp, email_type):
         body=body,
         from_email=settings.EMAIL_HOST_USER,
         to=[emp.email],
-        reply_to=[email["sender"]],
-        headers={"Replay-To": email["sender"]},
+        reply_to=["soufianemoussaoui.dev@gmail.com"],
+        headers={"Reply-To": email["sender"]},
     )
     send_msg.send(fail_silently=False)
 
@@ -202,6 +211,35 @@ def send_email(email, emp, email_type):
     )
 
 
+# send alert email after ccapture_credentials
+def send_alert_email(request, emp, tracking_uuid):
+
+    email = create_alert_email(emp)
+
+    body = email["header"] + email["content"] + email["footer"]
+    link = f"http://localhost:8000/sensibilisation/qcm/?rid={tracking_uuid}"
+
+    body = body.replace("lien", link)
+
+    send_msg = EmailMessage(
+        subject=email["subject"],
+        body=body,
+        from_email=settings.EMAIL_HOST_USER,
+        to=[emp.email],
+        reply_to=["soufianemoussaoui.dev@gmail.com"],
+        headers={"Reply-To": email["sender"]},
+    )
+    send_msg.send(fail_silently=False)
+
+    AlertsEmails.objects.update_or_create(
+        employe=emp,
+        defaults={  # create ot update
+            "status": "SENT",
+            "send_date": timezone.now(),
+        },
+    )
+
+
 # track the email
 # called when the user click in the email by the router
 def track_email(request, uuid, pg_slug):
@@ -211,7 +249,7 @@ def track_email(request, uuid, pg_slug):
     email_tracking.ip_address = get_client_ip(request)
     email_tracking.save()
 
-    return redirect(f"/fake-page/{pg_slug}/?rid={uuid}")
+    return redirect(f"/{pg_slug}/?rid={uuid}")
 
 
 def serve_fake_page(request, page_slug):
@@ -285,7 +323,6 @@ def capture_credentials(request):
                 ip_address=ip_address,
                 user_agent=user_agent,
             )
-        return redirect(f"/sensibilisation/training/?rid={tracking_uuid}")
 
     return JsonResponse({"error": "Method not allowed"}, status=405)
 
@@ -339,10 +376,16 @@ def phishing_email(request, employe):
     emp = Employes.objects.get(id=employe)
     # generate the email
     email, email_type = generate_email(emp)
+    messages.info(
+        request,
+        f"Sending email to {emp.first_name} {emp.last_name}, Email : {emp.email}",
+    )
     # send the email
     send_email(email, emp, email_type)
 
-    messages.success(request, f"Email sent successfully to {emp.email}")
+    messages.success(
+        request, f"Email sent successfully to {emp.first_name} {emp.last_name}"
+    )
 
     return redirect("/admin/employees/")
 
