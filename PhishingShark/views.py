@@ -204,16 +204,12 @@ def send_email(email, emp, email_type):
     send_msg.attach_alternative(body, "text/html")
     send_msg.send(fail_silently=False)
 
-    # test
-
-    EmailTracking.objects.update_or_create(
+    EmailTracking.objects.create(
         employe=emp,
-        defaults={  # create ot update
-            "uuid": uuid,
-            "status": "SENT",
-            "type": email_type,
-            "send_date": timezone.now(),
-        },
+        uuid=uuid,
+        status="SENT",
+        type=email_type,
+        send_date=timezone.now(),
     )
 
 
@@ -235,13 +231,15 @@ def send_alert_email(emp, tracking_uuid):
         reply_to=["soufianemoussaoui.dev@gmail.com"],
         headers={"Reply-To": email["sender"]},
     )
-
+    # combine text with html code
     send_msg.attach_alternative(body, "text/html")
+    # send email
     send_msg.send(fail_silently=False)
 
+    # create or update a the aAlertsEmails table
     AlertsEmails.objects.update_or_create(
         employee=emp,
-        defaults={  # create ot update
+        defaults={
             "status": "SENT",
             "send_date": timezone.now(),
         },
@@ -377,21 +375,30 @@ def employees_page(request):
     )
 
 
-# here is the function that handle all steps
+@login_required(login_url="/admin/login/")
 @require_POST
 def phishing_email(request, employe):
     # get all employe info
     emp = Employes.objects.get(id=employe)
+
+    # messages.info(request,f"Sending email to {emp.first_name} {emp.last_name}, Email : {emp.email}",)
     # generate the email
     email, email_type = generate_email(emp)
 
-    # messages.info(request,f"Sending email to {emp.first_name} {emp.last_name}, Email : {emp.email}",)
-    # send the email
-    send_email(email, emp, email_type)
+    try:
+        # send the email
+        send_email(email, emp, email_type)
 
-    messages.success(
-        request, f"Email sent successfully to {emp.first_name} {emp.last_name}"
-    )
+        messages.success(
+            request, f"Email sent successfully to {emp.first_name} {emp.last_name}"
+        )
+
+    except Exception as e:
+        # Add error message
+        messages.error(
+            request,
+            f"Failed to send email to {emp.first_name} {emp.last_name}: {str(e)}",
+        )
 
     return redirect("/admin/employees/")
 
@@ -400,7 +407,7 @@ def phishing_email(request, employe):
 def login_view(request):
     if request.user.is_authenticated:
         return redirect("/admin/dashboard")
-    render(request, "admin/Login.html")
+    return render(request, "admin/Login.html")
 
 
 def login_u(request):
