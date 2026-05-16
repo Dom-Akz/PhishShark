@@ -442,7 +442,9 @@ function closeModal(id) {
 }
  
 document.addEventListener('DOMContentLoaded', function() {
+    // Ensure all modals start hidden
     document.querySelectorAll('.modal-overlay').forEach(overlay => {
+        overlay.classList.remove('open');
         overlay.addEventListener('click', e => { if (e.target === overlay) overlay.classList.remove('open'); });
     });
 });
@@ -607,7 +609,7 @@ async function submitDelete() {
     } catch { showNotification('Network error.', 'error'); }
 }
  
-/* ── Table filter / sort (unchanged) ── */
+/* ── Table filter / sort ── */
 document.addEventListener('DOMContentLoaded', function() {
     const searchInput      = document.getElementById('searchInput');
     const departmentFilter = document.getElementById('departmentFilter');
@@ -615,26 +617,37 @@ document.addEventListener('DOMContentLoaded', function() {
     const sortBy           = document.getElementById('sortBy');
     const table            = document.getElementById('employeesTable');
     const showingCount     = document.getElementById('showingCount');
-    if (!table) return;
+    
+    // Safety check for required elements
+    if (!table || !searchInput || !departmentFilter || !enterpriseFilter || !sortBy) {
+        return;
+    }
+    
     const tbody = table.querySelector('tbody');
+    if (!tbody) return;
+    
     const rows  = Array.from(tbody.querySelectorAll('tr'));
  
     function filterAndSort() {
-        const searchTerm         = searchInput.value.toLowerCase();
+        const searchTerm         = (searchInput.value || '').toLowerCase().trim();
         const selectedDepartment = departmentFilter.value;
         const selectedEnterprise = enterpriseFilter.value;
         const sortValue          = sortBy.value;
+        
         let visibleRows = rows.filter(row => {
-            const name      = row.dataset.name      || '';
-            const email     = row.dataset.email     || '';
-            const matricule = row.dataset.matricule || '';
+            const name      = (row.dataset.name || '').toLowerCase();
+            const email     = (row.dataset.email || '').toLowerCase();
+            const matricule = (row.dataset.matricule || '').toLowerCase();
             const dept      = row.dataset.department || '';
             const ent       = row.dataset.enterprise || '';
-            const matchesSearch = name.includes(searchTerm) || email.includes(searchTerm) || matricule.toLowerCase().includes(searchTerm);
+            
+            const matchesSearch = !searchTerm || name.includes(searchTerm) || email.includes(searchTerm) || matricule.includes(searchTerm);
             const matchesDept   = !selectedDepartment || dept === selectedDepartment;
-            const matchesEnt    = !selectedEnterprise || ent  === selectedEnterprise;
+            const matchesEnt    = !selectedEnterprise || ent === selectedEnterprise;
+            
             return matchesSearch && matchesDept && matchesEnt;
         });
+        
         visibleRows.sort((a, b) => {
             switch(sortValue) {
                 case 'name-asc':    return (a.dataset.name||'').localeCompare(b.dataset.name||'');
@@ -644,15 +657,27 @@ document.addEventListener('DOMContentLoaded', function() {
                 default: return 0;
             }
         });
+        
         rows.forEach(r => r.style.display = 'none');
-        visibleRows.forEach(r => { r.style.display = ''; tbody.appendChild(r); });
-        if (showingCount) showingCount.textContent = visibleRows.length;
+        visibleRows.forEach(r => { 
+            r.style.display = ''; 
+            tbody.appendChild(r); 
+        });
+        
+        if (showingCount) {
+            const total = rows.length;
+            showingCount.textContent = `Showing ${visibleRows.length} of ${total} employees`;
+        }
     }
  
+    // Attach event listeners
     searchInput.addEventListener('input', filterAndSort);
     departmentFilter.addEventListener('change', filterAndSort);
     enterpriseFilter.addEventListener('change', filterAndSort);
     sortBy.addEventListener('change', filterAndSort);
+    
+    // Initialize display on page load
+    filterAndSort();
  
     table.querySelectorAll('th.sortable').forEach(th => {
         th.addEventListener('click', function() {

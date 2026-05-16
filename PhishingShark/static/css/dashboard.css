@@ -112,6 +112,41 @@ body {
     opacity 0.3s ease;
   pointer-events: auto;
 }
+.badge-type {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 500;
+}
+.badge-type[data-type="company_email"] {
+  background: #17a2b8;
+  color: white;
+}
+.badge-type[data-type="payment_request"] {
+  background: #28a745;
+  color: white;
+}
+.badge-type[data-type="job_offer"] {
+  background: #ffc107;
+  color: #333;
+}
+.badge-type[data-type="it_dep"] {
+  background: #6c757d;
+  color: white;
+}
+.badge-type[data-type="scam_iphone"] {
+  background: #fd7e14;
+  color: white;
+}
+.badge-type[data-type="scam_lottery"] {
+  background: #20c997;
+  color: white;
+}
+.badge-type[data-type="security_alert"] {
+  background: #dc3545;
+  color: white;
+}
 
 .notification-show {
   transform: translateX(0);

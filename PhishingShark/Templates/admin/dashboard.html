@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block title %}Security Dashboard - PhishShark{% endblock %}
-<i>
+
 {% block header_title %}
 <h1>Security Dashboard</h1>
 {% endblock %}
@@ -226,8 +226,8 @@
 <script>
     const dashboardData = {
         emailStatus: {
-            labels: ['Pending', 'Sent', 'Received', 'Clicked', 'Failed'],
-            data: [{{ email_pending|default:0 }}, {{ email_sent|default:0 }}, {{ email_received|default:0 }}, {{ email_clicked|default:0 }}, {{ email_failed|default:0 }}]
+            labels: ['Pending', 'Sent', 'Received', 'Clicked', 'Failed', 'Credentials Captured', 'Training Completed'],
+            data: [{{ email_pending|default:0 }}, {{ email_sent|default:0 }}, {{ email_received|default:0 }}, {{ email_clicked|default:0 }}, {{ email_failed|default:0 }}, {{ email_credentials_captured|default:0 }}, {{ email_training_completed|default:0 }}]
         },
         emailTypes: {
             labels: ['Company Email', 'Payment Request', 'Job Offer', 'IT Dept', 'Scam iPhone', 'Scam Lottery', 'Security Alert'],
@@ -252,7 +252,7 @@
     document.addEventListener('DOMContentLoaded', function() {
         new Chart(document.getElementById('emailStatusChart'), {
             type: 'doughnut',
-            data: { labels: dashboardData.emailStatus.labels, datasets: [{ data: dashboardData.emailStatus.data, backgroundColor: ['#ffc107', '#17a2b8', '#28a745', '#dc3545', '#6c757d'], borderWidth: 0 }] },
+            data: { labels: dashboardData.emailStatus.labels, datasets: [{ data: dashboardData.emailStatus.data, backgroundColor: ['#ffc107', '#17a2b8', '#28a745', '#dc3545', '#6c757d', '#20c997', '#fd7e14'], borderWidth: 0 }] },
             options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
         });
         new Chart(document.getElementById('emailTypeChart'), {
@@ -286,5 +286,20 @@
         if (dept !== 'all') url += '&department=' + dept;
         window.location.href = url;
     });
+document.querySelectorAll('.status').forEach(el => {
+        const status = el.textContent.toLowerCase();
+        if (status.includes('credentials')) el.style.backgroundColor = '#fd7e14';
+        else if (status.includes('training')) el.style.backgroundColor = '#20c997';
+        else if (status === 'click') el.style.backgroundColor = '#dc3545';
+        else if (status === 'sent') el.style.backgroundColor = '#17a2b8';
+        else if (status === 'pending') el.style.backgroundColor = '#ffc107';
+        else if (status === 'failed') el.style.backgroundColor = '#6c757d';
+        el.style.color = 'white';
+        el.style.padding = '4px 8px';
+        el.style.borderRadius = '12px';
+        el.style.fontSize = '11px';
+        el.style.fontWeight = '500';
+        el.style.display = 'inline-block';
+});
 </script>
 {% endblock %}

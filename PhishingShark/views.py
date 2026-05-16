@@ -365,7 +365,7 @@ def employees_page(request):
 
     return render(
         request,
-        "admin/employees1.html",
+        "admin/employees.html",
         {
             "employees": employees,
             "departments": departments,
@@ -384,10 +384,8 @@ def phishing_email(request, employe):
     emp = Employes.objects.get(id=employe)
     # generate the email
     email, email_type = generate_email(emp)
-    messages.info(
-        request,
-        f"Sending email to {emp.first_name} {emp.last_name}, Email : {emp.email}",
-    )
+
+    # messages.info(request,f"Sending email to {emp.first_name} {emp.last_name}, Email : {emp.email}",)
     # send the email
     send_email(email, emp, email_type)
 

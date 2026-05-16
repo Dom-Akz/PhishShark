@@ -94,12 +94,23 @@
 <!-- Toolbar -->
 <div class="toolbar">
     <div class="search-box">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="11" cy="11" r="8"/>
-            <path d="M21 21l-4.35-4.35"/>
-        </svg>
-        <input type="text" id="searchInput" placeholder="Search by name, email, or matricule...">
-    </div>
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+    >
+      <circle cx="11" cy="11" r="8" />
+      <path d="M21 21l-4.35-4.35" />
+    </svg>
+    <input
+      type="text"
+      id="searchInput"
+      placeholder="Search by employee name..."
+    />
+  </div>
     <div class="filter-controls">
         <select class="filter-select" id="departmentFilter">
             <option value="">All Departments</option>
@@ -439,7 +450,18 @@ document.addEventListener('DOMContentLoaded', function() {
         overlay.addEventListener('click', e => { if (e.target === overlay) overlay.classList.remove('open'); });
     });
 });
- 
+
+document.getElementById("searchInput")?.addEventListener("input", function (e) {
+      const searchTerm = e.target.value.toLowerCase();
+      const rows = document.querySelectorAll("#employeesTable tbody tr");
+
+      rows.forEach((row) => {
+        const name = row.dataset.name || "";
+        const head = row.dataset.head || "";
+        const matches = name.includes(searchTerm) || head.includes(searchTerm);
+        row.style.display = matches ? "" : "none";
+      });
+    });
 /* ── Notification helper ── */
 function showNotification(message, type) {
     let container = document.getElementById('notificationsContainer');
