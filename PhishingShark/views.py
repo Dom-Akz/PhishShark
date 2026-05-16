@@ -365,7 +365,7 @@ def employees_page(request):
 
     return render(
         request,
-        "admin/employees.html",
+        "admin/employees1.html",
         {
             "employees": employees,
             "departments": departments,
