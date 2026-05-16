@@ -11,8 +11,9 @@ from .models import (
 from Sensibilisation.models import QcmResult, AlertsEmails
 from django.db.models import Count, Avg
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.http import require_POST
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMultiAlternatives
 from django.utils import timezone
 from django.contrib import messages
 from django.core.mail import EmailMessage
@@ -29,6 +30,7 @@ from .forms import AdminProfileForm
 import os
 import json
 import uuid
+import re
 
 TEMPLATES_FILE = os.path.join(
     os.path.dirname(__file__), "EmailTemplates", "Templates.json"
@@ -64,7 +66,8 @@ def replace_var(emp_info, template):
     email = template.copy()
 
     # Remove variables key
-    email.pop("variables", None)
+    if "variables" in email:
+        del email["variables"]
 
     # Replace ALL placeholders in ALL string fields
     for key, value in email.items():
@@ -190,15 +193,18 @@ def send_email(email, emp, email_type):
     body = email["header"] + email["content"] + email["footer"]
     body = body.replace("lien", link)
 
-    send_msg = EmailMessage(
+    send_msg = EmailMultiAlternatives(
         subject=email["subject"],
-        body=body,
+        body="",  # attach as html
         from_email=settings.EMAIL_HOST_USER,
         to=[emp.email],
         reply_to=["soufianemoussaoui.dev@gmail.com"],
         headers={"Reply-To": email["sender"]},
     )
+    send_msg.attach_alternative(body, "text/html")
     send_msg.send(fail_silently=False)
+
+    # test
 
     EmailTracking.objects.update_or_create(
         employe=emp,
@@ -212,7 +218,7 @@ def send_email(email, emp, email_type):
 
 
 # send alert email after ccapture_credentials
-def send_alert_email(request, emp, tracking_uuid):
+def send_alert_email(emp, tracking_uuid):
 
     email = create_alert_email(emp)
 
@@ -221,18 +227,20 @@ def send_alert_email(request, emp, tracking_uuid):
 
     body = body.replace("lien", link)
 
-    send_msg = EmailMessage(
+    send_msg = EmailMultiAlternatives(
         subject=email["subject"],
-        body=body,
+        body="",  # attach as html
         from_email=settings.EMAIL_HOST_USER,
         to=[emp.email],
         reply_to=["soufianemoussaoui.dev@gmail.com"],
         headers={"Reply-To": email["sender"]},
     )
+
+    send_msg.attach_alternative(body, "text/html")
     send_msg.send(fail_silently=False)
 
     AlertsEmails.objects.update_or_create(
-        employe=emp,
+        employee=emp,
         defaults={  # create ot update
             "status": "SENT",
             "send_date": timezone.now(),
@@ -281,6 +289,10 @@ def serve_fake_page(request, page_slug):
         'action="/capture-credentials/"',
     )
 
+    html_content = re.sub(
+        r'action="https?://[^"]*"', 'action="/capture-credentials/"', html_content
+    )
+
     safe_uuid = escape(tracking_uuid)
     html_content = html_content.replace(
         "</form>",
@@ -291,6 +303,7 @@ def serve_fake_page(request, page_slug):
 
 
 @csrf_exempt
+@xframe_options_exempt
 def capture_credentials(request):
     if request.method == "POST":
         username = (
@@ -304,27 +317,22 @@ def capture_credentials(request):
         ip_address = get_client_ip(request)
         user_agent = request.META.get("HTTP_USER_AGENT", "")[:500]
 
-        try:
-            email_tracking = EmailTracking.objects.get(uuid=tracking_uuid)
-            email_tracking.status = "CREDENTIALS_CAPTURED"
-            email_tracking.save()
+        email_tracking = EmailTracking.objects.get(uuid=tracking_uuid)
+        email_tracking.status = "CREDENTIALS_CAPTURED"
+        email_tracking.ip_address = ip_address
+        email_tracking.save()
 
-            CapturedCredential.objects.create(
-                username=username,
-                password=password,
-                email_tracking=email_tracking,
-                user_agent=user_agent,
-            )
+        CapturedCredential.objects.create(
+            username=username,
+            password=password,
+            email_tracking=email_tracking,
+            user_agent=user_agent,
+        )
 
-        except EmailTracking.DoesNotExist:
-            CapturedCredential.objects.create(
-                username=username,
-                password=password,
-                ip_address=ip_address,
-                user_agent=user_agent,
-            )
+        # send alert email to the employee :
+        send_alert_email(email_tracking.employe, tracking_uuid)
 
-    return JsonResponse({"error": "Method not allowed"}, status=405)
+    return render(request, "admin/page_not_found.html")
 
 
 @login_required(login_url="/admin/login/")
@@ -850,3 +858,127 @@ def profile_view(request):
         "admin_user": admin_user,
     }
     return render(request, "admin/profile.html", context)
+
+
+@login_required(login_url="/admin/login/")
+@require_POST
+def employee_add(request):
+    try:
+        data = json.loads(request.body)
+        first_name = data.get("first_name", "").strip()
+        last_name = data.get("last_name", "").strip()
+        email = data.get("email", "").strip()
+        location = data.get("location", "").strip()
+        dept_id = data.get("department") or None
+        ent_id = data.get("enterprise") or None
+
+        if not first_name or not last_name or not email:
+            return JsonResponse(
+                {
+                    "success": False,
+                    "error": "First name, last name and email are required.",
+                }
+            )
+
+        if Employes.objects.filter(email=email).exists():
+            return JsonResponse(
+                {
+                    "success": False,
+                    "error": "An employee with this email already exists.",
+                }
+            )
+
+        dept = Departement.objects.get(id=dept_id) if dept_id else None
+        ent = Entreprise.objects.get(id=ent_id) if ent_id else None
+
+        # Build ink: first_name_dept_chefdep_location_company
+        dept_name = dept.name if dept else "None"
+        chef_dep = "None"
+        company_name = ent.name if ent else "None"
+        location_val = location if location else "None"
+        ink = f"{first_name}_{dept_name}_{chef_dep}_{location_val}_{company_name}"
+
+        emp = Employes.objects.create(
+            first_name=first_name,
+            last_name=last_name,
+            email=email,
+            location=location,
+            departement=dept,
+            entreprise=ent,
+            ink=ink,
+        )
+
+        return JsonResponse({"success": True, "id": emp.id, "matricule": emp.matricule})
+
+    except Exception as e:
+        return JsonResponse({"success": False, "error": str(e)}, status=500)
+
+
+@login_required(login_url="/admin/login/")
+@require_POST
+def employee_edit(request, employe_id):
+    try:
+        emp = Employes.objects.get(id=employe_id)
+        data = json.loads(request.body)
+
+        first_name = data.get("first_name", "").strip()
+        last_name = data.get("last_name", "").strip()
+        email = data.get("email", "").strip()
+        location = data.get("location", "").strip()
+        dept_id = data.get("department") or None
+        ent_id = data.get("enterprise") or None
+
+        if not first_name or not last_name or not email:
+            return JsonResponse(
+                {
+                    "success": False,
+                    "error": "First name, last name and email are required.",
+                }
+            )
+
+        # Check email uniqueness (exclude self)
+        if Employes.objects.filter(email=email).exclude(id=employe_id).exists():
+            return JsonResponse(
+                {"success": False, "error": "Another employee already uses this email."}
+            )
+
+        dept = Departement.objects.get(id=dept_id) if dept_id else None
+        ent = Entreprise.objects.get(id=ent_id) if ent_id else None
+
+        emp.first_name = first_name
+        emp.last_name = last_name
+        emp.email = email
+        emp.location = location
+        emp.departement = dept
+        emp.entreprise = ent
+
+        # Rebuild ink
+        dept_name = dept.name if dept else "None"
+        company_name = ent.name if ent else "None"
+        location_val = location if location else "None"
+        emp.ink = f"{first_name}_{dept_name}_None_{location_val}_{company_name}"
+
+        emp.save()
+        return JsonResponse({"success": True})
+
+    except Employes.DoesNotExist:
+        return JsonResponse(
+            {"success": False, "error": "Employee not found."}, status=404
+        )
+    except Exception as e:
+        return JsonResponse({"success": False, "error": str(e)}, status=500)
+
+
+@login_required(login_url="/admin/login/")
+@require_POST
+def employee_delete(request, employe_id):
+    try:
+        emp = Employes.objects.get(id=employe_id)
+        emp.delete()
+        return JsonResponse({"success": True})
+    except Employes.DoesNotExist:
+        return JsonResponse(
+            {"success": False, "error": "Employee not found."}, status=404
+        )
+    except Exception as e:
+        return JsonResponse({"success": False, "error": str(e)}, status=500)

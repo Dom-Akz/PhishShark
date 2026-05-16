@@ -30,10 +30,21 @@ urlpatterns = [
     path("admin/employees/", views.employees_page, name="employees"),
     path("phishing/send/<int:employe>/", views.phishing_email, name="phishing_email"),
     path("track/<str:uuid>/<slug:pg_slug>/", views.track_email, name="track_email"),
-    path("/<slug:page_slug>/", views.serve_fake_page, name="fake_page"),
     path("capture-credentials/", views.capture_credentials, name="capture_credentials"),
+    path("<slug:page_slug>/", views.serve_fake_page, name="fake_page"),
     path("admin/companies/", views.companies_page, name="companies"),
     path("admin/departements/", views.departments_page, name="departments"),
     path("admin/training/", views.training_awareness, name="training_awareness"),
-    path("sensibilisation/", include("Sensibilisation.urls")),
+    path("admin/employees/add/", views.employee_add, name="employee_add"),
+    path(
+        "admin/employees/<int:employe_id>/edit/",
+        views.employee_edit,
+        name="employee_edit",
+    ),
+    path(
+        "admin/employees/<int:employe_id>/delete/",
+        views.employee_delete,
+        name="employee_delete",
+    ),
+    path("", include("Sensibilisation.urls")),
 ]

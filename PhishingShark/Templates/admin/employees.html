@@ -26,13 +26,13 @@
     </svg>
     Export
 </button>
-<a href="#" class="btn btn-primary">
+<button onclick="openAddModal()" class="btn btn-primary">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <line x1="12" y1="5" x2="12" y2="19"/>
         <line x1="5" y1="12" x2="19" y2="12"/>
     </svg>
     Add Employee
-</a>
+</button>
 {% endblock %}
 
 {% block content %}
@@ -154,12 +154,19 @@
             </thead>
             <tbody>
                 {% for employee in employees %}
-                <tr data-employee-id="{{ employee.matricule }}"
-                    data-department="{{ employee.departement.id|default:'' }}"
-                    data-enterprise="{{ employee.entreprise.id|default:'' }}"
-                    data-name="{{ employee.first_name|lower }} {{ employee.last_name|lower }}"
-                    data-email="{{ employee.email|lower }}"
-                    data-date="{{ employee.created_at|date:'Y-m-d' }}">
+                <tr data-employee-id="{{ employee.id }}"
+    data-matricule="{{ employee.matricule }}"
+    data-first-name="{{ employee.first_name }}"
+    data-last-name="{{ employee.last_name }}"
+    data-email="{{ employee.email|lower }}"
+    data-location="{{ employee.location|default:'' }}"
+    data-department="{{ employee.departement.id|default:'' }}"
+    data-dept-name="{{ employee.departement.name|default:'' }}"
+    data-enterprise="{{ employee.entreprise.id|default:'' }}"
+    data-ent-name="{{ employee.entreprise.name|default:'' }}"
+    data-name="{{ employee.first_name|lower }} {{ employee.last_name|lower }}"
+    data-date="{{ employee.created_at|date:'Y-m-d' }}"
+    >
                     <td>
                         <div class="employee-info">
                             <div class="employee-avatar">
@@ -198,30 +205,37 @@
                         {{ employee.created_at|date:"M d, Y" }}
                     </td>
                     <td>
-                        <div class="action-buttons">
+                 <div class="action-buttons">
                             
- <form method="POST" action="{% url 'phishing_email' employee.id %}" style="display: inline;">
-            {% csrf_token %}
-            <button type="submit" class="btn-action send" title="Send Phishing Email">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                    <polyline points="22,6 12,13 2,6"/>
-                </svg>
-            </button>
-        </form>
-  <button class="btn-action view" title="View Details">
+<!-- Send phishing -->
+                            <form method="POST" action="{% url 'phishing_email' employee.id %}" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn-action send" title="Send Phishing Email">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                                        <polyline points="22,6 12,13 2,6"/>
+                                    </svg>
+                                </button>
+                            </form>
+                            <!-- View details -->
+                            <button class="btn-action view" title="View Details"
+                                onclick="openViewModal(this.closest('tr'))">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
                                     <circle cx="12" cy="12" r="3"/>
                                 </svg>
                             </button>
-                            <button class="btn-action edit" title="Edit">
+                            <!-- Edit -->
+                            <button class="btn-action edit" title="Edit"
+                                onclick="openEditModal(this.closest('tr'))">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
                                     <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
                                 </svg>
                             </button>
-                            <button class="btn-action delete" title="Delete">
+                            <!-- Delete -->
+                            <button class="btn-action delete" title="Delete"
+                                onclick="openDeleteModal(this.closest('tr'))">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <polyline points="3 6 5 6 21 6"/>
                                     <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
@@ -262,138 +276,404 @@
         </svg>
         <h3>No employees found</h3>
         <p>Get started by adding your first employee to the system.</p>
-        <a href="#" class="btn btn-primary">
+        <button class="btn btn-primary" onclick="openAddModal()">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <line x1="12" y1="5" x2="12" y2="19"/>
                 <line x1="5" y1="12" x2="19" y2="12"/>
             </svg>
             Add Employee
-        </a>
+        </button>
     </div>
     {% endif %}
+</div>
+ 
+<!-- ── ADD MODAL ── -->
+<div class="modal-overlay" id="addModal">
+    <div class="modal">
+        <button class="modal-close" onclick="closeModal('addModal')">&times;</button>
+        <h2>Add Employee</h2>
+        <div class="form-row">
+            <div class="form-group">
+                <label>First Name *</label>
+                <input type="text" id="add-first-name" placeholder="John">
+            </div>
+            <div class="form-group">
+                <label>Last Name *</label>
+                <input type="text" id="add-last-name" placeholder="Doe">
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Email *</label>
+            <input type="email" id="add-email" placeholder="john.doe@company.com">
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Department</label>
+                <select id="add-department">
+                    <option value="">— None —</option>
+                    {% for dept in departments %}
+                    <option value="{{ dept.id }}">{{ dept.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Enterprise</label>
+                <select id="add-enterprise">
+                    <option value="">— None —</option>
+                    {% for ent in enterprises %}
+                    <option value="{{ ent.id }}">{{ ent.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Location</label>
+            <input type="text" id="add-location" placeholder="New York">
+        </div>
+        <div class="modal-actions">
+            <button class="btn-modal-cancel" onclick="closeModal('addModal')">Cancel</button>
+            <button class="btn-modal-confirm" onclick="submitAdd()">Add Employee</button>
+        </div>
+    </div>
+</div>
+ 
+<!-- ── VIEW MODAL ── -->
+<div class="modal-overlay" id="viewModal">
+    <div class="modal">
+        <button class="modal-close" onclick="closeModal('viewModal')">&times;</button>
+        <h2>Employee Details</h2>
+        <div class="detail-avatar" id="view-avatar"></div>
+        <div class="detail-grid">
+            <div class="detail-item"><label>First Name</label><span id="view-first-name"></span></div>
+            <div class="detail-item"><label>Last Name</label><span id="view-last-name"></span></div>
+            <div class="detail-item" style="grid-column:span 2"><label>Email</label><span id="view-email"></span></div>
+            <div class="detail-item"><label>Matricule</label><span id="view-matricule"></span></div>
+            <div class="detail-item"><label>Location</label><span id="view-location"></span></div>
+            <div class="detail-item"><label>Department</label><span id="view-dept"></span></div>
+            <div class="detail-item"><label>Enterprise</label><span id="view-ent"></span></div>
+            <div class="detail-item"><label>Added</label><span id="view-date"></span></div>
+        </div>
+        <div class="modal-actions">
+            <button class="btn-modal-cancel" onclick="closeModal('viewModal')">Close</button>
+        </div>
+    </div>
+</div>
+ 
+<!-- ── EDIT MODAL ── -->
+<div class="modal-overlay" id="editModal">
+    <div class="modal">
+        <button class="modal-close" onclick="closeModal('editModal')">&times;</button>
+        <h2>Edit Employee</h2>
+        <input type="hidden" id="edit-id">
+        <div class="form-row">
+            <div class="form-group">
+                <label>First Name *</label>
+                <input type="text" id="edit-first-name">
+            </div>
+            <div class="form-group">
+                <label>Last Name *</label>
+                <input type="text" id="edit-last-name">
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Email *</label>
+            <input type="email" id="edit-email">
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Department</label>
+                <select id="edit-department">
+                    <option value="">— None —</option>
+                    {% for dept in departments %}
+                    <option value="{{ dept.id }}">{{ dept.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Enterprise</label>
+                <select id="edit-enterprise">
+                    <option value="">— None —</option>
+                    {% for ent in enterprises %}
+                    <option value="{{ ent.id }}">{{ ent.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Location</label>
+            <input type="text" id="edit-location">
+        </div>
+        <div class="modal-actions">
+            <button class="btn-modal-cancel" onclick="closeModal('editModal')">Cancel</button>
+            <button class="btn-modal-confirm" onclick="submitEdit()">Save Changes</button>
+        </div>
+    </div>
+</div>
+ 
+<!-- ── DELETE MODAL ── -->
+<div class="modal-overlay" id="deleteModal">
+    <div class="modal" style="max-width:400px; text-align:center;">
+        <button class="modal-close" onclick="closeModal('deleteModal')">&times;</button>
+        <h2>Delete Employee</h2>
+        <input type="hidden" id="delete-id">
+        <p style="color:var(--text-muted,#888); margin-bottom:1.5rem;">
+            Are you sure you want to delete <strong id="delete-name"></strong>?
+            This action cannot be undone.
+        </p>
+        <div class="modal-actions" style="justify-content:center;">
+            <button class="btn-modal-cancel" onclick="closeModal('deleteModal')">Cancel</button>
+            <button class="btn-modal-confirm danger" onclick="submitDelete()">Delete</button>
+        </div>
+    </div>
 </div>
 {% endblock %}
 
 {% block extra_js %}
 <script>
+const CSRF = '{{ csrf_token }}';
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+ 
 document.addEventListener('DOMContentLoaded', function() {
-    const searchInput = document.getElementById('searchInput');
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+        overlay.addEventListener('click', e => { if (e.target === overlay) overlay.classList.remove('open'); });
+    });
+});
+ 
+/* ── Notification helper ── */
+function showNotification(message, type) {
+    let container = document.getElementById('notificationsContainer');
+    if (!container) {
+        container = document.createElement('div');
+        container.className = 'notifications-container';
+        container.id = 'notificationsContainer';
+        document.querySelector('.main-content').prepend(container);
+    }
+    const icons = {
+        success: `<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>`,
+        info:    `<circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>`,
+        error:   `<circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>`,
+    };
+    const n = document.createElement('div');
+    n.className = `notification notification-${type}`;
+    n.innerHTML = `
+        <div class="notification-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${icons[type]||icons.info}</svg>
+        </div>
+        <div class="notification-content"><p class="notification-message">${message}</p></div>
+        <button class="notification-close" onclick="dismissNotification(this.parentElement)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+        </button>
+        <div class="notification-progress"></div>`;
+    container.appendChild(n);
+    setTimeout(() => n.remove(), 5000);
+}
+ 
+/* ── ADD ── */
+function openAddModal() {
+    ['add-first-name','add-last-name','add-email','add-location'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('add-department').value = '';
+    document.getElementById('add-enterprise').value = '';
+    openModal('addModal');
+}
+ 
+async function submitAdd() {
+    const body = {
+        first_name: document.getElementById('add-first-name').value.trim(),
+        last_name:  document.getElementById('add-last-name').value.trim(),
+        email:      document.getElementById('add-email').value.trim(),
+        department: document.getElementById('add-department').value,
+        enterprise: document.getElementById('add-enterprise').value,
+        location:   document.getElementById('add-location').value.trim(),
+    };
+    if (!body.first_name || !body.last_name || !body.email) {
+        showNotification('First name, last name and email are required.', 'error'); return;
+    }
+    try {
+        const res = await fetch('/admin/employees/add/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': CSRF },
+            body: JSON.stringify(body),
+        });
+        const data = await res.json();
+        if (data.success) {
+            showNotification(`${body.first_name} ${body.last_name} added successfully.`, 'success');
+            closeModal('addModal');
+            setTimeout(() => location.reload(), 1200);
+        } else {
+            showNotification(data.error || 'Failed to add employee.', 'error');
+        }
+    } catch { showNotification('Network error.', 'error'); }
+}
+ 
+/* ── VIEW ── */
+function openViewModal(row) {
+    const d = row.dataset;
+    document.getElementById('view-avatar').textContent =
+        (d.firstName||'?')[0].toUpperCase() + (d.lastName||'?')[0].toUpperCase();
+    document.getElementById('view-first-name').textContent = d.firstName || '-';
+    document.getElementById('view-last-name').textContent  = d.lastName  || '-';
+    document.getElementById('view-email').textContent      = d.email     || '-';
+    document.getElementById('view-matricule').textContent  = d.matricule || '-';
+    document.getElementById('view-location').textContent   = d.location  || '-';
+    document.getElementById('view-dept').textContent       = d.deptName  || '-';
+    document.getElementById('view-ent').textContent        = d.entName   || '-';
+    document.getElementById('view-date').textContent       = d.date      || '-';
+    openModal('viewModal');
+}
+ 
+/* ── EDIT ── */
+function openEditModal(row) {
+    const d = row.dataset;
+    document.getElementById('edit-id').value         = d.employeeId;
+    document.getElementById('edit-first-name').value = d.firstName  || '';
+    document.getElementById('edit-last-name').value  = d.lastName   || '';
+    document.getElementById('edit-email').value       = d.email      || '';
+    document.getElementById('edit-location').value    = d.location   || '';
+    document.getElementById('edit-department').value  = d.department || '';
+    document.getElementById('edit-enterprise').value  = d.enterprise || '';
+    openModal('editModal');
+}
+ 
+async function submitEdit() {
+    const id = document.getElementById('edit-id').value;
+    const body = {
+        first_name: document.getElementById('edit-first-name').value.trim(),
+        last_name:  document.getElementById('edit-last-name').value.trim(),
+        email:      document.getElementById('edit-email').value.trim(),
+        department: document.getElementById('edit-department').value,
+        enterprise: document.getElementById('edit-enterprise').value,
+        location:   document.getElementById('edit-location').value.trim(),
+    };
+    if (!body.first_name || !body.last_name || !body.email) {
+        showNotification('First name, last name and email are required.', 'error'); return;
+    }
+    try {
+        const res = await fetch(`/admin/employees/${id}/edit/`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': CSRF },
+            body: JSON.stringify(body),
+        });
+        const data = await res.json();
+        if (data.success) {
+            showNotification('Employee updated successfully.', 'success');
+            closeModal('editModal');
+            setTimeout(() => location.reload(), 1200);
+        } else {
+            showNotification(data.error || 'Failed to update employee.', 'error');
+        }
+    } catch { showNotification('Network error.', 'error'); }
+}
+ 
+/* ── DELETE ── */
+function openDeleteModal(row) {
+    const d = row.dataset;
+    document.getElementById('delete-id').value = d.employeeId;
+    document.getElementById('delete-name').textContent =
+        `${d.firstName} ${d.lastName}`;
+    openModal('deleteModal');
+}
+ 
+async function submitDelete() {
+    const id = document.getElementById('delete-id').value;
+    try {
+        const res = await fetch(`/admin/employees/${id}/delete/`, {
+            method: 'POST',
+            headers: { 'X-CSRFToken': CSRF },
+        });
+        const data = await res.json();
+        if (data.success) {
+            showNotification('Employee deleted.', 'success');
+            closeModal('deleteModal');
+            // Remove row from table immediately
+            const row = document.querySelector(`tr[data-employee-id="${id}"]`);
+            if (row) row.remove();
+        } else {
+            showNotification(data.error || 'Failed to delete.', 'error');
+        }
+    } catch { showNotification('Network error.', 'error'); }
+}
+ 
+/* ── Table filter / sort (unchanged) ── */
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput      = document.getElementById('searchInput');
     const departmentFilter = document.getElementById('departmentFilter');
     const enterpriseFilter = document.getElementById('enterpriseFilter');
-    const sortBy = document.getElementById('sortBy');
-    const table = document.getElementById('employeesTable');
-    const showingCount = document.getElementById('showingCount');
-    
+    const sortBy           = document.getElementById('sortBy');
+    const table            = document.getElementById('employeesTable');
+    const showingCount     = document.getElementById('showingCount');
     if (!table) return;
-    
     const tbody = table.querySelector('tbody');
-    const rows = Array.from(tbody.querySelectorAll('tr'));
-    
+    const rows  = Array.from(tbody.querySelectorAll('tr'));
+ 
     function filterAndSort() {
-        const searchTerm = searchInput.value.toLowerCase();
+        const searchTerm         = searchInput.value.toLowerCase();
         const selectedDepartment = departmentFilter.value;
         const selectedEnterprise = enterpriseFilter.value;
-        const sortValue = sortBy.value;
-        
-        // Filter
+        const sortValue          = sortBy.value;
         let visibleRows = rows.filter(row => {
-            const name = row.dataset.name || '';
-            const email = row.dataset.email || '';
-            const matricule = row.dataset.employeeId || '';
-            const dept = row.dataset.department || '';
-            const ent = row.dataset.enterprise || '';
-            
-            const matchesSearch = name.includes(searchTerm) || 
-                                  email.includes(searchTerm) || 
-                                  matricule.toLowerCase().includes(searchTerm);
-            const matchesDept = !selectedDepartment || dept === selectedDepartment;
-            const matchesEnt = !selectedEnterprise || ent === selectedEnterprise;
-            
+            const name      = row.dataset.name      || '';
+            const email     = row.dataset.email     || '';
+            const matricule = row.dataset.matricule || '';
+            const dept      = row.dataset.department || '';
+            const ent       = row.dataset.enterprise || '';
+            const matchesSearch = name.includes(searchTerm) || email.includes(searchTerm) || matricule.toLowerCase().includes(searchTerm);
+            const matchesDept   = !selectedDepartment || dept === selectedDepartment;
+            const matchesEnt    = !selectedEnterprise || ent  === selectedEnterprise;
             return matchesSearch && matchesDept && matchesEnt;
         });
-        
-        // Sort
         visibleRows.sort((a, b) => {
             switch(sortValue) {
-                case 'name-asc':
-                    return (a.dataset.name || '').localeCompare(b.dataset.name || '');
-                case 'name-desc':
-                    return (b.dataset.name || '').localeCompare(a.dataset.name || '');
-                case 'date-newest':
-                    return (b.dataset.date || '').localeCompare(a.dataset.date || '');
-                case 'date-oldest':
-                    return (a.dataset.date || '').localeCompare(b.dataset.date || '');
-                default:
-                    return 0;
+                case 'name-asc':    return (a.dataset.name||'').localeCompare(b.dataset.name||'');
+                case 'name-desc':   return (b.dataset.name||'').localeCompare(a.dataset.name||'');
+                case 'date-newest': return (b.dataset.date||'').localeCompare(a.dataset.date||'');
+                case 'date-oldest': return (a.dataset.date||'').localeCompare(b.dataset.date||'');
+                default: return 0;
             }
         });
-        
-        // Update DOM
-        rows.forEach(row => row.style.display = 'none');
-        visibleRows.forEach(row => {
-            row.style.display = '';
-            tbody.appendChild(row);
-        });
-        
-        // Update count
-        if (showingCount) {
-            showingCount.textContent = visibleRows.length;
-        }
+        rows.forEach(r => r.style.display = 'none');
+        visibleRows.forEach(r => { r.style.display = ''; tbody.appendChild(r); });
+        if (showingCount) showingCount.textContent = visibleRows.length;
     }
-    
-    // Event listeners
+ 
     searchInput.addEventListener('input', filterAndSort);
     departmentFilter.addEventListener('change', filterAndSort);
     enterpriseFilter.addEventListener('change', filterAndSort);
     sortBy.addEventListener('change', filterAndSort);
-    
-    // Column header sorting
+ 
     table.querySelectorAll('th.sortable').forEach(th => {
         th.addEventListener('click', function() {
-            const sortType = this.dataset.sort;
+            const sortType   = this.dataset.sort;
             const currentSort = sortBy.value;
-            
-            if (sortType === 'name') {
-                sortBy.value = currentSort === 'name-asc' ? 'name-desc' : 'name-asc';
-            } else if (sortType === 'date') {
-                sortBy.value = currentSort === 'date-newest' ? 'date-oldest' : 'date-newest';
-            }
-            
+            if (sortType === 'name') sortBy.value = currentSort === 'name-asc' ? 'name-desc' : 'name-asc';
+            else if (sortType === 'date') sortBy.value = currentSort === 'date-newest' ? 'date-oldest' : 'date-newest';
             filterAndSort();
         });
     });
-    
-    // Export button
+ 
     const exportBtn = document.getElementById('exportBtn');
     if (exportBtn) {
         exportBtn.addEventListener('click', function() {
-            // Simple CSV export
-            const visibleRows = rows.filter(row => row.style.display !== 'none');
+            const visibleRows = rows.filter(r => r.style.display !== 'none');
             let csv = 'Matricule,First Name,Last Name,Email,Department,Enterprise,Location,Created At\n';
-            
             visibleRows.forEach(row => {
-                const cells = row.querySelectorAll('td');
-                const matricule = row.dataset.employeeId;
-                const nameEl = row.querySelector('.employee-name');
-                const name = nameEl ? nameEl.textContent.trim() : '';
-                const nameParts = name.split(' ');
-                const firstName = nameParts[0] || '';
-                const lastName = nameParts.slice(1).join(' ') || '';
-                const email = row.dataset.email;
-                const dept = cells[2] ? cells[2].textContent.trim() : '';
-                const ent = cells[3] ? cells[3].textContent.trim() : '';
-                const loc = cells[4] ? cells[4].textContent.trim() : '';
-                const date = row.dataset.date;
-                
+                const cells     = row.querySelectorAll('td');
+                const matricule = row.dataset.matricule;
+                const firstName = row.dataset.firstName || '';
+                const lastName  = row.dataset.lastName  || '';
+                const email     = row.dataset.email;
+                const dept      = cells[2] ? cells[2].textContent.trim() : '';
+                const ent       = cells[3] ? cells[3].textContent.trim() : '';
+                const loc       = cells[4] ? cells[4].textContent.trim() : '';
+                const date      = row.dataset.date;
                 csv += `"${matricule}","${firstName}","${lastName}","${email}","${dept}","${ent}","${loc}","${date}"\n`;
             });
-            
             const blob = new Blob([csv], { type: 'text/csv' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'employees.csv';
-            a.click();
+            const url  = window.URL.createObjectURL(blob);
+            const a    = document.createElement('a');
+            a.href = url; a.download = 'employees.csv'; a.click();
             window.URL.revokeObjectURL(url);
         });
     }

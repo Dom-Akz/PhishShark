@@ -18,7 +18,7 @@ QCM_FILE = os.path.join(os.path.dirname(__file__), "Qcm_Database", "qcm.json")
 
 
 def load_questions():
-    with open(QCM_FILE, "r", encoding="utf-8") as file:
+    with open(QCM_FILE, "r") as file:
         data = json.load(file)
     return data.get("questions", [])
 
@@ -76,7 +76,7 @@ def qcm_page(request):
             pass
 
     # Get 20 random questions
-    questions = get_random_questions(20)
+    questions = get_random_questions(15)
 
     # Store questions in session for scoring
     request.session["quiz_questions"] = questions

@@ -3,10 +3,10 @@
         {
             "id": "company_email",
             "name": "Urgent Task from Manager",
-            "sender": "{nom_chef_dep}@{companyName}.com",
+            "sender": "{nom_chef_dep}@{company_name}.com",
             "subject": "Tâche urgente à traiter immédiatement",
-            "header": "Bonjour {Employe_Name},\n",
-            "content": "Je vous contacte concernant une tâche urgente qui nécessite votre attention immédiate.\nMerci de bien vouloir accéder au lien ci-dessous afin de consulter les détails et commencer le traitement sans délai :\n<a href=\"{lien}\" style=\"display: inline-block; padding: 12px 24px; background-color: #dc3545; color: white; text-decoration: none; border-radius: 6px; font-weight: bold;\">Accéder à la tâche</a>\n",
+            "header": "Bonjour {emp_name},\n",
+            "content": "Je vous contacte concernant une tâche urgente qui nécessite votre attention immédiate.\nMerci de bien vouloir accéder au site ci-dessous afin de consulter les détails et commencer le traitement sans délai :\n<div style=\"text-align: center;\">\n<a href=\"{lien}\" style=\"display: inline-block; padding: 12px 24px; background-color: #dc3545; color: white; text-decoration: none; border-radius: 6px; font-weight: bold;\">Accéder à la tâche</a>\n</div>\n",
             "footer": "Le respect des délais est essentiel pour le bon déroulement de nos opérations. N'hésitez pas à me contacter directement en cas de blocage.\nJe compte sur votre réactivité.\nCordialement,\n{nom_chef_dep}",
             "variables": [
                 {
@@ -14,7 +14,7 @@
                         "nom_chef_dep",
                         "company_name"
                     ],
-                    "header": "employe_name",
+                    "header": "emp_name",
                     "content": "lien"
                 }
             ]
@@ -25,7 +25,7 @@
             "sender": "bank-payment@portal.com",
             "subject": "Facture impayée – Action immédiate requise",
             "header": "Bonjour {emp_name},\n",
-            "content": "Suite à une vérification de nos comptes, nous constatons qu'une facture récente reste impayée à ce jour.\nMontant dû : 1 245,00 €\nDate d'échéance : 15/04/2026\nAfin d'éviter des frais de retard ou une suspension de service, nous vous invitons à régulariser votre situation dès maintenant en cliquant sur le button ci-dessous :\n<a href=\"{lien}\" style=\"display: inline-block; padding: 12px 24px; background-color: #28a745; color: white; text-decoration: none; border-radius: 6px; font-weight: bold;\">Régulariser ma situation</a>\n",
+            "content": "Suite à une vérification de nos comptes, nous constatons qu'une facture récente reste impayée à ce jour.\nMontant dû : 1 245,00 €\nDate d'échéance : 15/04/2026\nAfin d'éviter des frais de retard ou une suspension de service, nous vous invitons à régulariser votre situation dès maintenant en cliquant sur le button ci-dessous :\n<div style=\"text-align: center;\">\n<a href=\"{lien}\" style=\"display: inline-block; padding: 12px 24px; background-color: #28a745; color: white; text-decoration: none; border-radius: 6px; font-weight: bold;\">Régulariser ma situation</a>\n</div>\n",
             "footer": "Cordialement,\nService Facturation",
             "variables": [
                 {
@@ -40,7 +40,7 @@
             "sender": "recruitment@careers.com",
             "subject": "Offre d'emploi urgente – Réponse requise sous 48h",
             "header": "Bonjour {emp_name},\n",
-            "content": "Bonjour,\nNous avons consulté votre profil en ligne et avons été très impressionnés par votre parcours.\nDans le cadre de l'expansion de notre entreprise, nous souhaitons vous proposer un poste de Chargé(e) de mission en télétravail, avec une rémunération attractive allant jusqu'à 3 500€ par mois, sans expérience requise.\nVeuillez également confirmer votre intérêt en cliquant sur le button ci-dessous :\n<a href=\"{lien}\" style=\"display: inline-block; padding: 12px 24px; background-color: #007bff; color: white; text-decoration: none; border-radius: 6px; font-weight: bold;\">Postuler maintenant</a>\nAttention : cette offre est limitée et valable uniquement pendant 48 heures",
+            "content": "Bonjour,\nNous avons consulté votre profil en ligne et avons été très impressionnés par votre parcours.\nDans le cadre de l'expansion de notre entreprise, nous souhaitons vous proposer un poste de Chargé(e) de mission en télétravail, avec une rémunération attractive allant jusqu'à 3 500€ par mois, sans expérience requise.\nVeuillez également confirmer votre intérêt en cliquant sur le button ci-dessous :\n<div style=\"text-align: center;\">\n<a href=\"{lien}\" style=\"display: inline-block; padding: 12px 24px; background-color: #007bff; color: white; text-decoration: none; border-radius: 6px; font-weight: bold;\">Postuler maintenant</a>\n</div>\nAttention : cette offre est limitée et valable uniquement pendant 48 heures",
             "footer": "Dans l'attente de votre réponse,\nCordialement,\nService Recrutement",
             "variables": [
                 {
@@ -55,7 +55,7 @@
             "sender": "it-support@verification.com",
             "subject": "Action requise : Mise à jour urgente de votre compte informatique",
             "header": "Bonjour {emp_name},",
-            "content": "Dans le cadre de la mise à jour de sécurité de notre système informatique, le service IT a détecté une activité inhabituelle sur votre compte professionnel.\nAfin d'éviter toute suspension de votre accès, nous vous demandons de vérifier vos informations immédiatement en cliquant sur le button ci-dessous :\n<a href=\"{lien}\" style=\"display: inline-block; padding: 12px 24px; background-color: #ffc107; color: #333; text-decoration: none; border-radius: 6px; font-weight: bold;\">Vérifier mon compte</a>\n",
+            "content": "Dans le cadre de la mise à jour de sécurité de notre système informatique, le service IT a détecté une activité inhabituelle sur votre compte professionnel.\nAfin d'éviter toute suspension de votre accès, nous vous demandons de vérifier vos informations immédiatement en cliquant sur le button ci-dessous :\n<div style=\"text-align: center;\">\n<a href=\"{lien}\" style=\"display: inline-block; padding: 12px 24px; background-color: #ffc107; color: #333; text-decoration: none; border-radius: 6px; font-weight: bold;\">Vérifier mon compte</a>\n</div>\n",
             "footer": "Cordialement,\nService Informatique\nSupport Technique",
             "variables": [
                 {
@@ -70,7 +70,7 @@
             "sender": "noreply@apple-gift-center.net",
             "subject": "Vous avez gagné un iPhone",
             "header": "Félicitations {emp_name} 🎉",
-            "content": "Vous avez été sélectionné(e) pour gagner un iPhone 15 gratuit.\nPour recevoir votre cadeau, cliquez sur le button ci-dessous et confirmez vos informations :\n<a href=\"{lien}\" style=\"display: inline-block; padding: 12px 24px; background-color: #6c757d; color: white; text-decoration: none; border-radius: 6px; font-weight: bold;\">Recevoir mon cadeau</a>\nRépondez dans les 2 heures, sinon votre lot sera perdu.",
+            "content": "Vous avez été sélectionné(e) pour gagner un iPhone 15 gratuit.\nPour recevoir votre cadeau, cliquez sur le button ci-dessous et confirmez vos informations :\n<div style=\"text-align: center;\"\n<a href=\"{lien}\" style=\"display: inline-block; padding: 12px 24px; background-color: #6c757d; color: white; text-decoration: none; border-radius: 6px; font-weight: bold;\">\n</div>\nRecevoir mon cadeau</a>\nRépondez dans les 2 heures, sinon votre lot sera perdu.",
             "footer": "Cordialement,\nContactez-nous : {sender_email}",
             "variables": [
                 {
@@ -85,7 +85,7 @@
             "sender": "lotterie@gagnant-now.net",
             "subject": "Vous avez gagné un tirage au sort",
             "header": "Félicitations {emp_name} 🎉",
-            "content": "Vous avez été tiré au sort et vous avez gagné 5 000 €.\nPour recevoir votre gain, vous devez payer des frais de validation de 2 €.\nCliquez ici : <a href=\"{lien}\" style=\"display: inline-block; padding: 12px 24px; background-color: #28a745; color: white; text-decoration: none; border-radius: 6px; font-weight: bold;\">Réclamer mon gain</a>",
+            "content": "Vous avez été tiré au sort et vous avez gagné 5 000 €.\nPour recevoir votre gain, vous devez payer des frais de validation de 2 €.\nCliquez ici :\n<div style=\"text-align: center;\">\n<a href=\"{lien}\" style=\"display: inline-block; padding: 12px 24px; background-color: #28a745; color: white; text-decoration: none; border-radius: 6px; font-weight: bold;\">Réclamer mon gain</a>\n</div>",
             "footer": "Cordialement,\nContactez-nous : lotterie@gagnant-now.net",
             "variables": [
                 {
@@ -100,7 +100,7 @@
             "sender": "google-security@account.com",
             "subject": "Alerte de sécurité : Connexion suspecte détectée",
             "header": "Bonjour {emp_name},",
-            "content": "Nous avons détecté une tentative de connexion inhabituelle à votre compte depuis un appareil ou une localisation inconnue.\nDétails de la tentative :\nAppareil : Linux, Navigateur inconnu\nLocalisation : {diff_location}\nDate : {today_date}\nSi vous êtes à l'origine de cette connexion, aucune action n'est requise.\nDans le cas contraire, nous vous recommandons fortement de sécuriser votre compte immédiatement en confirmant votre identité via le button ci-dessous :\n<a href=\"{lien}\" style=\"display: inline-block; padding: 12px 24px; background-color: #dc3545; color: white; text-decoration: none; border-radius: 6px; font-weight: bold;\">Sécuriser mon compte</a>",
+            "content": "Nous avons détecté une tentative de connexion inhabituelle à votre compte depuis un appareil ou une localisation inconnue.\nDétails de la tentative :\nAppareil : Linux, Navigateur inconnu\nLocalisation : {diff_location}\nDate : {today_date}\nSi vous êtes à l'origine de cette connexion, aucune action n'est requise.\nDans le cas contraire, nous vous recommandons fortement de sécuriser votre compte immédiatement en confirmant votre identité via le button ci-dessous :\n<div style=\"text-align: center;\">\n<a href=\"{lien}\" style=\"display: inline-block; padding: 12px 24px; background-color: #dc3545; color: white; text-decoration: none; border-radius: 6px; font-weight: bold;\">Sécuriser mon compte</a>\n</div>",
             "footer": "Merci pour votre vigilance.\nCordialement,\nÉquipe Sécurité",
             "variables": [
                 {

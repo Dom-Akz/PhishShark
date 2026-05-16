@@ -1,21 +1,17 @@
 {
-    "Alerts": [
-        {
-            "id": "alert",
-            "name": "Alerte de Sécurité - Vous avez cliqué sur un lien de phishing",
-            "sender": "soufianemoussaoui.dev@gmail.com",
-            "subject": "ALERTE DE SÉCURITÉ - Test de sensibilisation au phishing",
-            "header": "Bonjour {emp_name},\n\n",
-            "content": "**Ceci est un test de sensibilisation à la sécurité.**\n\nVous avez récemment cliqué sur un lien dans un email qui simulait une attaque de phishing. Ne vous inquiétez pas, il s'agissait d'un exercice contrôlé pour tester et améliorer votre vigilance.\n\n**Ce que vous devez savoir :**\n• Aucune information n'a été compromise\n• Vos identifiants sont en sécurité\n• Ce test est organisé par votre département {dep_name}\n\n**Pourquoi avez-vous reçu cet email ?**\nLe département {dep_name} mène des simulations de phishing pour sensibiliser les employés aux risques réels. 
-            Votre participation nous aide à renforcer la sécurité de tous.\n\n**Comment reconnaître un vrai email de phishing ?**\n• Vérifiez toujours l'adresse de l'expéditeur\n• Ne cliquez jamais sur des liens suspects\n• Méfiez-vous des demandes urgentes\n• Signalez tout email douteux au service informatique\n\nPour plus d'informations ou pour une formation complémentaire, veuillez contacter votre supérieur : {nom_chef_dep
-            }\n\n","footer": "Cordialement,\n\nÉquipe Sécurité Informatique\n{dep_name} Department\n\n---\nCet email est un message automatique. Merci de votre compréhension",
-            "variable": [
-                {
-                    "header": "emp_name",
-                    "footer": "dep_name",
-                    "content": "link",
-                }
-            ]
-        }
-    ]
+    "id": "alert",
+    "name": "Alerte de Sécurité - Vous avez cliqué sur un lien de phishing",
+    "sender": "soufianemoussaoui.dev@gmail.com",
+    "subject": "ALERTE DE SÉCURITÉ - Test de sensibilisation au phishing",
+    "header": "Bonjour {emp_name},\n\n",
+    "content": "**Ceci est un test de sensibilisation à la sécurité.**\n\nVous avez récemment cliqué sur un link dans un email qui simulait une attaque de phishing. Ne vous inquiétez pas, il s'agissait d'un exercice contrôlé pour tester et améliorer votre vigilance.\n\n**Ce que vous devez savoir :**\n• Aucune information n'a été compromise\n• Vos identifiants sont en sécurité\n• Ce test est organisé par votre département {dep_name}\n\n**Pourquoi avez-vous reçu cet email ?**\nLe département {dep_name} mène des simulations de phishing pour sensibiliser les employés aux risques réels. Votre participation nous aide à renforcer la sécurité de tous.\n\n**Comment reconnaître un vrai email de phishing ?**\n• Vérifiez toujours l'adresse de l'expéditeur\n• Ne cliquez jamais sur des links suspects\n• Méfiez-vous des demandes urgentes\n• Signalez tout email douteux au service informatique\n\nVeuillez prendre 5 minutes pour compléter ce quiz de sensibilisation à la sécurité :\n\n<div style=\"text-align: center; margin: 20px 0;\">\n    <a href=\"{lien}\" style=\"display: inline-block; padding: 12px 24px; background-color: #28a745; color: white; text-decoration: none; border-radius: 6px; font-weight: bold; font-family: Arial, sans-serif;\">📋 Je fais le qcm de sensibilisation</a>\n</div>\n\nPour plus d'informations ou pour une formation complémentaire, veuillez contacter votre supérieur : {nom_chef_dep}\n\n",
+    "footer": "Cordialement,\n\nÉquipe Sécurité Informatique\n{dep_name} Department\n\n---\nCet email est un message automatique. Merci de votre compréhension",
+    "variables": {
+        "header": "emp_name",
+        "content": [
+            "lien",
+            "nom_chef_dep"
+        ],
+        "footer": "dep_name"
+    }
 }

@@ -8,7 +8,7 @@ const nextBtn = document.getElementById('nextBtn');
 const submitBtn = document.getElementById('submitBtn');
 const progressFill = document.getElementById('progressFill');
 const progressText = document.getElementById('progressText');
-      function showQuestion(index) {
+function showQuestion(index) {
           questionCards.forEach((card, i) => {
               card.classList.toggle('active', i === index);
           });
@@ -24,16 +24,16 @@ const progressText = document.getElementById('progressText');
           }
 
           updateProgress();
-      }
+  }
 
-      function updateProgress() {
+function updateProgress() {
           const answered = Object.keys(answers).length;
           const percent = (answered / totalQuestions) * 100;
           progressFill.style.width = percent + '%';
           progressText.textContent = `${answered}/${totalQuestions}`;
-      }
+}
 
-      function loadSavedAnswer(index) {
+function loadSavedAnswer(index) {
           const questionCard = questionCards[index];
           const questionId = questionCard.dataset.id;
           const savedValue = answers[questionId];
@@ -149,16 +149,55 @@ const progressText = document.getElementById('progressText');
                   Your security awareness certificate has been recorded.
               `;
               resultMessage.classList.add('result-pass');
+
+            const existingBtn = document.getElementById('tryAgainBtn');
+            if (existingBtn) existingBtn.remove();
+          
           } else {
               resultMessage.innerHTML = `
                   <strong>⚠️ Score: ${percentage}%</strong><br>
                   The passing score is 80%. Please review the training material and try again.<br>
                   Score: ${data.score}/${data.total}
               `;
-              resultMessage.classList.add('result-fail');
+              resultMessage.classList.add('result-fail'); 
+
+if (!document.getElementById('tryAgainBtn')) {
+            const tryAgainBtn = document.createElement('button');
+            tryAgainBtn.innerHTML = '<i class="ti ti-refresh" aria-hidden="true"></i> Try again';
+            tryAgainBtn.id = 'tryAgainBtn';
+            tryAgainBtn.className = 'btn-try-again';
+            tryAgainBtn.addEventListener('click', resetQuiz);
+            resultContainer.insertBefore(tryAgainBtn, document.querySelector('.btn-close'));
+        }
           }
       }
 
+function resetQuiz() {
+    // Reset state
+    currentIndex = 0;
+    answers = {};
+ 
+    // Clear selected options
+    questionCards.forEach(card => {
+        card.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+    });
+ 
+    // Hide result, show quiz
+    const resultContainer = document.getElementById('resultContainer');
+    resultContainer.classList.remove('show');
+    const scoreCircle = document.getElementById('scoreCircle');
+    scoreCircle.className = 'score-circle'; // remove pass/fail classes
+    const resultMessage = document.getElementById('resultMessage');
+    resultMessage.className = 'result-message'; // remove pass/fail classes
+ 
+    document.getElementById('questionsContainer').style.display = 'block';
+    document.querySelector('.navigation').style.display = 'flex';
+    document.querySelector('.progress-bar').style.display = 'block';
+ 
+    // Go back to first question
+    showQuestion(0);
+    updateProgress();
+}
       function closeWindow() {
           window.close();
       }

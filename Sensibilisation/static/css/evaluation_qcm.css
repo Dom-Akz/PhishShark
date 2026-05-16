@@ -280,21 +280,6 @@ body {
   color: #c62828;
 }
 
-.btn-close {
-  display: inline-block;
-  padding: 12px 30px;
-  background: #1a472a;
-  color: white;
-  text-decoration: none;
-  border-radius: 6px;
-  cursor: pointer;
-  border: none;
-}
-
-.btn-close:hover {
-  background: #0d2818;
-}
-
 @media (max-width: 640px) {
   .header {
     flex-direction: column;
@@ -303,4 +288,53 @@ body {
   .question-text {
     font-size: 16px;
   }
+}
+.btn-try-again {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.65rem 1.5rem;
+  background: #f59e0b;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    transform 0.1s;
+  margin-right: 8px;
+}
+
+.btn-try-again:hover {
+  background: #d97706;
+}
+
+.btn-try-again:active {
+  transform: scale(0.97);
+}
+
+.btn-try-again i {
+  font-size: 18px;
+}
+.btn-close {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.65rem 1.5rem;
+  background: transparent;
+  color: #9ca3af;
+  border: 1px solid #4b5563;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    transform 0.1s;
+}
+
+.btn-close:hover {
+  background: rgba(255, 255, 255, 0.08);
 }
