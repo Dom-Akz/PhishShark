@@ -46,5 +46,11 @@ urlpatterns = [
         views.employee_delete,
         name="employee_delete",
     ),
+    path("admin/logs/", views.logs_page, name="logs"),
+    path(
+        "admin/logs/generate-pdf/",
+        views.generate_logs_report_pdf,
+        name="generate_logs_pdf",
+    ),
     path("", include("Sensibilisation.urls")),
 ]
