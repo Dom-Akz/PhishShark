@@ -1,444 +1,332 @@
-{% extends 'base.html' %} {% load static %} {% block title %}Email Logs -
-Security Admin{% endblock %} {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/logs.css' %}" />
-{% endblock %} {% block header_title %}
+{% extends 'admin/base.html' %}
+{% load static %}
+
+{% block title %}Email Logs - Security Admin{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/logs.css' %}">
+{% endblock %}
+
+{% block header_title %}
 <h1>Email Tracking Logs</h1>
-{% endblock %} {% block header_actions %}
+{% endblock %}
+
+{% block header_actions %}
 <button id="reportBtn" class="btn btn-primary" onclick="openReportModal()">
-  <svg
-    width="18"
-    height="18"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="2"
-  >
-    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-    <polyline points="14 2 14 8 20 8" />
-    <line x1="12" y1="13" x2="8" y2="13" />
-    <line x1="16" y1="17" x2="8" y2="17" />
-  </svg>
-  Generate Report (PDF)
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+        <polyline points="14 2 14 8 20 8"/>
+        <line x1="12" y1="13" x2="8" y2="13"/>
+        <line x1="16" y1="17" x2="8" y2="17"/>
+    </svg>
+    Generate Report (PDF)
 </button>
-{% endblock %} {% block content %}
+{% endblock %}
+
+{% block content %}
 <div class="logs-container">
-  <!-- Statistics Cards -->
-  <div class="stats-grid">
-    <div class="stat-card">
-      <div class="stat-icon" style="background: #e3f2fd">
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="#1976d2"
-          stroke-width="2"
-        >
-          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-          <polyline points="22 4 12 14.01 9 11.01" />
-        </svg>
-      </div>
-      <div class="stat-content">
-        <div class="stat-value">{{ total_logs }}</div>
-        <div class="stat-label">Total Logs</div>
-      </div>
-    </div>
-
-    <div class="stat-card">
-      <div class="stat-icon" style="background: #f3e5f5">
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="#7b1fa2"
-          stroke-width="2"
-        >
-          <path
-            d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
-          />
-        </svg>
-      </div>
-      <div class="stat-content">
-        <div class="stat-value">{{ sent_count }}</div>
-        <div class="stat-label">Sent</div>
-      </div>
-    </div>
-
-    <div class="stat-card">
-      <div class="stat-icon" style="background: #fce4ec">
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="#c2185b"
-          stroke-width="2"
-        >
-          <path d="M6 9l6 6 6-6" />
-        </svg>
-      </div>
-      <div class="stat-content">
-        <div class="stat-value">{{ clicked_count }}</div>
-        <div class="stat-label">Clicked</div>
-      </div>
-    </div>
-
-    <div class="stat-card">
-      <div class="stat-icon" style="background: #fff3e0">
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="#f57c00"
-          stroke-width="2"
-        >
-          <circle cx="12" cy="12" r="10" />
-          <line x1="12" y1="8" x2="12" y2="16" />
-          <line x1="8" y1="12" x2="16" y2="12" />
-        </svg>
-      </div>
-      <div class="stat-content">
-        <div class="stat-value">{{ captured_count }}</div>
-        <div class="stat-label">Captured</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Filters Section -->
-  <div class="filters-section">
-    <h3>Filters</h3>
-    <form method="GET" class="filters-form">
-      <div class="filter-group">
-        <label for="days">Time Period:</label>
-        <select id="days" name="days">
-          <option value="1" {% if filter_days="" ="1" %}selected{% endif %}>
-            Last 24 Hours
-          </option>
-          <option value="7" {% if filter_days="" ="7" %}selected{% endif %}>
-            Last 7 Days
-          </option>
-          <option value="30" {% if filter_days="" ="30" %}selected{% endif %}>
-            Last 30 Days
-          </option>
-          <option value="90" {% if filter_days="" ="90" %}selected{% endif %}>
-            Last 90 Days
-          </option>
-        </select>
-      </div>
-
-      <div class="filter-group">
-        <label for="status">Status:</label>
-        <select id="status" name="status">
-          <option value="">All Statuses</option>
-          {% for status in all_statuses %}
-          <option
-            value="{{ status }}"
-            {%
-            if
-            filter_status=""
-            ="status"
-            %}selected{%
-            endif
-            %}
-          >
-            {{ status }}
-          </option>
-          {% endfor %}
-        </select>
-      </div>
-
-      <div class="filter-group">
-        <label for="type">Email Type:</label>
-        <select id="type" name="type">
-          <option value="">All Types</option>
-          {% for type in all_types %}
-          <option
-            value="{{ type }}"
-            {%
-            if
-            filter_type=""
-            ="type"
-            %}selected{%
-            endif
-            %}
-          >
-            {{ type }}
-          </option>
-          {% endfor %}
-        </select>
-      </div>
-
-      <div class="filter-group">
-        <label for="search">Search:</label>
-        <input
-          type="text"
-          id="search"
-          name="search"
-          placeholder="Name, email, or ID..."
-          value="{{ search_query }}"
-        />
-      </div>
-
-      <div class="filter-actions">
-        <button type="submit" class="btn btn-primary">Apply Filters</button>
-        <a href="/admin/logs/" class="btn btn-secondary">Clear</a>
-      </div>
-    </form>
-  </div>
-
-  <!-- Logs Table -->
-  <div class="logs-table-section">
-    <h3>Email Logs ({{ total_logs }} records)</h3>
-    <div class="table-wrapper">
-      <table class="logs-table">
-        <thead>
-          <tr>
-            <th>Date Sent</th>
-            <th>Employee</th>
-            <th>Email</th>
-            <th>Type</th>
-            <th>Status</th>
-            <th>Clicked At</th>
-            <th>IP Address</th>
-            <th>Credentials</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% if logs %} {% for item in logs %}
-          <tr class="log-row status-{{ item.log.status|lower }}">
-            <td>
-              <span class="date"
-                >{{ item.log.send_date|date:"Y-m-d H:i" }}</span
-              >
-            </td>
-            <td>
-              <div class="employee-name">
-                <strong
-                  >{{ item.log.employe.first_name }} {{
-                  item.log.employe.last_name }}</strong
-                >
-                <small>{{ item.log.employe.matricule }}</small>
-              </div>
-            </td>
-            <td>
-              <span class="email">{{ item.log.employe.email }}</span>
-            </td>
-            <td>
-              <span class="badge badge-type">{{ item.log.type }}</span>
-            </td>
-            <td>
-              <span
-                class="badge badge-status status-{{ item.log.status|lower }}"
-              >
-                {{ item.log.status }}
-              </span>
-            </td>
-            <td>
-              {% if item.log.clicked_at %}
-              <span class="clicked-time"
-                >{{ item.log.clicked_at|date:"Y-m-d H:i" }}</span
-              >
-              {% else %}
-              <span class="text-muted">—</span>
-              {% endif %}
-            </td>
-            <td>
-              {% if item.log.ip_address %}
-              <code class="ip-address">{{ item.log.ip_address }}</code>
-              {% else %}
-              <span class="text-muted">—</span>
-              {% endif %}
-            </td>
-            <td>
-              {% if item.credentials %}
-              <button
-                class="btn-view-creds"
-                onclick="viewCredentials({{ item.credentials.id }})"
-              >
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                  <circle cx="12" cy="12" r="3" />
+    <!-- Statistics Cards -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon" style="background: #e3f2fd;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1976d2" stroke-width="2">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                    <polyline points="22 4 12 14.01 9 11.01"/>
                 </svg>
-                View
-              </button>
-              {% else %}
-              <span class="text-muted">—</span>
-              {% endif %}
-            </td>
-          </tr>
-          {% endfor %} {% else %}
-          <tr>
-            <td colspan="8" class="empty-state">
-              <svg
-                width="48"
-                height="48"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1"
-              >
-                <path
-                  d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"
-                />
-                <polyline points="13 2 13 9 20 9" />
-              </svg>
-              <p>No logs found matching your criteria</p>
-            </td>
-          </tr>
-          {% endif %}
-        </tbody>
-      </table>
+            </div>
+            <div class="stat-content">
+                <div class="stat-value">{{ total_logs }}</div>
+                <div class="stat-label">Total Logs</div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon" style="background: #f3e5f5;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7b1fa2" stroke-width="2">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                </svg>
+            </div>
+            <div class="stat-content">
+                <div class="stat-value">{{ sent_count }}</div>
+                <div class="stat-label">Sent</div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon" style="background: #fce4ec;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c2185b" stroke-width="2">
+                    <path d="M6 9l6 6 6-6"/>
+                </svg>
+            </div>
+            <div class="stat-content">
+                <div class="stat-value">{{ clicked_count }}</div>
+                <div class="stat-label">Clicked</div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon" style="background: #fff3e0;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f57c00" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="8" x2="12" y2="16"/>
+                    <line x1="8" y1="12" x2="16" y2="12"/>
+                </svg>
+            </div>
+            <div class="stat-content">
+                <div class="stat-value">{{ captured_count }}</div>
+                <div class="stat-label">Captured</div>
+            </div>
+        </div>
     </div>
-  </div>
+
+    <!-- Filters Section -->
+    <div class="filters-section">
+        <h3>Filters</h3>
+        <form method="GET" class="filters-form">
+            <div class="filter-group">
+                <label for="days">Time Period:</label>
+                <select id="days" name="days">
+                    <option value="1" {% if filter_days == 1 %}selected{% endif %}>Last 24 Hours</option>
+                    <option value="7" {% if filter_days == 7 %}selected{% endif %}>Last 7 Days</option>
+                    <option value="30" {% if filter_days == 30 %}selected{% endif %}>Last 30 Days</option>
+                    <option value="90" {% if filter_days == 90 %}selected{% endif %}>Last 90 Days</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="status">Status:</label>
+                <select id="status" name="status">
+                    <option value="">All Statuses</option>
+                    {% for status in all_statuses %}
+                    <option value="{{ status }}" {% if filter_status == status %}selected{% endif %}>{{ status }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="type">Email Type:</label>
+                <select id="type" name="type">
+                    <option value="">All Types</option>
+                    {% for type in all_types %}
+                    <option value="{{ type }}" {% if filter_type == type %}selected{% endif %}>{{ type }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="search">Search:</label>
+                <input type="text" id="search" name="search" placeholder="Name, email, or ID..." value="{{ search_query }}">
+            </div>
+
+            <div class="filter-actions">
+                <button type="submit" class="btn btn-primary">Apply Filters</button>
+                <a href="/admin/logs/" class="btn btn-secondary">Clear</a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Logs Table -->
+    <div class="logs-table-section">
+        <h3>Email Logs ({{ total_logs }} records)</h3>
+        <div class="table-wrapper">
+            <table class="logs-table">
+                <thead>
+                    <tr>
+                        <th>Date Sent</th>
+                        <th>Employee</th>
+                        <th>Email</th>
+                        <th>Type</th>
+                        <th>Status</th>
+                        <th>Clicked At</th>
+                        <th>IP Address</th>
+                        <th>Credentials</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if logs %}
+                        {% for item in logs %}
+                        <tr class="log-row status-{{ item.log.status|lower }}">
+                            <td>
+                                <span class="date">{{ item.log.send_date|date:"Y-m-d H:i" }}</span>
+                            </td>
+                            <td>
+                                <div class="employee-name">
+                                    <strong>{{ item.log.employe.first_name }} {{ item.log.employe.last_name }}</strong>
+                                    <small>{{ item.log.employe.matricule }}</small>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="email">{{ item.log.employe.email }}</span>
+                            </td>
+                            <td>
+                                <span class="badge badge-type">{{ item.log.type }}</span>
+                            </td>
+                            <td>
+                                <span class="badge badge-status status-{{ item.log.status|lower }}">
+                                    {{ item.log.status }}
+                                </span>
+                            </td>
+                            <td>
+                                {% if item.log.clicked_at %}
+                                    <span class="clicked-time">{{ item.log.clicked_at|date:"Y-m-d H:i" }}</span>
+                                {% else %}
+                                    <span class="text-muted">—</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if item.log.ip_address %}
+                                    <code class="ip-address">{{ item.log.ip_address }}</code>
+                                {% else %}
+                                    <span class="text-muted">—</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if item.credentials %}
+                                    <button class="btn-view-creds" onclick="viewCredentials({{ item.credentials.id }})">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                            <circle cx="12" cy="12" r="3"/>
+                                        </svg>
+                                        View
+                                    </button>
+                                {% else %}
+                                    <span class="text-muted">—</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="8" class="empty-state">
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                                    <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
+                                    <polyline points="13 2 13 9 20 9"/>
+                                </svg>
+                                <p>No logs found matching your criteria</p>
+                            </td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 
 <!-- Report Modal -->
 <div id="reportModal" class="modal-overlay">
-  <div class="modal">
-    <div class="modal-header">
-      <h2>Generate PDF Report</h2>
-      <button class="modal-close" onclick="closeReportModal()">
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-        >
-          <line x1="18" y1="6" x2="6" y2="18" />
-          <line x1="6" y1="6" x2="18" y2="18" />
-        </svg>
-      </button>
-    </div>
-    <div class="modal-body">
-      <form id="reportForm" method="GET" action="/admin/logs/generate-pdf/">
-        <div class="form-group">
-          <label for="reportDays">Time Period:</label>
-          <select id="reportDays" name="days">
-            <option value="1">Last 24 Hours</option>
-            <option value="7" selected>Last 7 Days</option>
-            <option value="30">Last 30 Days</option>
-            <option value="90">Last 90 Days</option>
-          </select>
+    <div class="modal">
+        <div class="modal-header">
+            <h2>Generate PDF Report</h2>
+            <button class="modal-close" onclick="closeReportModal()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+            </button>
         </div>
+        <div class="modal-body">
+            <form id="reportForm" method="GET" action="/admin/logs/generate-pdf/">
+                <div class="form-group">
+                    <label for="reportDays">Time Period:</label>
+                    <select id="reportDays" name="days">
+                        <option value="1">Last 24 Hours</option>
+                        <option value="7" selected>Last 7 Days</option>
+                        <option value="30">Last 30 Days</option>
+                        <option value="90">Last 90 Days</option>
+                    </select>
+                </div>
 
-        <div class="form-group">
-          <label for="reportStatus">Status Filter (Optional):</label>
-          <select id="reportStatus" name="status">
-            <option value="">All Statuses</option>
-            {% for status in all_statuses %}
-            <option value="{{ status }}">{{ status }}</option>
-            {% endfor %}
-          </select>
+                <div class="form-group">
+                    <label for="reportStatus">Status Filter (Optional):</label>
+                    <select id="reportStatus" name="status">
+                        <option value="">All Statuses</option>
+                        {% for status in all_statuses %}
+                        <option value="{{ status }}">{{ status }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="reportType">Email Type (Optional):</label>
+                    <select id="reportType" name="type">
+                        <option value="">All Types</option>
+                        {% for type in all_types %}
+                        <option value="{{ type }}">{{ type }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <p class="form-help">The report will include all matching email logs with detailed statistics and employee information.</p>
+            </form>
         </div>
-
-        <div class="form-group">
-          <label for="reportType">Email Type (Optional):</label>
-          <select id="reportType" name="type">
-            <option value="">All Types</option>
-            {% for type in all_types %}
-            <option value="{{ type }}">{{ type }}</option>
-            {% endfor %}
-          </select>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeReportModal()">Cancel</button>
+            <button class="btn btn-primary" onclick="submitReportForm()">Generate PDF</button>
         </div>
-
-        <p class="form-help">
-          The report will include all matching email logs with detailed
-          statistics and employee information.
-        </p>
-      </form>
     </div>
-    <div class="modal-footer">
-      <button class="btn btn-secondary" onclick="closeReportModal()">
-        Cancel
-      </button>
-      <button class="btn btn-primary" onclick="submitReportForm()">
-        Generate PDF
-      </button>
-    </div>
-  </div>
 </div>
 
 <!-- Credentials Modal -->
 <div id="credentialsModal" class="modal-overlay">
-  <div class="modal">
-    <div class="modal-header">
-      <h2>Captured Credentials</h2>
-      <button class="modal-close" onclick="closeCredentialsModal()">
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-        >
-          <line x1="18" y1="6" x2="6" y2="18" />
-          <line x1="6" y1="6" x2="18" y2="18" />
-        </svg>
-      </button>
+    <div class="modal">
+        <div class="modal-header">
+            <h2>Captured Credentials</h2>
+            <button class="modal-close" onclick="closeCredentialsModal()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+            </button>
+        </div>
+        <div class="modal-body" id="credentialsContent">
+            <!-- Content loaded via AJAX -->
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeCredentialsModal()">Close</button>
+        </div>
     </div>
-    <div class="modal-body" id="credentialsContent">
-      <!-- Content loaded via AJAX -->
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-secondary" onclick="closeCredentialsModal()">
-        Close
-      </button>
-    </div>
-  </div>
 </div>
 
 <script>
-  function openReportModal() {
-    document.getElementById("reportModal").classList.add("open");
-    document.body.style.overflow = "hidden";
-  }
+function openReportModal() {
+    document.getElementById('reportModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+}
 
-  function closeReportModal() {
-    document.getElementById("reportModal").classList.remove("open");
-    document.body.style.overflow = "";
-  }
+function closeReportModal() {
+    document.getElementById('reportModal').classList.remove('open');
+    document.body.style.overflow = '';
+}
 
-  function submitReportForm() {
-    document.getElementById("reportForm").submit();
-  }
+function submitReportForm() {
+    document.getElementById('reportForm').submit();
+}
 
-  function openCredentialsModal(credentialId) {
+function openCredentialsModal(credentialId) {
     // Placeholder for loading credentials data
-    document.getElementById("credentialsModal").classList.add("open");
-    document.body.style.overflow = "hidden";
-  }
+    document.getElementById('credentialsModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+}
 
-  function closeCredentialsModal() {
-    document.getElementById("credentialsModal").classList.remove("open");
-    document.body.style.overflow = "";
-  }
+function closeCredentialsModal() {
+    document.getElementById('credentialsModal').classList.remove('open');
+    document.body.style.overflow = '';
+}
 
-  function viewCredentials(credentialId) {
+function viewCredentials(credentialId) {
     // This would typically fetch data via AJAX
     openCredentialsModal(credentialId);
-  }
+}
 
-  // Close modals when clicking outside
-  document.querySelectorAll(".modal-overlay").forEach((overlay) => {
-    overlay.addEventListener("click", function (e) {
-      if (e.target === this) {
-        this.classList.remove("open");
-        document.body.style.overflow = "";
-      }
+// Close modals when clicking outside
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+    overlay.addEventListener('click', function(e) {
+        if (e.target === this) {
+            this.classList.remove('open');
+            document.body.style.overflow = '';
+        }
     });
-  });
+});
 </script>
 
 {% endblock %}

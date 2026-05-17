@@ -1003,218 +1003,259 @@ def employee_delete(request, employe_id):
 
 @login_required(login_url="/admin/login/")
 def logs_page(request):
-    """Display email tracking logs with filtering options."""
-    
     # Get filter parameters from request
-    filter_days = int(request.GET.get('days', 7))
-    filter_status = request.GET.get('status', '')
-    filter_type = request.GET.get('type', '')
-    search_query = request.GET.get('search', '')
-    
+    filter_days = int(request.GET.get("days", 7))
+    filter_status = request.GET.get("status", "")
+    filter_type = request.GET.get("type", "")
+    search_query = request.GET.get("search", "")
+
     # Calculate date range
     end_date = timezone.now()
     start_date = end_date - timedelta(days=filter_days)
-    
+
     # Get all email tracking logs
-    logs = EmailTracking.objects.select_related('employe').filter(
-        send_date__gte=start_date,
-        send_date__lte=end_date
-    ).order_by('-send_date')
-    
+    logs = (
+        EmailTracking.objects.select_related("employe")
+        .filter(send_date__gte=start_date, send_date__lte=end_date)
+        .order_by("-send_date")
+    )
+
     # Apply status filter
     if filter_status:
         logs = logs.filter(status=filter_status)
-    
+
     # Apply type filter
     if filter_type:
         logs = logs.filter(type=filter_type)
-    
+
     # Apply search filter (search in employee name/email/matricule)
     if search_query:
         logs = logs.filter(
-            employe__first_name__icontains=search_query |
-            employe__last_name__icontains=search_query |
-            employe__email__icontains=search_query |
-            employe__matricule__icontains=search_query
+            Q(employe__first_name__icontains=search_query)
+            | Q(employe__last_name__icontains=search_query)
+            | Q(employe__email__icontains=search_query)
+            | Q(employe__matricule__icontains=search_query)
         )
-    
+
     # Get unique statuses and types for filter dropdowns
-    all_statuses = EmailTracking.objects.values_list('status', flat=True).distinct()
-    all_types = EmailTracking.objects.values_list('type', flat=True).distinct()
-    
+    all_statuses = EmailTracking.objects.values_list("status", flat=True).distinct()
+    all_types = EmailTracking.objects.values_list("type", flat=True).distinct()
+
     # Calculate statistics
     total_logs = logs.count()
-    sent_count = logs.filter(status='SENT').count()
-    clicked_count = logs.filter(status='CLICK').count()
-    captured_count = logs.filter(status='CREDENTIALS_CAPTURED').count()
-    failed_count = logs.filter(status='FAILED').count()
-    
+    sent_count = logs.filter(status="SENT").count()
+    clicked_count = logs.filter(status="CLICK").count()
+    captured_count = logs.filter(status="CREDENTIALS_CAPTURED").count()
+    failed_count = logs.filter(status="FAILED").count()
+
     # Get captured credentials for clicked emails
     captured_credentials = CapturedCredential.objects.filter(
         email_tracking__send_date__gte=start_date,
-        email_tracking__send_date__lte=end_date
-    ).select_related('email_tracking__employe')
-    
+        email_tracking__send_date__lte=end_date,
+    ).select_related("email_tracking__employe")
+
     # Prepare log data with related credentials
     log_data = []
     for log in logs:
         credentials = captured_credentials.filter(email_tracking=log).first()
-        log_data.append({
-            'log': log,
-            'credentials': credentials
-        })
-    
+        log_data.append({"log": log, "credentials": credentials})
+
     context = {
-        'logs': log_data,
-        'total_logs': total_logs,
-        'sent_count': sent_count,
-        'clicked_count': clicked_count,
-        'captured_count': captured_count,
-        'failed_count': failed_count,
-        'all_statuses': all_statuses,
-        'all_types': all_types,
-        'filter_days': filter_days,
-        'filter_status': filter_status,
-        'filter_type': filter_type,
-        'search_query': search_query,
-        'active_page': 'logs',
+        "logs": log_data,
+        "total_logs": total_logs,
+        "sent_count": sent_count,
+        "clicked_count": clicked_count,
+        "captured_count": captured_count,
+        "failed_count": failed_count,
+        "all_statuses": all_statuses,
+        "all_types": all_types,
+        "filter_days": filter_days,
+        "filter_status": filter_status,
+        "filter_type": filter_type,
+        "search_query": search_query,
+        "active_page": "logs",
     }
-    
-    return render(request, 'admin/logs.html', context)
+
+    return render(request, "admin/logs.html", context)
 
 
 @login_required(login_url="/admin/login/")
 def generate_logs_report_pdf(request):
-    """Generate PDF report of email logs."""
-    
+
     # Get filter parameters
-    filter_days = int(request.GET.get('days', 7))
-    filter_status = request.GET.get('status', '')
-    filter_type = request.GET.get('type', '')
-    
+    filter_days = int(request.GET.get("days", 7))
+    filter_status = request.GET.get("status", "")
+    filter_type = request.GET.get("type", "")
+
     # Calculate date range
     end_date = timezone.now()
     start_date = end_date - timedelta(days=filter_days)
-    
+
     # Get logs
-    logs = EmailTracking.objects.select_related('employe').filter(
-        send_date__gte=start_date,
-        send_date__lte=end_date
-    ).order_by('-send_date')
-    
+    logs = (
+        EmailTracking.objects.select_related("employe")
+        .filter(send_date__gte=start_date, send_date__lte=end_date)
+        .order_by("-send_date")
+    )
+
     if filter_status:
         logs = logs.filter(status=filter_status)
     if filter_type:
         logs = logs.filter(type=filter_type)
-    
+
     # Create PDF
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = f'attachment; filename="email_logs_{start_date.strftime("%Y%m%d")}_{end_date.strftime("%Y%m%d")}.pdf"'
-    
+    response = HttpResponse(content_type="application/pdf")
+    response["Content-Disposition"] = (
+        f'attachment; filename="email_logs_{start_date.strftime("%Y%m%d")}_{end_date.strftime("%Y%m%d")}.pdf"'
+    )
+
     # Create PDF document
-    doc = SimpleDocTemplate(response, pagesize=A4, topMargin=0.5*inch, bottomMargin=0.5*inch)
+    doc = SimpleDocTemplate(
+        response, pagesize=A4, topMargin=0.5 * inch, bottomMargin=0.5 * inch
+    )
     styles = getSampleStyleSheet()
     story = []
-    
+
     # Title
     title_style = ParagraphStyle(
-        'CustomTitle',
-        parent=styles['Heading1'],
+        "CustomTitle",
+        parent=styles["Heading1"],
         fontSize=18,
-        textColor=colors.HexColor('#1a1a1a'),
+        textColor=colors.HexColor("#1a1a1a"),
         spaceAfter=12,
-        alignment=1
+        alignment=1,
     )
-    story.append(Paragraph('Email Tracking Logs Report', title_style))
-    story.append(Spacer(1, 0.2*inch))
-    
+    story.append(Paragraph("Email Tracking Logs Report", title_style))
+    story.append(Spacer(1, 0.2 * inch))
+
     # Report metadata
     metadata_style = ParagraphStyle(
-        'Metadata',
-        parent=styles['Normal'],
+        "Metadata",
+        parent=styles["Normal"],
         fontSize=10,
-        textColor=colors.HexColor('#666666'),
-        spaceAfter=6
+        textColor=colors.HexColor("#666666"),
+        spaceAfter=6,
     )
-    story.append(Paragraph(f'Report Period: {start_date.strftime("%Y-%m-%d")} to {end_date.strftime("%Y-%m-%d")}', metadata_style))
-    story.append(Paragraph(f'Generated on: {timezone.now().strftime("%Y-%m-%d %H:%M:%S")}', metadata_style))
-    story.append(Spacer(1, 0.2*inch))
-    
+    story.append(
+        Paragraph(
+            f"Report Period: {start_date.strftime('%Y-%m-%d')} to {end_date.strftime('%Y-%m-%d')}",
+            metadata_style,
+        )
+    )
+    story.append(
+        Paragraph(
+            f"Generated on: {timezone.now().strftime('%Y-%m-%d %H:%M:%S')}",
+            metadata_style,
+        )
+    )
+    story.append(Spacer(1, 0.2 * inch))
+
     # Summary statistics
     summary_data = [
-        ['Metric', 'Value'],
-        ['Total Emails', str(logs.count())],
-        ['Sent', str(logs.filter(status='SENT').count())],
-        ['Clicked', str(logs.filter(status='CLICK').count())],
-        ['Credentials Captured', str(logs.filter(status='CREDENTIALS_CAPTURED').count())],
-        ['Failed', str(logs.filter(status='FAILED').count())],
+        ["Metric", "Value"],
+        ["Total Emails", str(logs.count())],
+        ["Sent", str(logs.filter(status="SENT").count())],
+        ["Clicked", str(logs.filter(status="CLICK").count())],
+        [
+            "Credentials Captured",
+            str(logs.filter(status="CREDENTIALS_CAPTURED").count()),
+        ],
+        ["Failed", str(logs.filter(status="FAILED").count())],
     ]
-    
-    summary_table = Table(summary_data, colWidths=[2*inch, 2*inch])
-    summary_table.setStyle(TableStyle([
-        ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#4f8ef7')),
-        ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
-        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-        ('FONTSIZE', (0, 0), (-1, 0), 11),
-        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
-        ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
-        ('GRID', (0, 0), (-1, -1), 1, colors.grey),
-        ('FONTSIZE', (0, 1), (-1, -1), 9),
-    ]))
-    
-    story.append(summary_table)
-    story.append(Spacer(1, 0.3*inch))
-    
-    # Detailed logs table
-    story.append(Paragraph('Detailed Email Tracking Logs', styles['Heading2']))
-    story.append(Spacer(1, 0.1*inch))
-    
-    # Build table data
-    table_data = [
-        ['Date', 'Employee', 'Email', 'Type', 'Status', 'IP Address']
-    ]
-    
-    for log in logs[:100]:  # Limit to 100 rows per page
-        table_data.append([
-            log.send_date.strftime('%Y-%m-%d %H:%M'),
-            f"{log.employe.first_name} {log.employe.last_name}",
-            log.employe.email,
-            log.type,
-            log.status,
-            log.ip_address or 'N/A',
-        ])
-    
-    # Create table with adjusted column widths
-    logs_table = Table(table_data, colWidths=[1.2*inch, 1.4*inch, 1.6*inch, 1.2*inch, 1.2*inch, 1.2*inch])
-    logs_table.setStyle(TableStyle([
-        ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#4f8ef7')),
-        ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
-        ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
-        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-        ('FONTSIZE', (0, 0), (-1, 0), 9),
-        ('BOTTOMPADDING', (0, 0), (-1, 0), 10),
-        ('BACKGROUND', (0, 1), (-1, -1), colors.HexColor('#f5f5f5')),
-        ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#cccccc')),
-        ('FONTSIZE', (0, 1), (-1, -1), 8),
-        ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, colors.HexColor('#f9f9f9')]),
-        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
-    ]))
-    
-    story.append(logs_table)
-    
-    # Add footer note
-    story.append(Spacer(1, 0.3*inch))
-    footer_style = ParagraphStyle(
-        'Footer',
-        parent=styles['Normal'],
-        fontSize=8,
-        textColor=colors.HexColor('#999999'),
-        alignment=0
+
+    summary_table = Table(summary_data, colWidths=[2 * inch, 2 * inch])
+    summary_table.setStyle(
+        TableStyle(
+            [
+                ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#4f8ef7")),
+                ("TEXTCOLOR", (0, 0), (-1, 0), colors.whitesmoke),
+                ("ALIGN", (0, 0), (-1, -1), "CENTER"),
+                ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+                ("FONTSIZE", (0, 0), (-1, 0), 11),
+                ("BOTTOMPADDING", (0, 0), (-1, 0), 12),
+                ("BACKGROUND", (0, 1), (-1, -1), colors.beige),
+                ("GRID", (0, 0), (-1, -1), 1, colors.grey),
+                ("FONTSIZE", (0, 1), (-1, -1), 9),
+            ]
+        )
     )
-    story.append(Paragraph('This report contains confidential information about email security tests. Use with discretion.', footer_style))
-    
+
+    story.append(summary_table)
+    story.append(Spacer(1, 0.3 * inch))
+
+    # Detailed logs table
+    story.append(Paragraph("Detailed Email Tracking Logs", styles["Heading2"]))
+    story.append(Spacer(1, 0.1 * inch))
+
+    # Build table data
+    table_data = [["Date", "Employee", "Email", "Type", "Status", "IP Address"]]
+
+    for log in logs[:100]:  # Limit to 100 rows per page
+        table_data.append(
+            [
+                log.send_date.strftime("%Y-%m-%d %H:%M"),
+                f"{log.employe.first_name} {log.employe.last_name}",
+                log.employe.email,
+                log.type,
+                log.status,
+                log.ip_address or "N/A",
+            ]
+        )
+
+    # Create table with adjusted column widths
+    logs_table = Table(
+        table_data,
+        colWidths=[
+            1.2 * inch,
+            1.4 * inch,
+            1.6 * inch,
+            1.2 * inch,
+            1.2 * inch,
+            1.2 * inch,
+        ],
+    )
+    logs_table.setStyle(
+        TableStyle(
+            [
+                ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#4f8ef7")),
+                ("TEXTCOLOR", (0, 0), (-1, 0), colors.whitesmoke),
+                ("ALIGN", (0, 0), (-1, -1), "LEFT"),
+                ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+                ("FONTSIZE", (0, 0), (-1, 0), 9),
+                ("BOTTOMPADDING", (0, 0), (-1, 0), 10),
+                ("BACKGROUND", (0, 1), (-1, -1), colors.HexColor("#f5f5f5")),
+                ("GRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#cccccc")),
+                ("FONTSIZE", (0, 1), (-1, -1), 8),
+                (
+                    "ROWBACKGROUNDS",
+                    (0, 1),
+                    (-1, -1),
+                    [colors.white, colors.HexColor("#f9f9f9")],
+                ),
+                ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+            ]
+        )
+    )
+
+    story.append(logs_table)
+
+    # Add footer note
+    story.append(Spacer(1, 0.3 * inch))
+    footer_style = ParagraphStyle(
+        "Footer",
+        parent=styles["Normal"],
+        fontSize=8,
+        textColor=colors.HexColor("#999999"),
+        alignment=0,
+    )
+    story.append(
+        Paragraph(
+            "This report contains confidential information about email security tests. Use with discretion.",
+            footer_style,
+        )
+    )
+
     # Build PDF
     doc.build(story)
-    
+
     return response
