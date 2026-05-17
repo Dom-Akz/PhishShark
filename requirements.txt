@@ -35,7 +35,9 @@ pydyf==0.12.1
 Pygments==2.20.0
 pyparsing==3.3.2
 pyphen==0.17.2
+python-dotenv==1.2.2
 qrcode==8.2
+reportlab==4.5.1
 requests==2.33.1
 rich==15.0.0
 secure-smtplib==0.1.1
