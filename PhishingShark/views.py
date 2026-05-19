@@ -910,7 +910,7 @@ def employee_add(request):
 
         # Build ink: first_name_dept_chefdep_location_company
         dept_name = dept.name if dept else "None"
-        chef_dep = "None"
+        chef_dep = dept.chef_departement
         company_name = ent.name if ent else "None"
         location_val = location if location else "None"
         ink = f"{first_name}_{dept_name}_{chef_dep}_{location_val}_{company_name}"
@@ -1073,7 +1073,7 @@ def logs_page(request):
         "filter_status": filter_status,
         "filter_type": filter_type,
         "search_query": search_query,
-        "active_page": "logs",
+        "captured_credentials": log_data,
     }
 
     return render(request, "admin/logs.html", context)

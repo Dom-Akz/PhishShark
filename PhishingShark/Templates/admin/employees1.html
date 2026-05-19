@@ -177,6 +177,10 @@
     data-ent-name="{{ employee.entreprise.name|default:'' }}"
     data-name="{{ employee.first_name|lower }} {{ employee.last_name|lower }}"
     data-date="{{ employee.created_at|date:'Y-m-d' }}"
+    data-firstname="{{ employee.first_name }}"
+    data-lastname="{{ employee.last_name }}"
+    data-deptname="{{ employee.departement.name|default:'' }}"
+    data-entname="{{ employee.entreprise.name|default:'' }}"
     >
                     <td>
                         <div class="employee-info">
@@ -437,12 +441,14 @@
         </div>
     </div>
 </div>
+{% endblock %}
 
+{% block extra_js %}
 <script>
 const CSRF = '{{ csrf_token }}';
 function openModal(id) { document.getElementById(id).classList.add('open'); }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-
+ 
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.modal-overlay').forEach(overlay => {
         overlay.addEventListener('click', e => { if (e.target === overlay) overlay.classList.remove('open'); });
@@ -461,6 +467,10 @@ document.getElementById("searchInput")?.addEventListener("input", function (e) {
       });
     });
 /* ── Notification helper ── */
+function dismissNotification(element) {
+    element.remove();
+}
+
 function showNotification(message, type) {
     let container = document.getElementById('notificationsContainer');
     if (!container) {
@@ -493,11 +503,9 @@ function showNotification(message, type) {
  
 /* ── ADD ── */
 function openAddModal() {
-    const inputIds = ['add-first-name','add-last-name','add-email','add-location','add-department','add-enterprise'];
-    inputIds.forEach(id => {
-        const element = document.getElementById(id);
-        if (element) element.value = '';
-    });
+    ['add-first-name','add-last-name','add-email','add-location'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('add-department').value = '';
+    document.getElementById('add-enterprise').value = '';
     openModal('addModal');
 }
  
@@ -533,10 +541,12 @@ async function submitAdd() {
 /* ── VIEW ── */
 function openViewModal(row) {
     const d = row.dataset;
+    const firstName = d.firstName || '';
+    const lastName = d.lastName || '';
     document.getElementById('view-avatar').textContent =
-        (d.firstName||'?')[0].toUpperCase() + (d.lastName||'?')[0].toUpperCase();
-    document.getElementById('view-first-name').textContent = d.firstName || '-';
-    document.getElementById('view-last-name').textContent  = d.lastName  || '-';
+        (firstName||'?')[0].toUpperCase() + (lastName||'?')[0].toUpperCase();
+    document.getElementById('view-first-name').textContent = firstName || '-';
+    document.getElementById('view-last-name').textContent  = lastName  || '-';
     document.getElementById('view-email').textContent      = d.email     || '-';
     document.getElementById('view-matricule').textContent  = d.matricule || '-';
     document.getElementById('view-location').textContent   = d.location  || '-';
@@ -550,10 +560,10 @@ function openViewModal(row) {
 function openEditModal(row) {
     const d = row.dataset;
     document.getElementById('edit-id').value         = d.employeeId;
-    document.getElementById('edit-first-name').value = d.firstName  || '';
-    document.getElementById('edit-last-name').value  = d.lastName   || '';
-    document.getElementById('edit-email').value       = d.email      || '';
-    document.getElementById('edit-location').value    = d.location   || '';
+    document.getElementById('edit-first-name').value = d.firstName || '';
+    document.getElementById('edit-last-name').value  = d.lastName || '';
+    document.getElementById('edit-email').value       = d.email || '';
+    document.getElementById('edit-location').value    = d.location || '';
     document.getElementById('edit-department').value  = d.department || '';
     document.getElementById('edit-enterprise').value  = d.enterprise || '';
     openModal('editModal');
@@ -593,8 +603,10 @@ async function submitEdit() {
 function openDeleteModal(row) {
     const d = row.dataset;
     document.getElementById('delete-id').value = d.employeeId;
+    const firstName = d.firstName || '';
+    const lastName = d.lastName || '';
     document.getElementById('delete-name').textContent =
-        `${d.firstName} ${d.lastName}`;
+        `${firstName} ${lastName}`;
     openModal('deleteModal');
 }
  
@@ -701,5 +713,4 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
-
 {% endblock %}
