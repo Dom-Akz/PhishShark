@@ -216,7 +216,7 @@ def send_email(email, emp, email_type):
     send_msg.attach_alternative(body, "text/html")
     send_msg.send(fail_silently=False)
 
-    EmailTracking.objects.create(
+    EmailTracking.objects.update_or_create(
         employe=emp,
         uuid=uuid,
         status="SENT",

@@ -104,7 +104,7 @@ class EmailTracking(models.Model):
         protocol="both", null=True, unpack_ipv4=False
     )
     # use to track the email by the employe
-    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
 
     def get_type_display(self):
         return self.type

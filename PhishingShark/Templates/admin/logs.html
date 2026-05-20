@@ -279,7 +279,10 @@
             </button>
         </div>
         <div class="modal-body" id="credentialsContent">
-
+            
+            <div id="credentialsData">
+                <!-- populated by JS -->
+            </div>
             <!-- No Credentials Message -->
             <div class="empty-state" id="noCredentialsMessage" style="display: none; text-align: center; padding: 2rem;">
                 <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin: 0 auto 1rem; opacity: 0.5;">
@@ -305,6 +308,44 @@ function closeReportModal() {
     document.body.style.overflow = '';
 }
 
+function viewCredentials(btn) {
+    const d = btn.dataset;
+ 
+    const container = document.getElementById('credentialsData');
+    container.innerHTML = `
+        <div class="creds-card">
+            <div class="creds-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                </svg>
+                <span>Credential capture #${d.id}</span>
+            </div>
+            <div class="creds-row">
+                <span class="creds-label">Employee</span>
+                <span class="creds-value">${d.employee}</span>
+            </div>
+            <div class="creds-row">
+                <span class="creds-label">Submitted at</span>
+                <span class="creds-value">${d.submitted}</span>
+            </div>
+            <div class="creds-row">
+                <span class="creds-label">IP address</span>
+                <code class="ip-address">${d.ip}</code>
+            </div>
+            <div class="creds-row creds-highlight">
+                <span class="creds-label">Username</span>
+                <code class="creds-value">${d.username}</code>
+            </div>
+            <div class="creds-row creds-highlight">
+                <span class="creds-label">Password</span>
+                <code class="creds-value">${d.password}</code>
+            </div>
+        </div>
+    `;
+ 
+    document.getElementById('credentialsModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+}
 function submitReportForm() {
     document.getElementById('reportForm').submit();
 }
