@@ -231,7 +231,7 @@ def send_alert_email(emp, tracking_uuid):
     email = create_alert_email(emp)
 
     body = email["header"] + email["content"] + email["footer"]
-    link = f"http://localhost:8000/sensibilisation/qcm/?rid={tracking_uuid}"
+    link = f"http://localhost:8000/sensibilisation/training/{tracking_uuid}"
 
     body = body.replace("lien", link)
 
@@ -243,18 +243,18 @@ def send_alert_email(emp, tracking_uuid):
         reply_to=["soufianemoussaoui.dev@gmail.com"],
         headers={"Reply-To": email["sender"]},
     )
+
     # combine text with html code
     send_msg.attach_alternative(body, "text/html")
+
     # send email
     send_msg.send(fail_silently=False)
 
-    # create or update a the aAlertsEmails table
-    AlertsEmails.objects.update_or_create(
+    # create or update a the AlertsEmails table
+    AlertsEmails.objects.create(
         employee=emp,
-        defaults={
-            "status": "SENT",
-            "send_date": timezone.now(),
-        },
+        status="SENT",
+        send_date=timezone.now(),
     )
 
 

@@ -1,10 +1,11 @@
 from django.shortcuts import render
-from .models import QcmResult, Sensibilisation
+from .models import QcmResult, Sensibilisation, AlertsEmails
 from django.contrib.auth.decorators import login_required
 from PhishingShark.models import Employes, EmailTracking
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
+from django.utils import timezone
 import json
 import random
 import os
@@ -33,25 +34,29 @@ def get_random_questions(n=20):
 # main functions here:
 
 
-def training_page(request):
-
-    # Get tracking UUID from URL
-    tracking_uuid = request.GET.get("rid", "")
+def training_page(request, uuid):
     employee_name = None
     employee_email = None
 
     # Try to find employee by tracking UUID
-    if tracking_uuid:
+    if uuid:
         try:
-            email_tracking = EmailTracking.objects.get(uuid=tracking_uuid)
+            email_tracking = EmailTracking.objects.get(uuid=uuid)
             employee = email_tracking.employe
             employee_name = f"{employee.first_name} {employee.last_name}"
             employee_email = employee.email
         except EmailTracking.DoesNotExist:
             pass
 
+    # registre the click on alert email update cause emp is unique and we still in one session
+    AlertsEmails.objects.update_or_create(
+        employee=employee,
+        status="CLICK",
+        clicked_at=timezone.now(),
+    )
+
     context = {
-        "tracking_uuid": tracking_uuid,
+        "tracking_uuid": uuid,
         "employee_name": employee_name,
         "employee_email": employee_email,
     }

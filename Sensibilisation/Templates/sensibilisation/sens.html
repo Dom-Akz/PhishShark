@@ -11,7 +11,6 @@
   <body>
     <div class="container">
       <div class="header">
-  
         <h1>Security Awareness Training</h1>
         <p>
           This was a simulated phishing test — learn to recognize real attacks
@@ -27,7 +26,8 @@
             was compromised.
           </p>
         </div>
-        <!-- Add this after the alert banner or header -->
+
+        <!-- Employee Info -->
         {% if employee_name %}
         <div
           style="
@@ -38,13 +38,14 @@
           "
         >
           <p style="margin: 0; font-size: 14px">
-            <strong>👤 Employee:</strong> {{ employee_name }} 
+            <strong>Employee:</strong> {{ employee_name }}
             {% if employee_email %}
             <span style="color: #6b7280; margin-left: 8px">({{ employee_email }})</span>
             {% endif %}
           </p>
         </div>
         {% endif %}
+
         <!-- Stats -->
         <div class="grid-3">
           <div class="stat-box">
@@ -260,24 +261,39 @@
           </ul>
         </div>
 
-        <!-- Additional Resources -->
-        <div class="section">
-          <h2 class="section-title">Additional Resources</h2>
-          <ul class="checklist-list">
-            <li>
-              <strong>Report Phishing Emails:</strong> Forward to
-              reportphishing@apwg.org
-            </li>
-            <li><strong>Report Text Scams:</strong> Forward to 7726 (SPAM)</li>
-            <li>
-              <strong>FTC Identity Theft Recovery:</strong> IdentityTheft.gov
-            </li>
-            <li>
-              <strong>Check for breached accounts:</strong> haveibeenpwned.com
-            </li>
-            <li><strong>Report to FTC:</strong> ReportFraud.ftc.gov</li>
-          </ul>
+        <div class="video-section">
+          <div class="video-section-label">
+            <span class="video-badge">📹 Required Viewing</span>
+          </div>
+          <h2 class="video-title">Watch Before Taking the Quiz</h2>
+          <p class="video-description">
+            This short training video walks you through exactly how phishing attacks are crafted,
+            what attackers are after, and the key signals that reveal a fake email.
+            Watch it fully before proceeding to the quiz.
+          </p>
+ 
+          <div class="video-wrapper">
+            <video
+              controls
+              preload="metadata"
+              poster="{{ MEDIA_URL }}phishing_awareness_poster.jpg"
+              id="training-video"
+              aria-label="Phishing awareness training video"
+            >
+            <source src="{{ MEDIA_URL}}phishing_awareness.webm"  type="video/webm" />
+              <p>Your browser does not support HTML5 video. Please contact IT to receive the training material.</p>
+            </video>
+          </div>
+ 
+          <!-- Live watch-progress bar -->
+          <div class="video-progress-bar">
+            <div class="video-progress-fill" id="video-progress-fill"></div>
+          </div>
+          <p class="video-progress-label" id="video-progress-label">0% watched</p>
+ 
         </div>
+
+
 
         <!-- Quiz CTA -->
         <div class="quiz-card">
@@ -287,7 +303,7 @@
             Take the Quiz →
           </button>
         </div>
-
+      </div>
 
       <div class="footer">
         <p>© 2026 PhishShark — Security Awareness Platform</p>
@@ -302,7 +318,6 @@
       function startQuiz() {
         window.location.href = `/sensibilisation/qcm/?rid=${trackingUuid}`;
       }
-
     </script>
   </body>
 </html>

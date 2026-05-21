@@ -42,7 +42,6 @@ class AlertsEmails(models.Model):
     employee = models.ForeignKey(
         Employes, on_delete=models.SET_NULL, null=True, related_name="alerts_email"
     )
-
     status = models.CharField(
         max_length=20, choices=EMAIL_STATUS_CHOICES, default="PENDING"
     )
