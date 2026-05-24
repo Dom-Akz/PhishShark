@@ -1,323 +1,325 @@
 {% load static %}
-
 <!doctype html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Security Awareness Training - PhishShark</title>
-    <link rel="stylesheet" href="{% static 'css/sens.css' %}" />
-  </head>
-  <body>
-    <div class="container">
-      <div class="header">
-        <h1>Security Awareness Training</h1>
-        <p>
-          This was a simulated phishing test — learn to recognize real attacks
-        </p>
-      </div>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
 
-      <div class="content">
-        <!-- Alert Banner -->
-        <div class="alert-banner">
-          <p>
-            <strong>Security Notice:</strong> You clicked on a simulated
-            phishing link. This was a controlled security test. No actual data
-            was compromised.
-          </p>
-        </div>
+        :root {
+            --bg: #111;
+            --surface: #1a1a1a;
+            --border: #2a2a2a;
+            --text: #ccc;
+            --text-muted: #666;
+            --text-bright: #eee;
+            --accent: #4a9eff;
+        }
 
-        <!-- Employee Info -->
-        {% if employee_name %}
-        <div
-          style="
-            background: #f3f4f6;
-            padding: 16px 20px;
-            margin-bottom: 24px;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html, body { height: 100%; width: 100%; overflow: hidden; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 14px;
+        }
+
+        .main-container {
+            display: flex;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 240px;
+            flex-shrink: 0;
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            padding: 24px 16px;
+            gap: 20px;
+        }
+
+        .logo {
+            font-family: 'IBM Plex Mono', monospace;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-bright);
+            letter-spacing: 1px;
+        }
+
+        .chapters-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .chapters-section {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            flex: 1;
+        }
+
+        .nav-item {
+            padding: 9px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-muted);
+            font-size: 13px;
+            transition: background 0.15s, color 0.15s;
+            border: 1px solid transparent;
+        }
+
+        .nav-item i { width: 14px; text-align: center; font-size: 12px; }
+
+        .nav-item:hover {
+            background: #222;
+            color: var(--text);
+        }
+
+        .nav-item.active {
+            background: #1e2d42;
+            border-color: #2a4060;
+            color: var(--accent);
+        }
+
+        .btn-qcm {
+            padding: 10px;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 13px;
+            font-family: 'IBM Plex Sans', sans-serif;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: opacity 0.15s;
+        }
+
+        .btn-qcm:hover { opacity: 0.85; }
+
+        /* CONTENT */
+        .content-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .header-section {
+            flex-shrink: 0;
+            padding: 24px 32px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header-section h1 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-bright);
+            margin-bottom: 4px;
+        }
+
+        .header-section p {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .employee-info {
+            display: inline-block;
+            margin-top: 12px;
+            background: #1a1a1a;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 8px 12px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .employee-info strong { color: var(--text); font-weight: 500; }
+
+        .content-wrapper {
+            flex: 1;
+            padding: 28px 32px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .video-box {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border: 1px solid var(--border);
             border-radius: 6px;
-          "
-        >
-          <p style="margin: 0; font-size: 14px">
-            <strong>Employee:</strong> {{ employee_name }}
-            {% if employee_email %}
-            <span style="color: #6b7280; margin-left: 8px">({{ employee_email }})</span>
-            {% endif %}
-          </p>
-        </div>
-        {% endif %}
+            overflow: hidden;
+            background: #000;
+            margin-bottom: 20px;
+        }
 
-        <!-- Stats -->
-        <div class="grid-3">
-          <div class="stat-box">
-            <div class="stat-number">3.4B+</div>
-            <div class="stat-label">Phishing emails sent daily</div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-number">1 in 5</div>
-            <div class="stat-label">Employees click phishing links</div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-number">$4.45M</div>
-            <div class="stat-label">Average cost per data breach</div>
-          </div>
-        </div>
+        .video-box iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
 
-        <!-- What is Phishing -->
-        <div class="section">
-          <h2 class="section-title">What is Phishing?</h2>
-          <div class="text-content">
-            <p>
-              Phishing is a cyber attack where criminals impersonate trusted
-              organizations to steal passwords, credit card numbers, or other
-              sensitive information. Attacks arrive via email, text message
-              (smishing), or phone calls (vishing).
-            </p>
-            <p>
-              Attackers create urgency — threatening account closure, promising
-              rewards, or impersonating executives — to trick you into acting
-              without thinking.
-            </p>
-          </div>
-        </div>
+        .info-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
 
-        <!-- Red Flags -->
-        <div class="section">
-          <h2 class="section-title">How to Spot a Phishing Email</h2>
-          <ul class="red-flag-list">
-            <li>
-              <strong>Suspicious sender address</strong> — Domain misspelled
-              (e.g., "micros0ft.com" instead of "microsoft.com")
-            </li>
-            <li>
-              <strong>Urgent or threatening language</strong> — "Your account
-              will be closed immediately"
-            </li>
-            <li>
-              <strong>Generic greeting</strong> — "Dear Customer" or "Valued
-              Member" instead of your name
-            </li>
-            <li>
-              <strong>Requests for sensitive information</strong> — Legitimate
-              companies never ask for passwords or credit cards by email
-            </li>
-            <li>
-              <strong>Suspicious links or attachments</strong> — Hover to see
-              real URL; unexpected attachments (ZIP, EXE, DOC macros) are
-              dangerous
-            </li>
-            <li>
-              <strong>Poor grammar and spelling</strong> — Professional
-              companies proofread their communications
-            </li>
-          </ul>
-        </div>
+        .info-card h2 {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-bright);
+            margin-bottom: 8px;
+        }
 
-        <!-- Examples -->
-        <div class="section">
-          <h2 class="section-title">Real Phishing Examples</h2>
+        .info-card p {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
 
-          <div class="example-card">
-            <div class="example-sender">
-              From: security@accounts-support.com
+        .footer-content {
+            margin-top: auto;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+            font-size: 11px;
+            color: #444;
+            font-family: 'IBM Plex Mono', monospace;
+        }
+
+        /* SCROLLBARS */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .main-container { flex-direction: column; height: auto; }
+            .sidebar {
+                width: 100%;
+                flex-direction: row;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+                padding: 12px 16px;
+                gap: 8px;
+                overflow-x: auto;
+                overflow-y: hidden;
+            }
+            .chapters-section { flex-direction: row; flex: 1; gap: 4px; }
+            .chapters-label { display: none; }
+            .nav-item { white-space: nowrap; flex-shrink: 0; font-size: 12px; }
+            .btn-qcm { white-space: nowrap; flex-shrink: 0; }
+            .content-wrapper { padding: 16px; }
+            .header-section { padding: 16px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <aside class="sidebar">
+            <div class="logo">PhishShark</div>
+
+            <div class="chapters-section">
+                <span class="chapters-label">Chapters</span>
+                <div class="nav-item active" onclick="change(1, this)">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <span>Chapter 1: Recognition</span>
+                </div>
+                <div class="nav-item" onclick="change(2, this)">
+                    <i class="fa-solid fa-user-secret"></i>
+                    <span>Chapter 2: Social Eng.</span>
+                </div>
+                <div class="nav-item" onclick="change(3, this)">
+                    <i class="fa-solid fa-lock"></i>
+                    <span>Chapter 3: Defense</span>
+                </div>
+                <div class="nav-item" onclick="change(4, this)">
+                    <i class="fa-solid fa-envelope-circle-check"></i>
+                    <span>Chapter 4: Best Practices</span>
+                </div>
             </div>
-            <div class="example-subject">
-              Subject: ⚠️ Unusual Sign-in Attempt Detected
-            </div>
-            <div class="example-body">
-              "Dear customer, someone tried to access your account from an
-              unknown device. Click here to secure your account immediately or
-              it will be permanently locked."
-            </div>
-            <div class="example-flags">
-              ❌ Generic greeting | ❌ Urgent threat | ❌ Suspicious sender
-              domain
-            </div>
-          </div>
 
-          <div class="example-card">
-            <div class="example-sender">From: billing@paypai.com</div>
-            <div class="example-subject">
-              Subject: Invoice #38491 - Payment Due
-            </div>
-            <div class="example-body">
-              "We noticed an unpaid invoice of $1,245.00. Download the attached
-              invoice to review the charges."
-            </div>
-            <div class="example-flags">
-              ❌ Wrong domain ("paypai.com" not "paypal.com") | ❌ Unexpected
-              attachment | ❌ Unfamiliar invoice
-            </div>
-          </div>
+            <button class="btn-qcm" onclick="startQuiz()">
+                <i class="fa-solid fa-graduation-cap"></i> Take Quiz
+            </button>
+        </aside>
 
-          <div class="example-card">
-            <div class="example-sender">From: ceo@company-secure.net</div>
-            <div class="example-subject">
-              Subject: Urgent - Wire Transfer Needed
+        <div class="content-area">
+            <div class="header-section">
+                <h1>Security Awareness Training</h1>
+                <p>Learn to recognize and prevent phishing attacks</p>
+                {% if employee_name %}
+                <div class="employee-info">
+                    <strong>Employee:</strong> {{ employee_name }}
+                    {% if employee_email %}
+                    <span style="color:#555; margin-left:6px;">{{ employee_email }}</span>
+                    {% endif %}
+                </div>
+                {% endif %}
             </div>
-            <div class="example-body">
-              "I'm in a meeting and can't talk. Please wire $50,000 to this
-              account immediately. I'll explain later."
-            </div>
-            <div class="example-flags">
-              ❌ Bypasses normal approval | ❌ Urgent request | ❌ Prevents
-              verification ("can't talk")
-            </div>
-          </div>
+
+            <main class="content-wrapper">
+                <div class="video-box">
+                    <iframe id="vf" src="https://www.youtube.com/embed/8-9mHeL5m8E" allowfullscreen></iframe>
+                </div>
+
+                <div class="info-card">
+                    <h2 id="mt">Chapter 1: How to Spot a Phishing Email</h2>
+                    <p id="md">Learn to verify links and understand why SSL certificates don't guarantee security. Essential knowledge for protecting yourself against phishing attacks.</p>
+                </div>
+
+                <div class="footer-content">© 2026 PhishShark — Security Awareness Platform</div>
+            </main>
         </div>
-
-        <!-- What to Do -->
-        <div class="section">
-          <h2 class="section-title">
-            What To Do If You Receive a Phishing Email
-          </h2>
-          <ul class="checklist-list">
-            <li>
-              <strong>STOP</strong> — Don't click links, reply, or open
-              attachments
-            </li>
-            <li>
-              <strong>HOVER</strong> — Hover over links to see the real URL
-              (don't click)
-            </li>
-            <li>
-              <strong>VERIFY</strong> — Contact the company using official
-              channels (not the email)
-            </li>
-            <li><strong>REPORT</strong> — Forward to your IT security team</li>
-            <li>
-              <strong>DELETE</strong> — Mark as spam and delete the message
-            </li>
-          </ul>
-        </div>
-
-        <div class="section">
-          <h2 class="section-title">
-            If You Already Clicked or Shared Information
-          </h2>
-          <ul class="action-list">
-            <li>
-              <strong>1. Disconnect from the internet</strong> — Stop malware
-              from spreading
-            </li>
-            <li>
-              <strong>2. Run a security scan</strong> — Use your antivirus
-              software immediately
-            </li>
-            <li>
-              <strong>3. Change your passwords</strong> — Especially for any
-              accounts using the same password
-            </li>
-            <li>
-              <strong>4. Enable Multi-Factor Authentication (MFA)</strong> — Add
-              this critical protection to all accounts
-            </li>
-            <li>
-              <strong>5. Contact affected institutions</strong> — Call your bank
-              or credit card company if you shared financial info
-            </li>
-            <li>
-              <strong>6. Report to IT</strong> — Immediately notify your
-              security team
-            </li>
-            <li>
-              <strong>7. Monitor your accounts</strong> — Check for unauthorized
-              activity
-            </li>
-          </ul>
-        </div>
-
-        <!-- Prevention -->
-        <div class="section">
-          <h2 class="section-title">How to Protect Yourself</h2>
-          <ul class="checklist-list">
-            <li>
-              <strong>Enable Multi-Factor Authentication (MFA/2FA)</strong> —
-              The single most effective protection
-            </li>
-            <li>
-              <strong>Use a password manager</strong> — Generate strong, unique
-              passwords for every account. Never reuse passwords
-            </li>
-            <li>
-              <strong>Keep software updated</strong> — Enable automatic updates
-              for your OS, browser, and antivirus
-            </li>
-            <li>
-              <strong>Back up your data</strong> — Use the 3-2-1 rule: 3 copies,
-              2 media types, 1 offsite
-            </li>
-            <li>
-              <strong>Verify before trusting</strong> — Always contact senders
-              through official channels you find independently
-            </li>
-            <li>
-              <strong>Never share passwords or 2FA codes</strong> — Legitimate
-              companies will never ask for them
-            </li>
-            <li>
-              <strong>Be skeptical of unexpected messages</strong> — Even from
-              coworkers (their accounts may be compromised)
-            </li>
-          </ul>
-        </div>
-
-        <div class="video-section">
-          <div class="video-section-label">
-            <span class="video-badge">📹 Required Viewing</span>
-          </div>
-          <h2 class="video-title">Watch Before Taking the Quiz</h2>
-          <p class="video-description">
-            This short training video walks you through exactly how phishing attacks are crafted,
-            what attackers are after, and the key signals that reveal a fake email.
-            Watch it fully before proceeding to the quiz.
-          </p>
- 
-          <div class="video-wrapper">
-            <video
-              controls
-              preload="metadata"
-              poster="{{ MEDIA_URL }}phishing_awareness_poster.jpg"
-              id="training-video"
-              aria-label="Phishing awareness training video"
-            >
-            <source src="{{ MEDIA_URL}}phishing_awareness.webm"  type="video/webm" />
-              <p>Your browser does not support HTML5 video. Please contact IT to receive the training material.</p>
-            </video>
-          </div>
- 
-          <!-- Live watch-progress bar -->
-          <div class="video-progress-bar">
-            <div class="video-progress-fill" id="video-progress-fill"></div>
-          </div>
-          <p class="video-progress-label" id="video-progress-label">0% watched</p>
- 
-        </div>
-
-
-
-        <!-- Quiz CTA -->
-        <div class="quiz-card">
-          <h3>Test Your Knowledge</h3>
-          <p>Complete the quiz to earn your security awareness certificate</p>
-          <button class="btn btn-primary" onclick="startQuiz()">
-            Take the Quiz →
-          </button>
-        </div>
-      </div>
-
-      <div class="footer">
-        <p>© 2026 PhishShark — Security Awareness Platform</p>
-      </div>
     </div>
 
     <script>
-      const urlParams = new URLSearchParams(window.location.search);
-      const trackingUuid =
-        urlParams.get("rid") || urlParams.get("employee") || "";
+        const urlParams = new URLSearchParams(window.location.search);
+        const trackingUuid = urlParams.get("rid") || urlParams.get("employee") || "";
 
-      function startQuiz() {
-        window.location.href = `/sensibilisation/qcm/?rid=${trackingUuid}`;
-      }
+        const chaptersData = {
+            1: { title: "Chapter 1: How to Spot a Phishing Email", description: "Learn to verify links and understand why SSL certificates don't guarantee security. Essential knowledge for protecting yourself against phishing attacks.", video: "https://www.youtube.com/embed/8-9mHeL5m8E" },
+            2: { title: "Chapter 2: Social Engineering Tactics", description: "Understand the psychology behind phishing. Learn the difference between mass phishing and targeted spear-phishing attacks.", video: "https://www.youtube.com/embed/lc7scxvKQOo" },
+            3: { title: "Chapter 3: Defense Strategies", description: "Master defensive techniques including reporting procedures and Multi-Factor Authentication (2FA). Learn why these tools are your best protection.", video: "https://www.youtube-nocookie.com/embed/Is7InXfSshE" },
+            4: { title: "Chapter 4: Best Practices & Response", description: "Complete guide on best security practices and what to do if you've clicked a phishing link. Incident response steps explained.", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" }
+        };
+
+        function change(id, el) {
+            const data = chaptersData[id];
+            document.getElementById('vf').src = data.video;
+            document.getElementById('mt').innerText = data.title;
+            document.getElementById('md').innerText = data.description;
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        function startQuiz() {
+            window.location.href = `/sensibilisation/qcm/?rid=${trackingUuid}`;
+        }
     </script>
-  </body>
+</body>
 </html>
