@@ -135,18 +135,27 @@
                 Emails Logs
               </a>
             </li>
+        <li class="{% if active_page == 'profile' %}active{% endif %}">
+              <a href="/admin/profile">
+               <svg 
+  width="20" 
+  height="20" 
+  viewBox="0 0 24 24" 
+  fill="none" 
+  stroke="currentColor" 
+  stroke-width="2"
+>
+  <!-- Profile circle (head) -->
+  <circle cx="12" cy="9" r="4" />
+  <!-- Profile body -->
+  <path d="M5 20v-2a7 7 0 0 1 14 0v2" />
+</svg>
+                      Profile
+              </a>
+            </li>
           </ul>
         </nav>
 
-<!--- Profile link -->
-<div class="user-info">
-      <a  href="/admin/profile">
-        <button class="btn btn-link" type="button" id="userMenuButton" width=16 height=16 aria-expanded="false"> 
-            <i class="fas fa-user-circle"></i> {{ request.user.username }}
-        </button>
-        </a>
-    
-</div>
 
       </aside>
 

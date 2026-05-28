@@ -1,0 +1,412 @@
+{% extends 'admin/base.html' %} {% block content %}
+<div class="profile-container">
+  <!-- Profile Header -->
+  <div class="profile-header">
+    <div class="profile-info">
+      <div class="profile-avatar">
+        <span class="avatar-initials">{{ admin_initial }}</span>
+      </div>
+      <div class="profile-details">
+        <h1 class="profile-name">{{ full_name }}</h1>
+        <p class="profile-email">{{ admin_email }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Profile Content -->
+  <div class="profile-content">
+    <div class="profile-section">
+      <h2 class="section-title">Account Information</h2>
+
+      <div class="info-grid">
+        <div class="info-item">
+          <label class="info-label">Full Name</label>
+          <p class="info-value">{{ admin_username }}</p>
+        </div>
+
+        <div class="info-item">
+          <label class="info-label">Username</label>
+          <p class="info-value">{{ admin_username }}</p>
+        </div>
+
+        <div class="info-item">
+          <label class="info-label">Email Address</label>
+          <p class="info-value">{{ admin_email }}</p>
+        </div>
+
+        <div class="info-item">
+          <label class="info-label">Department Access</label>
+          <p class="info-value">{{ department }}</p>
+        </div>
+
+        <div class="info-item">
+          <label class="info-label">Managed Employees</label>
+          <p class="info-value">{{ employee_count }}</p>
+        </div>
+
+        <div class="info-item">
+          <label class="info-label">Member Since</label>
+          <p class="info-value">{{ created_at|date:"M d, Y" }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit Profile Section -->
+    <div class="profile-section">
+      <h2 class="section-title">Update Profile</h2>
+
+      <form method="POST" action="/admin/profile/" class="profile-form">
+        {% csrf_token %}
+
+        <div class="form-group">
+          <label for="email" class="form-label">Email Address</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value="{{ admin_email }}"
+            class="form-input"
+            placeholder="your@email.com"
+          />
+          {% if form_errors.email %}
+          <span class="form-error">{{ form_errors.email }}</span>
+          {% endif %}
+        </div>
+
+        <div class="form-group">
+          <label for="password" class="form-label"
+            >New Password (leave blank to keep current)</label
+          >
+          <input
+            type="password"
+            id="password"
+            name="password"
+            class="form-input"
+            placeholder="Enter new password"
+          />
+          <span class="form-help">Password must be at least 8 characters</span>
+        </div>
+
+        <div class="form-group">
+          <label for="password_confirm" class="form-label"
+            >Confirm Password</label
+          >
+          <input
+            type="password"
+            id="password_confirm"
+            name="password_confirm"
+            class="form-input"
+            placeholder="Confirm new password"
+          />
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">
+            <i class="fa-solid fa-floppy-disk"></i> Save Changes
+          </button>
+          <a href="/admin/dashboard/" class="btn btn-secondary">
+            <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+          </a>
+        </div>
+      </form>
+    </div>
+
+    <!-- Activity Section -->
+    <div class="profile-section">
+      <h2 class="section-title">Account Activity</h2>
+
+      <div class="activity-grid">
+        <div class="activity-item">
+          <span class="activity-label">Account Status</span>
+          <span class="activity-value">
+            {% if is_active %}
+            <span class="badge badge-success">Active</span>
+            {% else %}
+            <span class="badge badge-inactive">Inactive</span>
+            {% endif %}
+          </span>
+        </div>
+
+        <div class="activity-item">
+          <span class="activity-label">Last Updated</span>
+          <span class="activity-value"
+            >{{ updated_at|date:"M d, Y \a\t h:i A" }}</span
+          >
+        </div>
+
+        <div class="activity-item">
+          <span class="activity-label">Profile Created</span>
+          <span class="activity-value">{{ created_at|date:"M d, Y" }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .profile-container {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .profile-header {
+    background: linear-gradient(135deg, #0f172a 0%, #1a1f35 100%);
+    border: 1px solid rgba(0, 242, 255, 0.1);
+    border-radius: 12px;
+    padding: 32px;
+    margin-bottom: 32px;
+  }
+
+  .profile-info {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+  }
+
+  .profile-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #00f2ff 0%, #bc13fe 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .avatar-initials {
+    font-size: 28px;
+    font-weight: 700;
+    color: white;
+  }
+
+  .profile-details h1 {
+    margin: 0 0 8px 0;
+    font-size: 24px;
+    color: white;
+  }
+
+  .profile-role {
+    margin: 4px 0;
+  }
+
+  .profile-email {
+    margin: 4px 0;
+    font-size: 13px;
+    color: #94a3b8;
+  }
+
+  .profile-department {
+    margin: 8px 0 0 0;
+    font-size: 13px;
+    color: #cbd5e1;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .badge-admin {
+    background: rgba(0, 242, 255, 0.15);
+    color: #00f2ff;
+    border: 1px solid rgba(0, 242, 255, 0.3);
+  }
+
+  .badge-manager {
+    background: rgba(139, 92, 246, 0.15);
+    color: #a78bfa;
+    border: 1px solid rgba(139, 92, 246, 0.3);
+  }
+
+  .badge-success {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+  }
+
+  .badge-inactive {
+    background: rgba(107, 114, 128, 0.15);
+    color: #9ca3af;
+    border: 1px solid rgba(107, 114, 128, 0.3);
+  }
+
+  .profile-content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .section-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: white;
+    margin: 0 0 20px 0;
+  }
+
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 24px;
+  }
+
+  .info-item {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .info-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+
+  .info-value {
+    font-size: 14px;
+    color: #cbd5e1;
+    margin: 0;
+  }
+
+  .profile-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .form-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #cbd5e1;
+    margin-bottom: 8px;
+  }
+
+  .form-input {
+    padding: 10px 14px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    color: #cbd5e1;
+    font-size: 13px;
+    transition: all 0.2s ease;
+  }
+
+  .form-input:focus {
+    outline: none;
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(0, 242, 255, 0.3);
+    box-shadow: 0 0 0 2px rgba(0, 242, 255, 0.1);
+  }
+
+  .form-help {
+    font-size: 12px;
+    color: #64748b;
+    margin-top: 4px;
+  }
+
+  .form-error {
+    font-size: 12px;
+    color: #ef4444;
+    margin-top: 4px;
+  }
+
+  .form-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 12px;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+  }
+
+  .activity-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+  }
+
+  .activity-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background: rgba(0, 242, 255, 0.05);
+    border: 1px solid rgba(0, 242, 255, 0.1);
+    border-radius: 6px;
+  }
+
+  .activity-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .activity-value {
+    font-size: 13px;
+    color: #cbd5e1;
+  }
+
+  @media (max-width: 768px) {
+    .profile-header {
+      padding: 20px;
+    }
+
+    .profile-info {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .profile-details h1 {
+      font-size: 20px;
+    }
+
+    .info-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .form-actions {
+      flex-direction: column;
+    }
+
+    .btn {
+      width: 100%;
+    }
+
+    .activity-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .activity-item {
+      flex-direction: column;
+      gap: 8px;
+    }
+  }
+</style>
+{% endblock %}

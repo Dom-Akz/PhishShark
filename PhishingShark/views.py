@@ -30,6 +30,10 @@ from .forms import AdminProfileForm
 from reportlab.lib.pagesizes import letter, A4
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from django.contrib.auth.hashers import make_password
+from django.core.exceptions import ValidationError
+from django.core.validators import validate_email
+
 from reportlab.platypus import (
     SimpleDocTemplate,
     Table,
@@ -874,6 +878,50 @@ def profile_view(request):
         "form": form,
         "admin_user": admin_user,
     }
+    return render(request, "admin/profile.html", context)
+
+
+@login_required(login_url="/admin/login/")
+def admin_profile(request):
+
+    # Get admin information
+    try:
+        admin = Administrateur.objects.get(username=request.user.username)
+    except Administrateur.DoesNotExist:
+        messages.error(request, "Admin profile not found.")
+        return redirect("/admin/dashboard")
+
+    if request.method == "POST":
+        form = AdminProfileForm(request.POST, instance=admin)
+
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Profile updated successfully.")
+            return redirect("/admin/profile")
+    else:
+        form = AdminProfileForm(instance=admin)
+
+    # Get admin stats
+    employee_count = Employes.objects.filter(departement=admin.departement).count()
+
+    # Get admin initial for avatar
+    admin_initial = (admin.first_name[0] if admin.first_name else "A").upper()
+    full_name = admin.first_name + " " + admin.last_name
+
+    context = {
+        "form": form,
+        "admin_name": full_name,
+        "admin_username": admin.username,
+        "admin_email": admin.email,
+        "admin_initial": admin_initial,
+        "is_active": admin.is_active,
+        "department": admin.departement.name if admin.departement else "N/A",
+        "employee_count": employee_count,
+        "created_at": admin.created_at,
+        "updated_at": admin.updated_at,
+        "active_page": "profile",
+    }
+
     return render(request, "admin/profile.html", context)
 
 
