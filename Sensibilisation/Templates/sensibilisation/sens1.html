@@ -1,0 +1,422 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Security Awareness Training - PhishShark</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap");
+
+      :root {
+        --bg: #111;
+        --surface: #1a1a1a;
+        --border: #2a2a2a;
+        --text: #ccc;
+        --text-muted: #666;
+        --text-bright: #eee;
+        --accent: #4a9eff;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+      }
+
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: "IBM Plex Sans", sans-serif;
+        font-size: 14px;
+      }
+
+      .main-container {
+        display: flex;
+        width: 100vw;
+        height: 100vh;
+      }
+
+      /* SIDEBAR */
+      .sidebar {
+        width: 240px;
+        flex-shrink: 0;
+        background: var(--surface);
+        border-right: 1px solid var(--border);
+        display: flex;
+        flex-direction: column;
+        padding: 24px 16px;
+        gap: 20px;
+      }
+
+      .logo {
+        font-family: "IBM Plex Mono", monospace;
+        font-weight: 600;
+        font-size: 14px;
+        color: var(--text-bright);
+        letter-spacing: 1px;
+      }
+
+      .chapters-label {
+        font-size: 11px;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        display: block;
+        margin-bottom: 6px;
+      }
+
+      .chapters-section {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        flex: 1;
+      }
+
+      .nav-item {
+        padding: 9px 10px;
+        border-radius: 4px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: var(--text-muted);
+        font-size: 13px;
+        transition:
+          background 0.15s,
+          color 0.15s;
+        border: 1px solid transparent;
+      }
+
+      .nav-item i {
+        width: 14px;
+        text-align: center;
+        font-size: 12px;
+      }
+
+      .nav-item:hover {
+        background: #222;
+        color: var(--text);
+      }
+
+      .nav-item.active {
+        background: #1e2d42;
+        border-color: #2a4060;
+        color: var(--accent);
+      }
+
+      .btn-qcm {
+        padding: 10px;
+        background: var(--accent);
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        font-weight: 600;
+        font-size: 13px;
+        font-family: "IBM Plex Sans", sans-serif;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition: opacity 0.15s;
+      }
+
+      .btn-qcm:hover {
+        opacity: 0.85;
+      }
+
+      /* CONTENT */
+      .content-area {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+
+      .header-section {
+        flex-shrink: 0;
+        padding: 24px 32px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .header-section h1 {
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--text-bright);
+        margin-bottom: 4px;
+      }
+
+      .header-section p {
+        font-size: 13px;
+        color: var(--text-muted);
+      }
+
+      .employee-info {
+        display: inline-block;
+        margin-top: 12px;
+        background: #1a1a1a;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        padding: 8px 12px;
+        font-size: 12px;
+        color: var(--text-muted);
+      }
+
+      .employee-info strong {
+        color: var(--text);
+        font-weight: 500;
+      }
+
+      .content-wrapper {
+        flex: 1;
+        padding: 28px 32px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .video-box {
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        overflow: hidden;
+        background: #000;
+        margin-bottom: 20px;
+      }
+
+      .video-box iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+        display: block;
+      }
+
+      .info-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 20px;
+        margin-bottom: 20px;
+      }
+
+      .info-card h2 {
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--text-bright);
+        margin-bottom: 8px;
+      }
+
+      .info-card p {
+        font-size: 13px;
+        color: var(--text-muted);
+        line-height: 1.6;
+      }
+
+      .footer-content {
+        margin-top: auto;
+        padding-top: 16px;
+        border-top: 1px solid var(--border);
+        font-size: 11px;
+        color: #444;
+        font-family: "IBM Plex Mono", monospace;
+      }
+
+      /* SCROLLBARS */
+      ::-webkit-scrollbar {
+        width: 5px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #333;
+        border-radius: 3px;
+      }
+
+      /* RESPONSIVE */
+      @media (max-width: 768px) {
+        .main-container {
+          flex-direction: column;
+          height: auto;
+        }
+        .sidebar {
+          width: 100%;
+          flex-direction: row;
+          border-right: none;
+          border-bottom: 1px solid var(--border);
+          padding: 12px 16px;
+          gap: 8px;
+          overflow-x: auto;
+          overflow-y: hidden;
+        }
+        .chapters-section {
+          flex-direction: row;
+          flex: 1;
+          gap: 4px;
+        }
+        .chapters-label {
+          display: none;
+        }
+        .nav-item {
+          white-space: nowrap;
+          flex-shrink: 0;
+          font-size: 12px;
+        }
+        .btn-qcm {
+          white-space: nowrap;
+          flex-shrink: 0;
+        }
+        .content-wrapper {
+          padding: 16px;
+        }
+        .header-section {
+          padding: 16px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main-container">
+      <aside class="sidebar">
+        <div class="logo">PhishShark</div>
+
+        <div class="chapters-section">
+          <span class="chapters-label">Chapters</span>
+          <div class="nav-item active" onclick="changeChapter(1, this)">
+            <i class="fa-solid fa-shield-halved"></i>
+            <span>Chapter 1: Recognition</span>
+          </div>
+          <div class="nav-item" onclick="changeChapter(2, this)">
+            <i class="fa-solid fa-user-secret"></i>
+            <span>Chapter 2: Social Eng.</span>
+          </div>
+          <div class="nav-item" onclick="changeChapter(3, this)">
+            <i class="fa-solid fa-lock"></i>
+            <span>Chapter 3: Defense</span>
+          </div>
+        </div>
+
+        <button class="btn-qcm" onclick="startQuiz()">
+          <i class="fa-solid fa-graduation-cap"></i> Take Quiz
+        </button>
+      </aside>
+
+      <div class="content-area">
+        <div class="header-section">
+          <h1>Security Awareness Training</h1>
+          <p>Learn to recognize and prevent phishing attacks</p>
+          {% if employee_name %}
+          <div class="employee-info">
+            <strong>Employee:</strong> {{ employee_name }} 
+            {% if employee_email %}
+            <span style="color: #555; margin-left: 6px"
+              >{{ employee_email }}</span
+            >
+            {% endif %}
+          </div>
+          {% endif %}
+        </div>
+
+        <main class="content-wrapper">
+          <div class="video-box">
+            <iframe
+              id="videoFrame"
+              width="560"
+              height="315"
+              src="https://www.youtube.com/embed/XBkzBrXlle0?si=Jrg802a_6z_fzPjp"
+              title="YouTube video player"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allowfullscreen
+            >
+            </iframe>
+          </div>
+          <div class="info-card">
+            <h2 id="chapterTitle">Chapter 1: How to Spot a Phishing Email</h2>
+            <p id="chapterDesc">
+              Learn to verify links and understand why SSL certificates don't
+              guarantee security. Essential knowledge for protecting yourself
+              against phishing attacks. Discover the telltale signs of
+              suspicious emails, including mismatched URLs, urgent language, and
+              unexpected attachments.
+            </p>
+          </div>
+
+          <div class="footer-content">
+            © 2026 PhishShark — Security Awareness Platform
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <script>
+      const urlParams = new URLSearchParams(window.location.search);
+      const trackingUuid =
+        urlParams.get("rid") || urlParams.get("employee") || "";
+
+      const chapters = {
+        1: {
+          title: "Chapter 1: How to Spot a Phishing Email",
+          description:
+            "Learn to verify links and understand why SSL certificates don't guarantee security. Essential knowledge for protecting yourself against phishing attacks. Discover the telltale signs of suspicious emails, including mismatched URLs, urgent language, and unexpected attachments.",
+          video:
+            "https://www.youtube.com/embed/XBkzBrXlle0?si=Jrg802a_6z_fzPjp",
+        },
+        2: {
+          title: "Chapter 2: Social Engineering Tactics",
+          description:
+            "Understand the psychology behind phishing attacks. Learn the difference between mass phishing campaigns and targeted spear-phishing attacks. Recognize manipulation techniques like authority, urgency, and fear that attackers use to trick victims.",
+          video:
+            "https://www.youtube.com/embed/uvKTMgWRPw4?si=wFH52qKc-BtGb0Lk",
+        },
+        3: {
+          title: "Chapter 3: Defense Strategies",
+          description:
+            "Master defensive techniques including proper reporting procedures and Multi-Factor Authentication (MFA). Learn why these tools are your best protection against credential theft and unauthorized access to company systems.",
+          video:
+            "https://www.youtube.com/embed/TdSXh5q5mrI?si=DGzCCf7Y-rHPXCXM",
+        },
+      };
+
+      function changeChapter(chapterId, element) {
+        // Update video iframe
+        const videoFrame = document.getElementById("videoFrame");
+        videoFrame.src = chapters[chapterId].video;
+
+        // Update title and description
+        document.getElementById("chapterTitle").innerText =
+          chapters[chapterId].title;
+        document.getElementById("chapterDesc").innerText =
+          chapters[chapterId].description;
+
+        // Update active state on navigation items
+        document.querySelectorAll(".nav-item").forEach((item) => {
+          item.classList.remove("active");
+        });
+        element.classList.add("active");
+      }
+
+      function startQuiz() {
+        if (trackingUuid) {
+          window.location.href = `/sensibilisation/qcm/?rid=${trackingUuid}`;
+        } else {
+          window.location.href = `/sensibilisation/qcm/`;
+        }
+      }
+    </script>
+  </body>
+</html>

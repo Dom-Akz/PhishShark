@@ -12,6 +12,7 @@
 {% endblock %}
 
 {% block header_actions %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <div class="filter-group">
     <label for="dateRange">Date Range:</label>
     <select id="dateRange" class="filter-select">
@@ -34,67 +35,59 @@
 {% endblock %}
 
 {% block content %}
-<!-- KPI Cards Section -->
 <section class="kpi-section">
     <h2 class="section-title">Key Performance Indicators</h2>
-    <div class="kpi-grid">
-        <div class="kpi-card kpi-primary">
-            <div class="kpi-icon">📧</div>
-            <div class="kpi-content">
-                <span class="kpi-value">{{ total_emails_sent|default:"0" }}</span>
-                <span class="kpi-label">Emails Sent</span>
-            </div>
-        </div>
-        <div class="kpi-card kpi-danger">
-            <div class="kpi-icon">⚠️</div>
-            <div class="kpi-content">
-                <span class="kpi-value">{{ total_clicks|default:"0" }}</span>
-                <span class="kpi-label">Phishing Clicks</span>
-            </div>
-        </div>
-        <div class="kpi-card kpi-warning">
-            <div class="kpi-icon">📊</div>
-            <div class="kpi-content">
-                <span class="kpi-value">{{ click_rate|default:"0" }}%</span>
-                <span class="kpi-label">Click Rate</span>
-            </div>
-        </div>
-        <div class="kpi-card kpi-success">
-            <div class="kpi-icon">👥</div>
-            <div class="kpi-content">
-                <span class="kpi-value">{{ total_employees|default:"0" }}</span>
-                <span class="kpi-label">Total Employees</span>
-            </div>
-        </div>
-        <div class="kpi-card kpi-info">
-            <div class="kpi-icon">📝</div>
-            <div class="kpi-content">
-                <span class="kpi-value">{{ total_qcm_taken|default:"0" }}</span>
-                <span class="kpi-label">Quizzes Completed</span>
-            </div>
-        </div>
-        <div class="kpi-card kpi-purple">
-            <div class="kpi-icon">⭐</div>
-            <div class="kpi-content">
-                <span class="kpi-value">{{ avg_score|default:"0" }}%</span>
-                <span class="kpi-label">Average Quiz Score</span>
-            </div>
-        </div>
-        <div class="kpi-card kpi-teal">
-            <div class="kpi-icon">⏱️</div>
-            <div class="kpi-content">
-                <span class="kpi-value">{{ avg_training_time|default:"00:00" }}</span>
-                <span class="kpi-label">Avg. Training Time</span>
-            </div>
-        </div>
-        <div class="kpi-card kpi-dark">
-            <div class="kpi-icon">🏢</div>
-            <div class="kpi-content">
-                <span class="kpi-value">{{ departments|length|default:"0" }}</span>
-                <span class="kpi-label">Departments</span>
-            </div>
+<div class="kpi-grid">
+    <div class="kpi-card kpi-primary">
+        <div class="kpi-icon"><i class="fas fa-envelope"></i></div>
+        <div class="kpi-content">
+            <span class="kpi-value">{{ total_emails_sent|default:"0" }}</span>
+            <span class="kpi-label">Emails Sent</span>
         </div>
     </div>
+    <div class="kpi-card kpi-danger">
+        <div class="kpi-icon"><i class="fas fa-exclamation-triangle"></i></div>
+        <div class="kpi-content">
+            <span class="kpi-value">{{ total_clicks|default:"0" }}</span>
+            <span class="kpi-label">Phishing Clicks</span>
+        </div>
+    </div>
+    <div class="kpi-card kpi-warning">
+        <div class="kpi-icon"><i class="fas fa-chart-line"></i></div>
+        <div class="kpi-content">
+            <span class="kpi-value">{{ click_rate|default:"0" }}%</span>
+            <span class="kpi-label">Click Rate</span>
+        </div>
+    </div>
+    <div class="kpi-card kpi-success">
+        <div class="kpi-icon"><i class="fas fa-users"></i></div>
+        <div class="kpi-content">
+            <span class="kpi-value">{{ total_employees|default:"0" }}</span>
+            <span class="kpi-label">Total Employees</span>
+        </div>
+    </div>
+    <div class="kpi-card kpi-info">
+        <div class="kpi-icon"><i class="fas fa-clipboard-list"></i></div>
+        <div class="kpi-content">
+            <span class="kpi-value">{{ total_qcm_taken|default:"0" }}</span>
+            <span class="kpi-label">Quizzes Completed</span>
+        </div>
+    </div>
+    <div class="kpi-card kpi-purple">
+        <div class="kpi-icon"><i class="fas fa-star"></i></div>
+        <div class="kpi-content">
+            <span class="kpi-value">{{ avg_score|default:"0" }}%</span>
+            <span class="kpi-label">Average Quiz Score</span>
+        </div>
+    </div>
+    <div class="kpi-card kpi-dark">
+        <div class="kpi-icon"><i class="fas fa-building"></i></div>
+        <div class="kpi-content">
+            <span class="kpi-value">{{ departments|length|default:"0" }}</span>
+            <span class="kpi-label">Departments</span>
+        </div>
+    </div>
+</div>
 </section>
 
 <!-- Charts Section -->

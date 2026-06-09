@@ -49,7 +49,7 @@ import uuid
 import re
 
 TEMPLATES_FILE = os.path.join(
-    os.path.dirname(__file__), "EmailTemplates", "Templates.json"
+    os.path.dirname(__file__), "EmailTemplates", "Templates1.json"
 )
 MIRROR_MAP_FILE = os.path.join(os.path.dirname(__file__), "Mirrors", "map.json")
 ALERT_EMAIL = os.path.join(os.path.dirname(__file__), "EmailTemplates", "alerts.json")
@@ -206,7 +206,7 @@ def send_email(email, emp, email_type):
 
     link = f"http://localhost:8000/track/{uuid}/{pg_slug}/"
 
-    body = email["header"] + email["content"] + email["footer"]
+    body = email["header"] + email["content"]
     body = body.replace("lien", link)
 
     send_msg = EmailMultiAlternatives(

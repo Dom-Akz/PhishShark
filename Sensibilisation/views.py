@@ -61,7 +61,7 @@ def training_page(request, uuid):
         "employee_email": employee_email,
     }
 
-    return render(request, "sensibilisation/sens.html", context)
+    return render(request, "sensibilisation/sens1.html", context)
 
 
 def qcm_page(request):

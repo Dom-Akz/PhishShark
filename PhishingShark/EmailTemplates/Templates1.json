@@ -1,0 +1,110 @@
+{
+    "templates": [
+        {
+            "id": "company_email",
+            "name": "Urgent Task from Manager",
+            "sender": "{nom_chef_dep}@{company_name}.com",
+            "subject": "Tâche urgente à traiter immédiatement",
+            "header": "Bonjour {emp_name},\n",
+            "content": "<!DOCTYPE html>\n<html lang=\"fr\">\n<head>\n  <meta charset=\"UTF-8\"/>\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/>\n  <title>Tâche urgente à traiter immédiatement</title>\n  <style>\n    body { background-color: #f4f4f4; font-family: Arial, sans-serif; color: #333; padding: 24px 16px; margin: 0; }\n    .wrapper { max-width: 580px; margin: 0 auto; background: #fff; border: 1px solid #ddd; border-radius: 4px; }\n    .content { padding: 32px 40px; font-size: 14px; line-height: 1.7; }\n    .content h2 { font-size: 18px; font-weight: bold; margin: 0 0 20px 0; color: #222; }\n    .footer { border-top: 1px solid #e0e0e0; padding: 20px 40px; font-size: 12px; color: #777; line-height: 1.7; }\n  </style>\n</head>\n<body>\n<div class=\"wrapper\">\n  <div class=\"content\">\n    <h2>Tâche urgente à traiter immédiatement</h2>\n    <p>Bonjour {emp_name},<br></p>\n    <p>Je vous contacte concernant une tâche urgente qui nécessite votre attention immédiate.<br>Merci de bien vouloir accéder au site ci-dessous afin de consulter les détails et commencer le traitement sans délai :<br><div style=\"text-align: center;\"><br><a href=\"{lien}\" style=\"display: inline-block; padding: 12px 24px; background-color: #dc3545; color: white; text-decoration: none; border-radius: 6px; font-weight: bold;\">Accéder à la tâche</a><br></div><br></p>\n  </div>\n  <div class=\"footer\">\n    Le respect des délais est essentiel pour le bon déroulement de nos opérations. N'hésitez pas à me contacter directement en cas de blocage.<br>Je compte sur votre réactivité.<br>Cordialement,<br>{nom_chef_dep}\n  </div>\n</div>\n</body>\n</html>",
+            "variables": [
+                {
+                    "sender": [
+                        "nom_chef_dep",
+                        "company_name"
+                    ],
+                    "header": "emp_name",
+                    "content": "lien"
+                }
+            ]
+        },
+        {
+            "id": "payment_request",
+            "name": "Unpaid Invoice Notice",
+            "sender": "bank-payment@portal.com",
+            "subject": "Facture impayée – Action immédiate requise",
+            "header": "Bonjour {emp_name},\n",
+            "content": "<!DOCTYPE html>\n<html lang=\"fr\">\n<head>\n  <meta charset=\"UTF-8\"/>\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/>\n  <title>Facture impayée – Action immédiate requise</title>\n  <style>\n    body { background-color: #f4f4f4; font-family: Arial, sans-serif; color: #333; padding: 24px 16px; margin: 0; }\n    .wrapper { max-width: 580px; margin: 0 auto; background: #fff; border: 1px solid #ddd; border-radius: 4px; }\n    .content { padding: 32px 40px; font-size: 14px; line-height: 1.7; }\n    .content h2 { font-size: 18px; font-weight: bold; margin: 0 0 20px 0; color: #222; }\n    .footer { border-top: 1px solid #e0e0e0; padding: 20px 40px; font-size: 12px; color: #777; line-height: 1.7; }\n  </style>\n</head>\n<body>\n<div class=\"wrapper\">\n  <div class=\"content\">\n    <h2>Facture impayée – Action immédiate requise</h2>\n    <p>Bonjour {emp_name},<br></p>\n    <p>Suite à une vérification de nos comptes, nous constatons qu'une facture récente reste impayée à ce jour.<br>Montant dû : 1 245,00 €<br>Date d'échéance : 15/04/2026<br>Afin d'éviter des frais de retard ou une suspension de service, nous vous invitons à régulariser votre situation dès maintenant en cliquant sur le button ci-dessous :<br><div style=\"text-align: center;\"><br><a href=\"{lien}\" style=\"display: inline-block; padding: 12px 24px; background-color: #28a745; color: white; text-decoration: none; border-radius: 6px; font-weight: bold;\">Régulariser ma situation</a><br></div><br></p>\n  </div>\n  <div class=\"footer\">\n    Cordialement,<br>Service Facturation\n  </div>\n</div>\n</body>\n</html>",
+            "variables": [
+                {
+                    "header": "emp_name",
+                    "content": "lien"
+                }
+            ]
+        },
+        {
+            "id": "job_offer",
+            "name": "Urgent Job Offer",
+            "sender": "recruitment@careers.com",
+            "subject": "Offre d'emploi urgente – Réponse requise sous 48h",
+            "header": "Bonjour {emp_name},\n",
+            "content": "<!DOCTYPE html>\n<html lang=\"fr\">\n<head>\n  <meta charset=\"UTF-8\"/>\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/>\n  <title>Offre d'emploi urgente – Réponse requise sous 48h</title>\n  <style>\n    body { background-color: #f4f4f4; font-family: Arial, sans-serif; color: #333; padding: 24px 16px; margin: 0; }\n    .wrapper { max-width: 580px; margin: 0 auto; background: #fff; border: 1px solid #ddd; border-radius: 4px; }\n    .content { padding: 32px 40px; font-size: 14px; line-height: 1.7; }\n    .content h2 { font-size: 18px; font-weight: bold; margin: 0 0 20px 0; color: #222; }\n    .footer { border-top: 1px solid #e0e0e0; padding: 20px 40px; font-size: 12px; color: #777; line-height: 1.7; }\n  </style>\n</head>\n<body>\n<div class=\"wrapper\">\n  <div class=\"content\">\n    <h2>Offre d'emploi urgente – Réponse requise sous 48h</h2>\n    <p>Bonjour {emp_name},<br></p>\n    <p>Bonjour,<br>Nous avons consulté votre profil en ligne et avons été très impressionnés par votre parcours.<br>Dans le cadre de l'expansion de notre entreprise, nous souhaitons vous proposer un poste de Chargé(e) de mission en télétravail, avec une rémunération attractive allant jusqu'à 3 500€ par mois, sans expérience requise.<br>Veuillez également confirmer votre intérêt en cliquant sur le button ci-dessous :<br><div style=\"text-align: center;\"><br><a href=\"{lien}\" style=\"display: inline-block; padding: 12px 24px; background-color: #007bff; color: white; text-decoration: none; border-radius: 6px; font-weight: bold;\">Postuler maintenant</a><br></div><br>Attention : cette offre est limitée et valable uniquement pendant 48 heures</p>\n  </div>\n  <div class=\"footer\">\n    Dans l'attente de votre réponse,<br>Cordialement,<br>Service Recrutement\n  </div>\n</div>\n</body>\n</html>",
+            "variables": [
+                {
+                    "header": "emp_name",
+                    "content": "lien"
+                }
+            ]
+        },
+        {
+            "id": "it_dep",
+            "name": "IT Security Update",
+            "sender": "it-support@verification.com",
+            "subject": "Action requise : Mise à jour urgente de votre compte informatique",
+            "header": "Bonjour {emp_name},",
+            "content": "<!DOCTYPE html>\n<html lang=\"fr\">\n<head>\n  <meta charset=\"UTF-8\"/>\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/>\n  <title>Action requise : Mise à jour urgente de votre compte informatique</title>\n  <style>\n    body { background-color: #f4f4f4; font-family: Arial, sans-serif; color: #333; padding: 24px 16px; margin: 0; }\n    .wrapper { max-width: 580px; margin: 0 auto; background: #fff; border: 1px solid #ddd; border-radius: 4px; }\n    .content { padding: 32px 40px; font-size: 14px; line-height: 1.7; }\n    .content h2 { font-size: 18px; font-weight: bold; margin: 0 0 20px 0; color: #222; }\n    .footer { border-top: 1px solid #e0e0e0; padding: 20px 40px; font-size: 12px; color: #777; line-height: 1.7; }\n  </style>\n</head>\n<body>\n<div class=\"wrapper\">\n  <div class=\"content\">\n    <h2>Action requise : Mise à jour urgente de votre compte informatique</h2>\n    <p>Bonjour {emp_name},</p>\n    <p>Dans le cadre de la mise à jour de sécurité de notre système informatique, le service IT a détecté une activité inhabituelle sur votre compte professionnel.<br>Afin d'éviter toute suspension de votre accès, nous vous demandons de vérifier vos informations immédiatement en cliquant sur le button ci-dessous :<br><div style=\"text-align: center;\"><br><a href=\"{lien}\" style=\"display: inline-block; padding: 12px 24px; background-color: #ffc107; color: #333; text-decoration: none; border-radius: 6px; font-weight: bold;\">Vérifier mon compte</a><br></div><br></p>\n  </div>\n  <div class=\"footer\">\n    Cordialement,<br>Service Informatique<br>Support Technique\n  </div>\n</div>\n</body>\n</html>",
+            "variables": [
+                {
+                    "header": "emp_name",
+                    "content": "lien"
+                }
+            ]
+        },
+        {
+            "id": "scam_iphone",
+            "name": "iPhone Gift Scam",
+            "sender": "noreply@apple-gift-center.net",
+            "subject": "Vous avez gagné un iPhone",
+            "header": "Félicitations {emp_name} 🎉",
+            "content": "<!DOCTYPE html>\n<html lang=\"fr\">\n<head>\n  <meta charset=\"UTF-8\"/>\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/>\n  <title>Vous avez gagné un iPhone</title>\n  <style>\n    body { background-color: #f4f4f4; font-family: Arial, sans-serif; color: #333; padding: 24px 16px; margin: 0; }\n    .wrapper { max-width: 580px; margin: 0 auto; background: #fff; border: 1px solid #ddd; border-radius: 4px; }\n    .content { padding: 32px 40px; font-size: 14px; line-height: 1.7; }\n    .content h2 { font-size: 18px; font-weight: bold; margin: 0 0 20px 0; color: #222; }\n    .footer { border-top: 1px solid #e0e0e0; padding: 20px 40px; font-size: 12px; color: #777; line-height: 1.7; }\n  </style>\n</head>\n<body>\n<div class=\"wrapper\">\n  <div class=\"content\">\n    <h2>Vous avez gagné un iPhone</h2>\n    <p>Félicitations {emp_name} 🎉</p>\n    <p>Vous avez été sélectionné(e) pour gagner un iPhone 15 gratuit.<br>Pour recevoir votre cadeau, cliquez sur le button ci-dessous et confirmez vos informations :<br><div style=\"text-align: center;\"<br><a href=\"{lien}\" style=\"display: inline-block; padding: 12px 24px; background-color: #6c757d; color: white; text-decoration: none; border-radius: 6px; font-weight: bold;\"><br></div><br>Recevoir mon cadeau</a><br>Répondez dans les 2 heures, sinon votre lot sera perdu.</p>\n  </div>\n  <div class=\"footer\">\n    Cordialement,<br>Contactez-nous : {sender_email}\n  </div>\n</div>\n</body>\n</html>",
+            "variables": [
+                {
+                    "header": "emp_name",
+                    "content": "lien"
+                }
+            ]
+        },
+        {
+            "id": "scam_lottery",
+            "name": "Lottery Winning Scam",
+            "sender": "lotterie@gagnant-now.net",
+            "subject": "Vous avez gagné un tirage au sort",
+            "header": "Félicitations {emp_name} 🎉",
+            "content": "<!DOCTYPE html>\n<html lang=\"fr\">\n<head>\n  <meta charset=\"UTF-8\"/>\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/>\n  <title>Vous avez gagné un tirage au sort</title>\n  <style>\n    body { background-color: #f4f4f4; font-family: Arial, sans-serif; color: #333; padding: 24px 16px; margin: 0; }\n    .wrapper { max-width: 580px; margin: 0 auto; background: #fff; border: 1px solid #ddd; border-radius: 4px; }\n    .content { padding: 32px 40px; font-size: 14px; line-height: 1.7; }\n    .content h2 { font-size: 18px; font-weight: bold; margin: 0 0 20px 0; color: #222; }\n    .footer { border-top: 1px solid #e0e0e0; padding: 20px 40px; font-size: 12px; color: #777; line-height: 1.7; }\n  </style>\n</head>\n<body>\n<div class=\"wrapper\">\n  <div class=\"content\">\n    <h2>Vous avez gagné un tirage au sort</h2>\n    <p>Félicitations {emp_name} 🎉</p>\n    <p>Vous avez été tiré au sort et vous avez gagné 5 000 €.<br>Pour recevoir votre gain, vous devez payer des frais de validation de 2 €.<br>Cliquez ici :<br><div style=\"text-align: center;\"><br><a href=\"{lien}\" style=\"display: inline-block; padding: 12px 24px; background-color: #28a745; color: white; text-decoration: none; border-radius: 6px; font-weight: bold;\">Réclamer mon gain</a><br></div></p>\n  </div>\n  <div class=\"footer\">\n    Cordialement,<br>Contactez-nous : lotterie@gagnant-now.net\n  </div>\n</div>\n</body>\n</html>",
+            "variables": [
+                {
+                    "header": "emp_name",
+                    "content": "lien"
+                }
+            ]
+        },
+        {
+            "id": "security_alert",
+            "name": "Google Security Alert",
+            "sender": "google-security@account.com",
+            "subject": "Alerte de sécurité : Connexion suspecte détectée",
+            "header": "Bonjour {emp_name},",
+            "content": "<!DOCTYPE html>\n<html lang=\"fr\">\n<head>\n  <meta charset=\"UTF-8\"/>\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/>\n  <title>Alerte de sécurité : Connexion suspecte détectée</title>\n  <style>\n    body { background-color: #f4f4f4; font-family: Arial, sans-serif; color: #333; padding: 24px 16px; margin: 0; }\n    .wrapper { max-width: 580px; margin: 0 auto; background: #fff; border: 1px solid #ddd; border-radius: 4px; }\n    .content { padding: 32px 40px; font-size: 14px; line-height: 1.7; }\n    .content h2 { font-size: 18px; font-weight: bold; margin: 0 0 20px 0; color: #222; }\n    .footer { border-top: 1px solid #e0e0e0; padding: 20px 40px; font-size: 12px; color: #777; line-height: 1.7; }\n  </style>\n</head>\n<body>\n<div class=\"wrapper\">\n  <div class=\"content\">\n    <h2>Alerte de sécurité : Connexion suspecte détectée</h2>\n    <p>Bonjour {emp_name},</p>\n    <p>Nous avons détecté une tentative de connexion inhabituelle à votre compte depuis un appareil ou une localisation inconnue.<br>Détails de la tentative :<br>Appareil : Linux, Navigateur inconnu<br>Localisation : {diff_location}<br>Date : {today_date}<br>Si vous êtes à l'origine de cette connexion, aucune action n'est requise.<br>Dans le cas contraire, nous vous recommandons fortement de sécuriser votre compte immédiatement en confirmant votre identité via le button ci-dessous :<br><div style=\"text-align: center;\"><br><a href=\"{lien}\" style=\"display: inline-block; padding: 12px 24px; background-color: #dc3545; color: white; text-decoration: none; border-radius: 6px; font-weight: bold;\">Sécuriser mon compte</a><br></div></p>\n  </div>\n  <div class=\"footer\">\n    Merci pour votre vigilance.<br>Cordialement,<br>Équipe Sécurité\n  </div>\n</div>\n</body>\n</html>",
+            "variables": [
+                {
+                    "header": "emp_name",
+                    "content": [
+                        "diff_location",
+                        "today_date",
+                        "lien"
+                    ]
+                }
+            ]
+        }
+    ]
+}
