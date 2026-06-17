@@ -234,7 +234,7 @@ def send_alert_email(emp, tracking_uuid):
 
     email = create_alert_email(emp)
 
-    body = email["header"] + email["content"] + email["footer"]
+    body = email["header"] + email["content"]
     link = f"http://localhost:8000/sensibilisation/training/{tracking_uuid}"
 
     body = body.replace("lien", link)
